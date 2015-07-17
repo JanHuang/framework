@@ -15,6 +15,7 @@
 namespace FastD\Framework\Kernel;
 
 use FastD\Console\Environment\BaseEnvironment;
+use FastD\Framework\Bundle;
 
 /**
  * Class Terminal
