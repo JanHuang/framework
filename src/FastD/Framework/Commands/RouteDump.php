@@ -11,7 +11,7 @@
  * Gmail: bboyjanhuang@gmail.com
  */
 
-namespace FastD\Framework\Kernel\Commands;
+namespace FastD\Framework\Commands;
 
 use FastD\Console\Command;
 use FastD\Console\IO\Input;

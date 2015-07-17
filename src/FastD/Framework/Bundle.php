@@ -10,7 +10,7 @@
  * Blog: http://segmentfault.com/blog/janhuang
  */
 
-namespace FastD\Framework\Kernel;
+namespace FastD\Framework;
 
 /**
  * Class Bundle

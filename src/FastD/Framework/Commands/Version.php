@@ -16,7 +16,7 @@ namespace FastD\Framework\Kernel\Commands;
 use FastD\Console\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
-use FastD\Framework\Kernel\AppKernel;
+use FastD\Framework\AppKernel;
 
 class Version extends Command
 {

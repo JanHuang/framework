@@ -16,9 +16,10 @@ namespace FastD\Framework\Kernel;
 use FastD\Config\Config;
 use FastD\Container\Container;
 use FastD\Debug\Debug;
+use FastD\Framework\Bundle;
 use FastD\Http\Request;
 use FastD\Http\Response;
-use FastD\Framework\Kernel\Events\BaseEvent;
+use FastD\Framework\Events\BaseEvent;
 
 /**
  * Class AppKernel
@@ -69,7 +70,7 @@ abstract class AppKernel extends Terminal
     private $debug;
 
     /**
-     * @var \Kernel\Bundle[]
+     * @var Bundle
      */
     private $bundles = array();
 
@@ -98,7 +99,7 @@ abstract class AppKernel extends Terminal
     }
 
     /**
-     * @return \Kernel\Bundle[]
+     * @return Bundle
      */
     public function getBundles()
     {

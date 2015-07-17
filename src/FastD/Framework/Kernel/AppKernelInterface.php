@@ -15,6 +15,7 @@
 namespace FastD\Framework\Kernel;
 
 use FastD\Config\Config;
+use FastD\Framework\Bundle;
 
 interface AppKernelInterface
 {
@@ -26,7 +27,7 @@ interface AppKernelInterface
     /**
      * Register project bundle.
      *
-     * @return \Kernel\Bundle[]
+     * @return Bundle
      */
     public function registerBundles();
 

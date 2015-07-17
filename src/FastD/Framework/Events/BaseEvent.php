@@ -11,7 +11,7 @@
  * Gmail: bboyjanhuang@gmail.com
  */
 
-namespace FastD\Framework\Kernel\Events;
+namespace FastD\Framework\Events;
 
 use FastD\Config\Config;
 use FastD\Container\Container;

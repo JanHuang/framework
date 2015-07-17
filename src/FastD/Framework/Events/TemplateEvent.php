@@ -12,7 +12,7 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Kernel\Events;
+namespace FastD\Framework\Events;
 
 use FastD\Template\Template;
 
