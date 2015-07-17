@@ -18,17 +18,17 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.5",
-        "fastd/http": "~dev-dev",
-        "fastd/routing": "~dev-dev",
-        "fastd/database": "~dev-dev",
-        "fastd/container": "~dev-dev",
-        "fastd/config": "~dev-dev",
-        "fastd/storage": "~dev-dev",
-        "fastd/logger": "~dev-dev",
-        "fastd/console": "~dev-dev",
-        "fastd/finder": "~dev-dev",
-        "fastd/debug": "~dev-dev",
-        "fastd/template": "~dev-dev"
+        "fastd/http": "dev-dev",
+        "fastd/routing": "dev-dev",
+        "fastd/database": "dev-dev",
+        "fastd/container": "dev-dev",
+        "fastd/config": "dev-dev",
+        "fastd/storage": "dev-dev",
+        "fastd/logger": "dev-dev",
+        "fastd/console": "dev-dev",
+        "fastd/finder": "dev-dev",
+        "fastd/debug": "dev-dev",
+        "fastd/template": "dev-dev"
     },
     "autoload": {
         "psr-4": {
