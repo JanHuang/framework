@@ -206,12 +206,6 @@ abstract class AppKernel extends Terminal
      */
     public function initializeRouting()
     {
-        if (!class_exists('\\Routes')) {
-            include __DIR__ . '/../../vendor/fastd/routing/src/FastD/Routing/Routes.php';
-        }
-
-        include __DIR__ . '/../routes.php';
-
         foreach ($this->getBundles() as $bundle) {
             if (file_exists($routes = $bundle->getRootPath() . '/Resources/config/routes.php')) {
                 include $routes;
