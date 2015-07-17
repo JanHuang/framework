@@ -183,7 +183,7 @@ abstract class AppKernel extends Terminal
 
         $config->setVariable($variables);
 
-        $config->load($this->getRootPath() . '/config/config.php');
+        $config->load($this->getRootPath() . '/config/global.php');
 
         $this->registerConfiguration($config);
 
