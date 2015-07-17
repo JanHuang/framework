@@ -19,7 +19,7 @@ use FastD\Http\Response;
 /**
  * Interface TerminalInterface
  *
- * @package FastD\Framework
+ * @package FastD\Framework\Kernel
  */
 interface TerminalInterface
 {

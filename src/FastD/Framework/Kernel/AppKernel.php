@@ -24,7 +24,7 @@ use FastD\Framework\Events\BaseEvent;
 /**
  * Class AppKernel
  *
- * @package FastD\Framework
+ * @package FastD\Framework\Kernel
  */
 abstract class AppKernel extends Terminal
 {

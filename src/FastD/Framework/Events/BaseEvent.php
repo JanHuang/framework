@@ -25,9 +25,9 @@ use FastD\Routing\Router;
 use FastD\Storage\StorageManager;
 
 /**
- * Class EventAbstract
+ * Class BaseEvent
  *
- * @package FastD\Framework\Controller
+ * @package FastD\Framework\Events
  */
 class BaseEvent
 {

@@ -18,6 +18,11 @@ use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Framework\AppKernel;
 
+/**
+ * Class Version
+ *
+ * @package FastD\Framework\Kernel\Commands
+ */
 class Version extends Command
 {
     /**

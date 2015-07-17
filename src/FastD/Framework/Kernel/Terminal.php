@@ -16,6 +16,11 @@ namespace FastD\Framework\Kernel;
 
 use FastD\Console\Environment\BaseEnvironment;
 
+/**
+ * Class Terminal
+ *
+ * @package FastD\Framework\Kernel
+ */
 abstract class Terminal extends BaseEnvironment implements TerminalInterface, AppKernelInterface
 {
     public function register()

@@ -18,6 +18,11 @@ use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Routing\Router;
 
+/**
+ * Class RouteDump
+ *
+ * @package FastD\Framework\Commands
+ */
 class RouteDump extends Command
 {
     /**

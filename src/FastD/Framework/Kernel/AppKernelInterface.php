@@ -17,6 +17,11 @@ namespace FastD\Framework\Kernel;
 use FastD\Config\Config;
 use FastD\Framework\Bundle;
 
+/**
+ * Interface AppKernelInterface
+ *
+ * @package FastD\Framework\Kernel
+ */
 interface AppKernelInterface
 {
     /**

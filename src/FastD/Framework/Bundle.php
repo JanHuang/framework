@@ -14,7 +14,8 @@ namespace FastD\Framework;
 
 /**
  * Class Bundle
- * @package FastD\Kernel\Framework\Bundles
+ *
+ * @package FastD\Framework
  */
 class Bundle
 {

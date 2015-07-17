@@ -17,6 +17,11 @@ use FastD\Console\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 
+/**
+ * Class Generator
+ *
+ * @package FastD\Framework\Commands
+ */
 class Generator extends Command
 {
     /**

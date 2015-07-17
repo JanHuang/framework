@@ -19,7 +19,7 @@ use FastD\Template\Template;
 /**
  * Class TemplateEvent
  *
- * @package Kernel\Events
+ * @package FastD\Framework\Events
  */
 class TemplateEvent extends BaseEvent
 {

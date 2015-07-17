@@ -18,9 +18,9 @@ use FastD\Http\Response;
 use FastD\Http\JsonResponse;
 
 /**
- * Class REST
+ * Class RestEvent
  *
- * @package Kernel\Extensions
+ * @package FastD\Framework\Events
  */
 class RestEvent extends BaseEvent
 {
