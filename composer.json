@@ -25,5 +25,8 @@
         "fastd/template": "dev-dev"
     },
     "autoload": {
+        "psr-4": {
+            "FastD\\": "src/FastD"
+        }
     }
 }
