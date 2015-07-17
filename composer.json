@@ -27,9 +27,6 @@
     "autoload": {
         "psr-4": {
             "FastD\\": "src/FastD"
-        },
-        "files": [
-            "src/FastD/"
-        ]
+        }
     }
 }
