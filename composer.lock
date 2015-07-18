@@ -4,9 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d374d22a52ecffd0896ab7964bb16ca5",
-    "packages": [],
-    "packages-dev": [
+    "hash": "6ff05f59971ac8bbda0968212c964f7e",
+    "packages": [
         {
             "name": "fastd/config",
             "version": "dev-dev",
@@ -745,6 +744,7 @@
             "time": "2015-06-06 23:31:24"
         }
     ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
