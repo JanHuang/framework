@@ -23,17 +23,17 @@
     },
     "require": {
         "php": ">=5.5",
-        "fastd/http": "@dev",
-        "fastd/routing": "@dev",
-        "fastd/database": "@dev",
-        "fastd/container": "@dev",
-        "fastd/config": "@dev",
-        "fastd/storage": "@dev",
-        "fastd/logger": "@dev",
-        "fastd/console": "@dev",
-        "fastd/finder": "@dev",
-        "fastd/debug": "@dev",
-        "fastd/template": "@dev"
+        "fastd/http": "dev-dev",
+        "fastd/routing": "dev-dev",
+        "fastd/database": "dev-dev",
+        "fastd/container": "dev-dev",
+        "fastd/config": "dev-dev",
+        "fastd/storage": "dev-dev",
+        "fastd/logger": "dev-dev",
+        "fastd/console": "dev-dev",
+        "fastd/finder": "dev-dev",
+        "fastd/debug": "dev-dev",
+        "fastd/template": "dev-dev"
     },
     "prefer-stable": true,
     "extra": {
