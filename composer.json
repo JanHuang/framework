@@ -1,23 +1,30 @@
 {
     "name": "fastd/framework",
+    "type": "library",
+    "license": "MIT",
     "description": "The fastd framework library.",
+    "minimum-stability": "dev",
     "keywords": [
         "FastD",
         "FastD Framework",
         "FastD Module",
         "FastD Bootstrap"
     ],
-    "type": "library",
-    "license": "MIT",
     "authors": [
         {
             "name": "janhuang",
             "email": "bboyjanhuang@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "FastD\\": "src/FastD"
+        }
+    },
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.5"
+    },
+    "require-dev": {
         "fastd/http": "dev-dev",
         "fastd/routing": "dev-dev",
         "fastd/database": "dev-dev",
@@ -30,9 +37,10 @@
         "fastd/debug": "dev-dev",
         "fastd/template": "dev-dev"
     },
-    "autoload": {
-        "psr-4": {
-            "FastD\\": "src/FastD"
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
         }
     }
 }
