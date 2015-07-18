@@ -4,8 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2a793495336cc5b357e0ce52d648ab55",
-    "packages": [
+    "hash": "d374d22a52ecffd0896ab7964bb16ca5",
+    "packages": [],
+    "packages-dev": [
         {
             "name": "fastd/config",
             "version": "dev-dev",
@@ -95,12 +96,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/container.git",
-                "reference": "caee4ee527809e52371754a7bcfed9578487a9cf"
+                "reference": "bc5b9aad31f23bd3a6422a3e7e387abdca21ad0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/container/zipball/caee4ee527809e52371754a7bcfed9578487a9cf",
-                "reference": "caee4ee527809e52371754a7bcfed9578487a9cf",
+                "url": "https://api.github.com/repos/JanHuang/container/zipball/bc5b9aad31f23bd3a6422a3e7e387abdca21ad0c",
+                "reference": "bc5b9aad31f23bd3a6422a3e7e387abdca21ad0c",
                 "shasum": ""
             },
             "require": {
@@ -127,7 +128,7 @@
                 "FastD",
                 "container"
             ],
-            "time": "2015-06-21 01:57:23"
+            "time": "2015-07-17 17:43:33"
         },
         {
             "name": "fastd/database",
@@ -259,12 +260,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/http.git",
-                "reference": "b29895bb356039b2dde6c832828af865a28abd3b"
+                "reference": "5b6fb14d7ea299eb6d9fb578ad340124a8a31a19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/http/zipball/b29895bb356039b2dde6c832828af865a28abd3b",
-                "reference": "b29895bb356039b2dde6c832828af865a28abd3b",
+                "url": "https://api.github.com/repos/JanHuang/http/zipball/5b6fb14d7ea299eb6d9fb578ad340124a8a31a19",
+                "reference": "5b6fb14d7ea299eb6d9fb578ad340124a8a31a19",
                 "shasum": ""
             },
             "require": {
@@ -292,7 +293,7 @@
                 "http",
                 "protocol"
             ],
-            "time": "2015-07-14 08:07:24"
+            "time": "2015-07-18 10:47:20"
         },
         {
             "name": "fastd/logger",
@@ -463,16 +464,16 @@
         },
         {
             "name": "maximebf/debugbar",
-            "version": "dev-master",
+            "version": "v1.10.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maximebf/php-debugbar.git",
-                "reference": "ab12b6f57dd33b1fffa875046fd17c34d88388b9"
+                "reference": "7b2006e6e095126b5a061ec33fca3d90ea8a8219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maximebf/php-debugbar/zipball/ab12b6f57dd33b1fffa875046fd17c34d88388b9",
-                "reference": "ab12b6f57dd33b1fffa875046fd17c34d88388b9",
+                "url": "https://api.github.com/repos/maximebf/php-debugbar/zipball/7b2006e6e095126b5a061ec33fca3d90ea8a8219",
+                "reference": "7b2006e6e095126b5a061ec33fca3d90ea8a8219",
                 "shasum": ""
             },
             "require": {
@@ -515,7 +516,7 @@
             "keywords": [
                 "debug"
             ],
-            "time": "2015-07-09 18:15:09"
+            "time": "2015-02-05 07:51:20"
         },
         {
             "name": "monolog/monolog",
@@ -591,30 +592,22 @@
         },
         {
             "name": "psr/log",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "9e45edca52cc9c954680072c93e621f8b71fab26"
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/9e45edca52cc9c954680072c93e621f8b71fab26",
-                "reference": "9e45edca52cc9c954680072c93e621f8b71fab26",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "shasum": ""
             },
-            "require": {
-                "php": ">=5.3.0"
-            },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
             "autoload": {
-                "psr-4": {
-                    "Psr\\Log\\": "Psr/Log/"
+                "psr-0": {
+                    "Psr\\Log\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -633,27 +626,27 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2015-06-02 13:48:41"
+            "time": "2012-12-21 11:40:51"
         },
         {
             "name": "symfony/var-dumper",
-            "version": "2.8.x-dev",
+            "version": "v2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "35d27bf5a71abd8f57f15ac4101492494ee0fb11"
+                "reference": "fde603d9f4b2418ff0f0315b93eb039c9aa41205"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/35d27bf5a71abd8f57f15ac4101492494ee0fb11",
-                "reference": "35d27bf5a71abd8f57f15ac4101492494ee0fb11",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/fde603d9f4b2418ff0f0315b93eb039c9aa41205",
+                "reference": "fde603d9f4b2418ff0f0315b93eb039c9aa41205",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9"
             },
             "require-dev": {
-                "symfony/phpunit-bridge": "~2.7|~3.0.0"
+                "symfony/phpunit-bridge": "~2.7"
             },
             "suggest": {
                 "ext-symfony_debug": ""
@@ -661,7 +654,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
@@ -692,20 +685,20 @@
                 "debug",
                 "dump"
             ],
-            "time": "2015-07-02 14:25:26"
+            "time": "2015-07-01 12:07:40"
         },
         {
             "name": "twig/twig",
-            "version": "1.x-dev",
+            "version": "v1.18.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "1ded65daeb8da1fb0d22016e53c2e7026557f040"
+                "reference": "e8e6575abf6102af53ec283f7f14b89e304fa602"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/1ded65daeb8da1fb0d22016e53c2e7026557f040",
-                "reference": "1ded65daeb8da1fb0d22016e53c2e7026557f040",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e8e6575abf6102af53ec283f7f14b89e304fa602",
+                "reference": "e8e6575abf6102af53ec283f7f14b89e304fa602",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +707,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.19-dev"
+                    "dev-master": "1.18-dev"
                 }
             },
             "autoload": {
@@ -749,10 +742,9 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-07-05 08:50:23"
+            "time": "2015-06-06 23:31:24"
         }
     ],
-    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
@@ -768,7 +760,7 @@
         "fastd/debug": 20,
         "fastd/template": 20
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.5"
