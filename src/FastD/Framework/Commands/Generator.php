@@ -4,7 +4,7 @@
  * User: janhuang
  * Date: 15/3/19
  * Time: 下午5:34
- * Github: https://www.github.com/janhuang 
+ * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
  * Blog: http://segmentfault.com/blog/janhuang
@@ -63,7 +63,7 @@ class Generator extends Command
 
         $source = $this->getEnv()->getRootPath() . '/../src';
 
-        $this->builderStructure($source, $bundle, str_replace(':', '', $bundle));
+        $this->builderStructure($source, $bundle, str_replace(DIRECTORY_SEPARATOR, '', $bundle));
     }
 
     public function builderStructure($path, $bundle, $fullName)
@@ -74,22 +74,22 @@ class Generator extends Command
         ));
 
         foreach (array(
-            'Events',
-            'Repository',
-            'Exceptions',
-            'Commands',
-            'Services',
-            'Resources/views',
-            'Resources/config',
-        ) as $dir) {
-             $directory = implode(DIRECTORY_SEPARATOR, array(
-                 $bundlePath,
-                 $dir
-             ));
+                     'Events',
+                     'Repository',
+                     'Exceptions',
+                     'Commands',
+                     'Services',
+                     'Resources/views',
+                     'Resources/config',
+                 ) as $dir) {
+            $directory = implode(DIRECTORY_SEPARATOR, array(
+                $bundlePath,
+                $dir
+            ));
 
-             if (!file_exists($directory)) {
+            if (!file_exists($directory)) {
                 mkdir($directory, 0755, true);
-             }
+            }
         }
 
         $bundleArray = explode(DIRECTORY_SEPARATOR, $bundle);
