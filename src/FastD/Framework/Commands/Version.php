@@ -16,7 +16,7 @@ namespace FastD\Framework\Commands;
 use FastD\Console\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
-use FastD\Framework\AppKernel;
+use FastD\Framework\Kernel\AppKernel;
 
 /**
  * Class Version
