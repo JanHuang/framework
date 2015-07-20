@@ -3,7 +3,7 @@
     "type": "library",
     "license": "MIT",
     "description": "The fastd framework library.",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "keywords": [
         "FastD",
         "FastD Framework",
@@ -23,19 +23,18 @@
     },
     "require": {
         "php": ">=5.5",
-        "fastd/http": "dev-dev",
-        "fastd/routing": "dev-dev",
-        "fastd/database": "dev-dev",
-        "fastd/container": "dev-dev",
-        "fastd/config": "dev-dev",
-        "fastd/storage": "dev-dev",
-        "fastd/logger": "dev-dev",
-        "fastd/console": "dev-dev",
-        "fastd/finder": "dev-dev",
-        "fastd/debug": "dev-dev",
-        "fastd/template": "dev-dev"
+        "fastd/http": "~0.1.0",
+        "fastd/routing": "~0.1.1",
+        "fastd/database": "~0.1.2",
+        "fastd/container": "~0.1.1",
+        "fastd/config": "~0.1.0",
+        "fastd/storage": "~0.1.0",
+        "fastd/logger": "~0.1.0",
+        "fastd/console": "~0.1.1",
+        "fastd/finder": "~0.1.0",
+        "fastd/debug": "~0.1.0",
+        "fastd/template": "~0.1.0"
     },
-    "prefer-stable": true,
     "extra": {
         "branch-alias": {
             "dev-master": "0.1.x-dev"
