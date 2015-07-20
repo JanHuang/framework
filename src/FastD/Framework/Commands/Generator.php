@@ -63,10 +63,10 @@ class Generator extends Command
 
         $source = $this->getEnv()->getRootPath() . '/../src';
 
-        $this->builderStructure($source, $bundle);
+        $this->builderStructure($source, $bundle, str_replace(':', '', $bundle));
     }
 
-    public function builderStructure($path, $bundle)
+    public function builderStructure($path, $bundle, $fullName)
     {
         $bundlePath = implode(DIRECTORY_SEPARATOR, array(
             $path,
@@ -107,15 +107,13 @@ class Generator extends Command
             file_put_contents($controllerFile, $controller);
         }
 
-        $bootstrapName = ucfirst(end($bundleArray));
-
         $bootstrap = sprintf(
             $this->getBootstrapTemplate(),
             str_replace(DIRECTORY_SEPARATOR, '\\', $bundle),
-            $bootstrapName
+            $fullName
         );
 
-        $bootstrapFile = $bundlePath . DIRECTORY_SEPARATOR . 'Boot.php';
+        $bootstrapFile = $bundlePath . DIRECTORY_SEPARATOR . $fullName . 'Boot.php';
 
         if (!file_exists($bootstrapFile)) {
             file_put_contents($bootstrapFile, $bootstrap);
@@ -155,7 +153,7 @@ namespace %s;
 
 use FastD\Framework\Bundle;
 
-class Boot extends Bundle
+class %sBoot extends Bundle
 {
 
 }
