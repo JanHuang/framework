@@ -134,9 +134,9 @@ class Generator extends Command
 
 namespace %s\Events;
 
-use Kernel\Events\EventAbstract;
+use FastD\Framework\Events\BaseEvent;
 
-class Index extends EventAbstract
+class Index extends BaseEvent
 {
     public function indexAction()
     {
@@ -153,7 +153,7 @@ CONTROLLER;
 
 namespace %s;
 
-use Kernel\Bundle;
+use FastD\Framework\Bundle;
 
 class Boot extends Bundle
 {
