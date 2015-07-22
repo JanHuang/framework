@@ -38,6 +38,11 @@
     "require-dev": {
         "fastd/fastd-module": "dev-dev"
     },
+    "autoload": {
+        "psr-4": {
+            "": "src"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "0.1.x-dev"

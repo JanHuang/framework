@@ -26,6 +26,10 @@ class Bundle
 
     protected $namespace;
 
+    protected $shortname;
+
+    protected $fullname;
+
     /**
      * @return string
      */
@@ -45,5 +49,23 @@ class Bundle
         }
 
         return $this->namespace;
+    }
+
+    public function getShortname()
+    {
+        if (null === $this->shortname) {
+            $this->shortname = (new \ReflectionClass($this))->getShortName();
+        }
+
+        return $this->shortname;
+    }
+
+    public function getFullname()
+    {
+        if (null === $this->fullname) {
+            $this->fullname = (new \ReflectionClass($this))->getName();
+        }
+
+        return $this->fullname;
     }
 }

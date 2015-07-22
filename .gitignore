@@ -4,3 +4,5 @@
 composer.lock
 /app
 /web
+/src/Demo
+public

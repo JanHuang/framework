@@ -123,6 +123,11 @@ class Generator extends Command
         if (!file_exists($routes)) {
             file_put_contents($routes, '<?php ' . PHP_EOL);
         }
+
+        $config = $bundlePath . DIRECTORY_SEPARATOR . 'Resources/config/config.php';
+        if (!file_exists($config)) {
+            file_put_contents($config, '<?php return [];' . PHP_EOL);
+        }
     }
 
     public function getControllerTemplate()

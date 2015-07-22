@@ -17,9 +17,18 @@ namespace FastD\Framework\Commands;
 use FastD\Console\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
+use FastD\Finder\Directory\Directory;
 
+/**
+ * Class AssetInstall
+ *
+ * @package FastD\Framework\Commands
+ */
 class AssetInstall extends Command
 {
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'asset:install';
@@ -32,17 +41,35 @@ class AssetInstall extends Command
 
     public function execute(Input $input, Output $output)
     {
-        print_r($this->getContainer());
+        $bundles = $this->getContainer()->get('kernel')->getBundles();
+
+        $web = (null === ($web = $input->getParameterArgument(0)) ? 'public' : $web);
+
+        $targetRootDir = $this->getContainer()->get('kernel')->getRootPath() . '/../' . $web;
+
+        $output->writeln('Trying to install assets as symbolic links.');
+
+        foreach ($bundles as $bundle) {
+            $originDir = $bundle->getRootPath() . DIRECTORY_SEPARATOR . 'Resources/assets';
+            if (!file_exists($originDir)) {
+                continue;
+            }
+            $targetDir = $targetRootDir . DIRECTORY_SEPARATOR . strtolower($bundle->getShortname());
+
+            try {
+                $this->symlink($originDir, $targetDir);
+                $output->write('Installing assets for ');
+                $output->write($bundle->getFullName(), Output::STYLE_SUCCESS);
+                $output->write(' into ');
+                $output->writeln($web . DIRECTORY_SEPARATOR . strtolower($bundle->getShortname()), Output::STYLE_SUCCESS);
+            } catch (\Exception $e) {
+                throw $e;
+            }
+        }
     }
 
-    public function symlink($originDir, $targetDir, $copyOnWindows = false)
+    public function symlink($originDir, $targetDir)
     {
-        if ('\\' === DIRECTORY_SEPARATOR && $copyOnWindows) {
-            $this->mirror($originDir, $targetDir);
-
-            return;
-        }
-
         $this->mkdir(dirname($targetDir));
 
         $ok = false;
@@ -59,15 +86,43 @@ class AssetInstall extends Command
                 $report = error_get_last();
                 if (is_array($report)) {
                     if ('\\' === DIRECTORY_SEPARATOR && false !== strpos($report['message'], 'error code(1314)')) {
-                        throw new IOException('Unable to create symlink due to error code 1314: \'A required privilege is not held by the client\'. Do you have the required Administrator-rights?');
+                        throw new \RuntimeException('Unable to create symlink due to error code 1314: \'A required privilege is not held by the client\'. Do you have the required Administrator-rights?');
                     }
                 }
-                throw new IOException(sprintf('Failed to create symbolic link from "%s" to "%s".', $originDir, $targetDir), 0, null, $targetDir);
+                throw new \RuntimeException(sprintf('Failed to create symbolic link from "%s" to "%s".', $originDir, $targetDir), 0, null, $targetDir);
             }
         }
     }
+    public function remove($files)
+    {
+        $files = iterator_to_array($this->toIterator($files));
+        $files = array_reverse($files);
+        foreach ($files as $file) {
+            if (!file_exists($file) && !is_link($file)) {
+                continue;
+            }
 
-    public function mkdir($dirs, $mode = 0777)
+            if (is_dir($file) && !is_link($file)) {
+                $this->remove(new \FilesystemIterator($file));
+
+                if (true !== @rmdir($file)) {
+                    throw new IOException(sprintf('Failed to remove directory "%s".', $file), 0, null, $file);
+                }
+            } else {
+                // https://bugs.php.net/bug.php?id=52176
+                if ('\\' === DIRECTORY_SEPARATOR && is_dir($file)) {
+                    if (true !== @rmdir($file)) {
+                        throw new IOException(sprintf('Failed to remove file "%s".', $file), 0, null, $file);
+                    }
+                } else {
+                    if (true !== @unlink($file)) {
+                        throw new IOException(sprintf('Failed to remove file "%s".', $file), 0, null, $file);
+                    }
+                }
+            }
+        }
+    }
+    public function mkdir($dirs, $mode = 0755)
     {
         foreach ($this->toIterator($dirs) as $dir) {
             if (is_dir($dir)) {
@@ -79,12 +134,26 @@ class AssetInstall extends Command
                 if (!is_dir($dir)) {
                     // The directory was not created by a concurrent process. Let's throw an exception with a developer friendly error message if we have one
                     if ($error) {
-                        throw new IOException(sprintf('Failed to create "%s": %s.', $dir, $error['message']), 0, null, $dir);
+                        throw new \RuntimeException(sprintf('Failed to create "%s": %s.', $dir, $error['message']), 0, null, $dir);
                     }
-                    throw new IOException(sprintf('Failed to create "%s"', $dir), 0, null, $dir);
+                    throw new \RuntimeException(sprintf('Failed to create "%s"', $dir), 0, null, $dir);
                 }
             }
         }
+    }
+
+    /**
+     * @param mixed $files
+     *
+     * @return \Traversable
+     */
+    private function toIterator($files)
+    {
+        if (!$files instanceof \Traversable) {
+            $files = new \ArrayObject(is_array($files) ? $files : array($files));
+        }
+
+        return $files;
     }
 
     public function mirror($originDir, $targetDir, \Traversable $iterator = null, $options = array())
@@ -130,7 +199,7 @@ class AssetInstall extends Command
                 } elseif (is_dir($file)) {
                     $this->mkdir($target);
                 } else {
-                    throw new IOException(sprintf('Unable to guess "%s" file type.', $file), 0, null, $file);
+                    throw new \RuntimeException(sprintf('Unable to guess "%s" file type.', $file), 0, null, $file);
                 }
             } else {
                 if (is_link($file)) {
@@ -140,7 +209,7 @@ class AssetInstall extends Command
                 } elseif (is_file($file)) {
                     $this->copy($file, $target, isset($options['override']) ? $options['override'] : false);
                 } else {
-                    throw new IOException(sprintf('Unable to guess "%s" file type.', $file), 0, null, $file);
+                    throw new \RuntimeException(sprintf('Unable to guess "%s" file type.', $file), 0, null, $file);
                 }
             }
         }
