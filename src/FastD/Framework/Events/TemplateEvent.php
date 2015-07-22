@@ -87,7 +87,7 @@ class TemplateEvent extends BaseEvent
             try {
                 $host = $this->getParameters('assets.host');
             } catch (\InvalidArgumentException $e) {
-                $host = '//' . $this->getRequest()->getDomain();
+                $host = $this->getRequest()->getSchemeAndHttpAndHost();
             }
         }
 
