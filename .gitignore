@@ -2,3 +2,5 @@
 .idea
 *orig
 composer.lock
+/app
+/web

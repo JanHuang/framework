@@ -35,9 +35,17 @@
         "fastd/debug": "~0.1.0",
         "fastd/template": "~0.1.0"
     },
+    "require-dev": {
+        "fastd/fastd-module": "dev-dev"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "0.1.x-dev"
         }
+    },
+    "scripts": {
+        "post-update-cmd": "Module\\Module::init",
+        "post-install-cmd": "Module\\Module::init",
+        "post-create-project-cmd": "Module\\Module::init"
     }
 }

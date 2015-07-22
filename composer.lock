@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6846b3812ed0238cf382dc11ebe4c4dc",
+    "hash": "bb786ece08f25d8e8b89a1c0f6ace4af",
     "packages": [
         {
             "name": "fastd/config",
@@ -48,7 +48,7 @@
         },
         {
             "name": "fastd/console",
-            "version": "dev-master",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/console.git",
@@ -91,16 +91,16 @@
         },
         {
             "name": "fastd/container",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/container.git",
-                "reference": "caee4ee527809e52371754a7bcfed9578487a9cf"
+                "reference": "bc5b9aad31f23bd3a6422a3e7e387abdca21ad0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/container/zipball/caee4ee527809e52371754a7bcfed9578487a9cf",
-                "reference": "caee4ee527809e52371754a7bcfed9578487a9cf",
+                "url": "https://api.github.com/repos/JanHuang/container/zipball/bc5b9aad31f23bd3a6422a3e7e387abdca21ad0c",
+                "reference": "bc5b9aad31f23bd3a6422a3e7e387abdca21ad0c",
                 "shasum": ""
             },
             "require": {
@@ -127,20 +127,20 @@
                 "FastD",
                 "container"
             ],
-            "time": "2015-06-21 01:57:23"
+            "time": "2015-07-17 17:43:33"
         },
         {
             "name": "fastd/database",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/database.git",
-                "reference": "fbbadfef1cacb14d9e2ecf2a8fde5938312458db"
+                "reference": "a91862c6b4404556625b21177a10fd713089cc62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/database/zipball/fbbadfef1cacb14d9e2ecf2a8fde5938312458db",
-                "reference": "fbbadfef1cacb14d9e2ecf2a8fde5938312458db",
+                "url": "https://api.github.com/repos/JanHuang/database/zipball/a91862c6b4404556625b21177a10fd713089cc62",
+                "reference": "a91862c6b4404556625b21177a10fd713089cc62",
                 "shasum": ""
             },
             "require": {
@@ -167,20 +167,20 @@
                 "FastD",
                 "database"
             ],
-            "time": "2015-06-23 06:20:50"
+            "time": "2015-07-14 06:28:03"
         },
         {
             "name": "fastd/debug",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/debug.git",
-                "reference": "5f02116ad5bcdfe547a648d1c93b1c65cbebb7a2"
+                "reference": "68d12b387805317d415c3ffce5dfbce37ec32998"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/debug/zipball/5f02116ad5bcdfe547a648d1c93b1c65cbebb7a2",
-                "reference": "5f02116ad5bcdfe547a648d1c93b1c65cbebb7a2",
+                "url": "https://api.github.com/repos/JanHuang/debug/zipball/68d12b387805317d415c3ffce5dfbce37ec32998",
+                "reference": "68d12b387805317d415c3ffce5dfbce37ec32998",
                 "shasum": ""
             },
             "require": {
@@ -211,20 +211,20 @@
                 "FastD",
                 "exception"
             ],
-            "time": "2015-07-16 06:53:28"
+            "time": "2015-07-20 02:13:16"
         },
         {
             "name": "fastd/finder",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/finder.git",
-                "reference": "7985bb4eef4898a601f0403aeb4d3ee29461c8bb"
+                "reference": "d683b7be7f97300c2051d637773a16ff150084c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/finder/zipball/7985bb4eef4898a601f0403aeb4d3ee29461c8bb",
-                "reference": "7985bb4eef4898a601f0403aeb4d3ee29461c8bb",
+                "url": "https://api.github.com/repos/JanHuang/finder/zipball/d683b7be7f97300c2051d637773a16ff150084c7",
+                "reference": "d683b7be7f97300c2051d637773a16ff150084c7",
                 "shasum": ""
             },
             "require": {
@@ -251,20 +251,20 @@
                 "FastD",
                 "finder"
             ],
-            "time": "2015-06-21 09:33:56"
+            "time": "2015-07-20 02:11:51"
         },
         {
             "name": "fastd/http",
-            "version": "dev-master",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/http.git",
-                "reference": "5b6fb14d7ea299eb6d9fb578ad340124a8a31a19"
+                "reference": "abbaf03147fa1d4fbcc334ec199b5243a07b64ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/http/zipball/5b6fb14d7ea299eb6d9fb578ad340124a8a31a19",
-                "reference": "5b6fb14d7ea299eb6d9fb578ad340124a8a31a19",
+                "url": "https://api.github.com/repos/JanHuang/http/zipball/abbaf03147fa1d4fbcc334ec199b5243a07b64ca",
+                "reference": "abbaf03147fa1d4fbcc334ec199b5243a07b64ca",
                 "shasum": ""
             },
             "require": {
@@ -292,20 +292,20 @@
                 "http",
                 "protocol"
             ],
-            "time": "2015-07-18 10:47:20"
+            "time": "2015-07-21 03:07:36"
         },
         {
             "name": "fastd/logger",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/logger.git",
-                "reference": "f4a2a66d0d62854b975aa60048894df217f1cf4f"
+                "reference": "52144ac3fece78c334c35720ff66eae3e0669ad2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/logger/zipball/f4a2a66d0d62854b975aa60048894df217f1cf4f",
-                "reference": "f4a2a66d0d62854b975aa60048894df217f1cf4f",
+                "url": "https://api.github.com/repos/JanHuang/logger/zipball/52144ac3fece78c334c35720ff66eae3e0669ad2",
+                "reference": "52144ac3fece78c334c35720ff66eae3e0669ad2",
                 "shasum": ""
             },
             "require": {
@@ -333,20 +333,20 @@
                 "FastD",
                 "logger"
             ],
-            "time": "2015-06-24 09:50:49"
+            "time": "2015-06-30 07:40:15"
         },
         {
             "name": "fastd/routing",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/routing.git",
-                "reference": "96813daeaf5b3305f7f7929ec454e0011854bb7d"
+                "reference": "c2c3a82da07b6728635b29eb7038842326ccf927"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/routing/zipball/96813daeaf5b3305f7f7929ec454e0011854bb7d",
-                "reference": "96813daeaf5b3305f7f7929ec454e0011854bb7d",
+                "url": "https://api.github.com/repos/JanHuang/routing/zipball/c2c3a82da07b6728635b29eb7038842326ccf927",
+                "reference": "c2c3a82da07b6728635b29eb7038842326ccf927",
                 "shasum": ""
             },
             "require": {
@@ -354,6 +354,9 @@
             },
             "type": "library",
             "autoload": {
+                "files": [
+                    "src/FastD/Routing/Routes.php"
+                ],
                 "psr-4": {
                     "FastD\\": "src/FastD"
                 }
@@ -375,11 +378,11 @@
                 "router",
                 "routing"
             ],
-            "time": "2015-06-20 12:28:35"
+            "time": "2015-07-17 17:15:42"
         },
         {
             "name": "fastd/storage",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/storage.git",
@@ -419,16 +422,16 @@
         },
         {
             "name": "fastd/template",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/template.git",
-                "reference": "859b24ede75def2119165516bd6e0bfa0e3991f9"
+                "reference": "50d411bf9928f645488beeb089dee52c3dad46ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/template/zipball/859b24ede75def2119165516bd6e0bfa0e3991f9",
-                "reference": "859b24ede75def2119165516bd6e0bfa0e3991f9",
+                "url": "https://api.github.com/repos/JanHuang/template/zipball/50d411bf9928f645488beeb089dee52c3dad46ef",
+                "reference": "50d411bf9928f645488beeb089dee52c3dad46ef",
                 "shasum": ""
             },
             "require": {
@@ -456,7 +459,7 @@
                 "templating",
                 "twig"
             ],
-            "time": "2015-06-21 08:57:12"
+            "time": "2015-06-30 04:28:54"
         },
         {
             "name": "maximebf/debugbar",
@@ -741,23 +744,60 @@
             "time": "2015-06-06 23:31:24"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "fastd/fastd-module",
+            "version": "dev-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JanHuang/fast-module.git",
+                "reference": "78e48bef46062bd7e7b16463c90886a5c4681071"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JanHuang/fast-module/zipball/78e48bef46062bd7e7b16463c90886a5c4681071",
+                "reference": "78e48bef46062bd7e7b16463c90886a5c4681071",
+                "shasum": ""
+            },
+            "require": {
+                "fastd/framework": "~0.1.0",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "": "src/",
+                    "Module\\": "module"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "janhuang",
+                    "email": "bboyjanhuang@gmail.com"
+                }
+            ],
+            "description": "The fastd module framework.",
+            "keywords": [
+                "module develop framework."
+            ],
+            "time": "2015-07-20 14:13:50"
+        }
+    ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": {
-        "fastd/http": 20,
-        "fastd/routing": 20,
-        "fastd/database": 20,
-        "fastd/container": 20,
-        "fastd/config": 20,
-        "fastd/storage": 20,
-        "fastd/logger": 20,
-        "fastd/console": 20,
-        "fastd/finder": 20,
-        "fastd/debug": 20,
-        "fastd/template": 20
+        "fastd/fastd-module": 20
     },
-    "prefer-stable": true,
+    "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.5"
