@@ -62,7 +62,7 @@ abstract class AppKernel extends Terminal
     /**
      * @var Container
      */
-    private $container;
+    protected $container;
 
     /**
      * @var bool

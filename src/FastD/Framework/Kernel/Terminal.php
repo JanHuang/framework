@@ -40,6 +40,7 @@ abstract class Terminal extends BaseEnvironment implements TerminalInterface, Ap
                     $fileName = $bundle->getNamespace() . '\\Commands\\' . pathinfo($file, PATHINFO_FILENAME);
                     $command = new $fileName();
                     $command->setEnv($this);
+                    $command->setContainer($this->getContainer());
                     $this->setCommand($command);
                 }
                 closedir($dh);

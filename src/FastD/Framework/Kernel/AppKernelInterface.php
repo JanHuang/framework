@@ -15,6 +15,7 @@
 namespace FastD\Framework\Kernel;
 
 use FastD\Config\Config;
+use FastD\Container\Container;
 use FastD\Framework\Bundle;
 
 /**
@@ -28,6 +29,11 @@ interface AppKernelInterface
      * @return Bundle[]
      */
     public function getBundles();
+
+    /**
+     * @return Container
+     */
+    public function getContainer();
 
     /**
      * Register project bundle.

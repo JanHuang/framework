@@ -30,7 +30,7 @@
         "fastd/config": "~0.1.0",
         "fastd/storage": "~0.1.0",
         "fastd/logger": "~0.1.0",
-        "fastd/console": "~0.1.1",
+        "fastd/console": "~0.1.2",
         "fastd/finder": "~0.1.0",
         "fastd/debug": "~0.1.0",
         "fastd/template": "~0.1.0"

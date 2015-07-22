@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bb786ece08f25d8e8b89a1c0f6ace4af",
+    "hash": "77e88f1ebb3d672ef1534ab43cd3673c",
     "packages": [
         {
             "name": "fastd/config",
@@ -48,25 +48,33 @@
         },
         {
             "name": "fastd/console",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/console.git",
-                "reference": "5669f4157394144253f7cac19076b663015998a5"
+                "reference": "ba3bbde4a1332d6e844fd1e1fe1c21aac9171f57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/console/zipball/5669f4157394144253f7cac19076b663015998a5",
-                "reference": "5669f4157394144253f7cac19076b663015998a5",
+                "url": "https://api.github.com/repos/JanHuang/console/zipball/ba3bbde4a1332d6e844fd1e1fe1c21aac9171f57",
+                "reference": "ba3bbde4a1332d6e844fd1e1fe1c21aac9171f57",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4"
             },
+            "require-dev": {
+                "fastd/container": "dev-master"
+            },
             "bin": [
                 "bin/console"
             ],
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "FastD\\": "src/FastD"
@@ -87,7 +95,7 @@
                 "FastD",
                 "console"
             ],
-            "time": "2015-07-16 03:56:40"
+            "time": "2015-07-22 02:29:32"
         },
         {
             "name": "fastd/container",
