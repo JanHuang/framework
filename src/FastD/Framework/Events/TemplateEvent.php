@@ -53,7 +53,7 @@ class TemplateEvent extends BaseEvent
             $this->template = $this->container->get('kernel.template', [$paths, $options]);
             $this->template->addGlobal('request', $this->getRequest());
             $this->template->addFunction('url', new \Twig_SimpleFunction('url', function ($name, array $parameters = [], $suffix = false) use ($self) {
-                return $self->url($name, $parameters, $suffix);
+                return $self->generateUrl($name, $parameters, $suffix);
             }));
             $this->template->addFunction('asset', new \Twig_SimpleFunction('asset', function ($name, $host = null, $path = null) use ($self) {
                 return $self->asset($name, $host, $path);
@@ -62,47 +62,5 @@ class TemplateEvent extends BaseEvent
         }
 
         return $this->template->render($template, $parameters);
-    }
-
-    /**
-     * @param $name
-     * @param $parameters
-     * @param $suffix
-     * @return string
-     */
-    protected function url($name, array $parameters = null, $suffix = false)
-    {
-        return $this->generateUrl($name, $parameters, $suffix);
-    }
-
-    /**
-     * @param      $name
-     * @param null $host
-     * @param null $path
-     * @return string
-     */
-    protected function asset($name, $host = null, $path = null)
-    {
-        if (null === $host) {
-            try {
-                $host = $this->getParameters('assets.host');
-            } catch (\InvalidArgumentException $e) {
-                $host = $this->getRequest()->getSchemeAndHttpAndHost();
-            }
-        }
-
-        if (null === $path) {
-            try {
-                $path = $this->getParameters('assets.path');
-            } catch (\InvalidArgumentException $e) {
-                $path = $this->getRequest()->getRootPath();
-
-                if ('' != pathinfo($path, PATHINFO_EXTENSION)) {
-                    $path = pathinfo($path, PATHINFO_DIRNAME);
-                }
-            }
-        }
-
-        return $host . str_replace('//', '/', $path . '/' . $name);
     }
 }

@@ -200,6 +200,37 @@ class BaseEvent
     }
 
     /**
+     * @param      $name
+     * @param null $host
+     * @param null $path
+     * @return string
+     */
+    public function asset($name, $host = null, $path = null)
+    {
+        if (null === $host) {
+            try {
+                $host = $this->getParameters('assets.host');
+            } catch (\InvalidArgumentException $e) {
+                $host = $this->getRequest()->getSchemeAndHttpAndHost();
+            }
+        }
+
+        if (null === $path) {
+            try {
+                $path = $this->getParameters('assets.path');
+            } catch (\InvalidArgumentException $e) {
+                $path = $this->getRequest()->getRootPath();
+
+                if ('' != pathinfo($path, PATHINFO_EXTENSION)) {
+                    $path = pathinfo($path, PATHINFO_DIRNAME);
+                }
+            }
+        }
+
+        return $host . str_replace('//', '/', $path . '/' . $name);
+    }
+
+    /**
      * @param     $url
      * @param int $statusCode
      * @param array $headers
