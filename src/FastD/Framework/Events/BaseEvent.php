@@ -234,7 +234,7 @@ class BaseEvent
      * @param     $url
      * @param int $statusCode
      * @param array $headers
-     * @return \FastD\Protocol\Http\RedirectResponse
+     * @return \FastD\Http\RedirectResponse
      */
     public function redirect($url, $statusCode = 302, array $headers = [])
     {
