@@ -74,6 +74,7 @@ class Generator extends Command
         ));
 
         foreach (array(
+                     'Api/V1',
                      'Events',
                      'Repository',
                      'Exceptions',
@@ -113,7 +114,7 @@ class Generator extends Command
             $fullName
         );
 
-        $bootstrapFile = $bundlePath . DIRECTORY_SEPARATOR . $fullName . 'Boot.php';
+        $bootstrapFile = $bundlePath . DIRECTORY_SEPARATOR . $fullName . 'Bundle.php';
 
         if (!file_exists($bootstrapFile)) {
             file_put_contents($bootstrapFile, $bootstrap);
@@ -158,7 +159,7 @@ namespace %s;
 
 use FastD\Framework\Bundle;
 
-class %sBoot extends Bundle
+class %sBundle extends Bundle
 {
 
 }
