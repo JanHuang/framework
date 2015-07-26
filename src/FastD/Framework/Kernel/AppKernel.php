@@ -300,13 +300,11 @@ abstract class AppKernel extends Terminal
                 ->addInfo($request->getPathInfo(), $context)
             ;
         } else if(false === strpos($response->header->has('Content-Type') ? $response->header->get('Content-Type') : '', 'application')) {
-            $path = $request->getBaseUrl();
-            if ('' != pathinfo($path, PATHINFO_EXTENSION)) {
-                $path = pathinfo($path, PATHINFO_DIRNAME);
-                if ('' == $path || '/' == $path) {
-                    $path = '';
-                }
+            $path = 'http://resources.fast-d.cn';
+            if (file_exists($this->getRootPath() . '/../public/debugbar')) {
+                $path = $request->getSchemeAndHttpAndHost() . $request->getRootPath();
             }
+
             Debug::showDebugBar($path . '/debugbar', $context);
         }
 
