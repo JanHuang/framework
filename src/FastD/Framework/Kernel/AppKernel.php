@@ -259,7 +259,10 @@ abstract class AppKernel extends Terminal
         }
 
         if (method_exists($event, '__initialize')) {
-            $this->container->getProvider()->callServiceMethod($event, '__initialize');
+            $response = $this->container->getProvider()->callServiceMethod($event, '__initialize');
+            if (null !== $response && $response instanceof Response) {
+                return $response;
+            }
         }
 
         $response = $this->container->getProvider()->callServiceMethod($event, $handle, $route->getParameters());
