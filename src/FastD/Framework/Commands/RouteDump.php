@@ -16,6 +16,7 @@ namespace FastD\Framework\Commands;
 use FastD\Console\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
+use FastD\Routing\RouteInterface;
 use FastD\Routing\Router;
 
 /**
@@ -39,7 +40,7 @@ class RouteDump extends Command
     public function configure()
     {
         $this
-            ->setOption('name', null)
+            ->setOption('bundle', null)
             ->setDescription('Thank for you use routing dump tool.')
         ;
     }
@@ -57,41 +58,73 @@ class RouteDump extends Command
 
         $name = $input->getParameterArgument(0);
 
+        $bundle = '' == ($bundle = $input->getParameterOption('bundle')) ? null : $bundle;
+
+        if (false !== strpos($bundle, ':')) {
+            $bundle = str_replace(':', '\\', $bundle);
+        }
+
         if ('' == $name) {
-            $this->showRouteCollections($router, $output);
+            $this->showRouteCollections($router, $output, $bundle);
         } else {
             $route = $router->getRoute($name);
-            $output->write('Route [');
-            $output->write('"' . $name . '"', Output::STYLE_SUCCESS);
-            $output->writeln(']');
-            $output->writeln("Name:\t\t" . $route->getName());
-            $output->writeln("Group:\t\t" . str_replace('//', '/', $route->getGroup()));
-            $output->writeln("Path:\t\t" . $route->getPath());
-            $output->writeln("Method:\t\t" . implode(', ', $route->getMethods()));
-            $output->writeln("Format:\t\t" . implode(', ', $route->getFormats()));
-            $output->writeln("Callback:\t" . (is_callable($route->getCallback()) ? 'Closure' : $route->getCallback()));
-            $output->writeln("Defaults:\t" . implode(', ', $route->getDefaults()));
-            $output->writeln("Requirements:\t" . implode(', ', $route->getRequirements()));
-            $output->writeln("Path-Regex:\t" . $route->getPathRegex());
+            $this->formatOutput($route);
         }
 
-        $output->writeln('');
+        return 0;
     }
 
-    public function showRouteCollections(Router $router, Output $output)
+    public function showRouteCollections(Router $router, Output $output, $bundleName = null)
     {
-        $length = 30;
-        $output->writeln("Name" . str_repeat(' ', 26) . "Method" . str_repeat(' ', 24) . "Group" . str_repeat(' ', 25) . "Path", Output::STYLE_SUCCESS);
+        $allRoutes = [];
+        $bundles = $this->getContainer()->get('kernel')->getBundles();
         foreach ($router->getCollections() as $name => $route) {
-            $method = implode(', ', $route->getMethods());
-            $group = str_replace('//', '/', $route->getGroup());
-            $group = empty($group) ? '/' : $group;
-            $output->writeln(
-                $route->getName() . str_repeat(' ', ($length - strlen($route->getName()))) .
-                $method . str_repeat(' ', ($length - strlen($method))) .
-                str_replace('//', '/', $group . str_repeat(' ', ($length - strlen($group)))) .
-                str_replace('//', '/', $route->getPath())
-            );
+            $callback = $route->getCallback();
+            if (is_array($callback)) {
+                $callback = get_class($callback[0]) . '@' . $callback[1];
+            }
+            foreach ($bundles as $bundle) {
+                if (0 === strpos($callback, $bundle->getNamespace())) {
+                    $allRoutes[$bundle->getFullName()][] = $route;
+                    break;
+                }
+            }
         }
+
+        if (null === $bundleName) {
+            foreach ($allRoutes as $name => $routes) {
+                $output->writeln($name, Output::STYLE_SUCCESS);
+                foreach ($routes as $route) {
+                    $this->formatOutput($route, $output);
+                }
+            }
+            return 0;
+        }
+
+        foreach ($allRoutes as $name => $routes) {
+            if ($name == $bundleName) {
+                $output->writeln($name, Output::STYLE_SUCCESS);
+                foreach ($routes as $route) {
+                    $this->formatOutput($route, $output);
+                }
+            }
+
+        }
+    }
+
+    public function formatOutput(RouteInterface $routeInterface, Output $output)
+    {
+        $output->write('Route [');
+        $output->write('"' . $routeInterface->getName() . '"', Output::STYLE_SUCCESS);
+        $output->writeln(']');
+        $output->writeln("Group:\t\t" . ('' == ($group = str_replace('//', '/', $routeInterface->getGroup())) ? '/' : $group));
+        $output->writeln("Path:\t\t" . $routeInterface->getPath());
+        $output->writeln("Method:\t\t" . implode(', ', $routeInterface->getMethods()));
+        $output->writeln("Format:\t\t" . implode(', ', $routeInterface->getFormats()));
+        $output->writeln("Callback:\t" . (is_callable($routeInterface->getCallback()) ? 'Closure' : $routeInterface->getCallback()));
+        $output->writeln("Defaults:\t" . implode(', ', $routeInterface->getDefaults()));
+        $output->writeln("Requirements:\t" . implode(', ', $routeInterface->getRequirements()));
+        $output->writeln("Path-Regex:\t" . $routeInterface->getPathRegex());
+        $output->writeln('');
     }
 }
