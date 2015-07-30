@@ -40,7 +40,7 @@ class TemplateEvent extends BaseEvent
         if (null === $this->template) {
             $paths = $this->getParameters('template.paths');
             foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
-                $paths[] = $bundle->getRootPath();
+                $paths[] = dirname($bundle->getRootPath());
             }
             $options = [];
             if (!($isDebug = $this->container->get('kernel')->isDebug())) {
