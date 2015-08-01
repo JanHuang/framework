@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c179cdb45f1883a6dc83170d2ad4bd34",
+    "hash": "1188d8da0cfccf962de052658af5b69b",
     "packages": [
         {
             "name": "fastd/config",
@@ -48,16 +48,16 @@
         },
         {
             "name": "fastd/console",
-            "version": "v0.1.2",
+            "version": "v0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/console.git",
-                "reference": "ba3bbde4a1332d6e844fd1e1fe1c21aac9171f57"
+                "reference": "8042dede061e7d491675c40609fb880bd2f7c118"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/console/zipball/ba3bbde4a1332d6e844fd1e1fe1c21aac9171f57",
-                "reference": "ba3bbde4a1332d6e844fd1e1fe1c21aac9171f57",
+                "url": "https://api.github.com/repos/JanHuang/console/zipball/8042dede061e7d491675c40609fb880bd2f7c118",
+                "reference": "8042dede061e7d491675c40609fb880bd2f7c118",
                 "shasum": ""
             },
             "require": {
@@ -95,7 +95,7 @@
                 "FastD",
                 "console"
             ],
-            "time": "2015-07-22 02:29:32"
+            "time": "2015-07-23 01:31:05"
         },
         {
             "name": "fastd/container",
@@ -139,22 +139,27 @@
         },
         {
             "name": "fastd/database",
-            "version": "v0.1.2",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/database.git",
-                "reference": "a91862c6b4404556625b21177a10fd713089cc62"
+                "reference": "69d1b70dd06f3f0ccc5c67fa62bcb4ad2d0fba45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/database/zipball/a91862c6b4404556625b21177a10fd713089cc62",
-                "reference": "a91862c6b4404556625b21177a10fd713089cc62",
+                "url": "https://api.github.com/repos/JanHuang/database/zipball/69d1b70dd06f3f0ccc5c67fa62bcb4ad2d0fba45",
+                "reference": "69d1b70dd06f3f0ccc5c67fa62bcb4ad2d0fba45",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "FastD\\": "src/FastD"
@@ -175,20 +180,20 @@
                 "FastD",
                 "database"
             ],
-            "time": "2015-07-14 06:28:03"
+            "time": "2015-08-01 16:08:04"
         },
         {
             "name": "fastd/debug",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/debug.git",
-                "reference": "68d12b387805317d415c3ffce5dfbce37ec32998"
+                "reference": "a361b10afec7f93c991f3f5cf725c6baa509661b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/debug/zipball/68d12b387805317d415c3ffce5dfbce37ec32998",
-                "reference": "68d12b387805317d415c3ffce5dfbce37ec32998",
+                "url": "https://api.github.com/repos/JanHuang/debug/zipball/a361b10afec7f93c991f3f5cf725c6baa509661b",
+                "reference": "a361b10afec7f93c991f3f5cf725c6baa509661b",
                 "shasum": ""
             },
             "require": {
@@ -219,7 +224,7 @@
                 "FastD",
                 "exception"
             ],
-            "time": "2015-07-20 02:13:16"
+            "time": "2015-07-24 03:49:37"
         },
         {
             "name": "fastd/finder",
@@ -263,16 +268,16 @@
         },
         {
             "name": "fastd/http",
-            "version": "v0.1.1",
+            "version": "v0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/http.git",
-                "reference": "abbaf03147fa1d4fbcc334ec199b5243a07b64ca"
+                "reference": "4dc2b741c778f5fc9efe251b1b9ceac8f4891ed4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/http/zipball/abbaf03147fa1d4fbcc334ec199b5243a07b64ca",
-                "reference": "abbaf03147fa1d4fbcc334ec199b5243a07b64ca",
+                "url": "https://api.github.com/repos/JanHuang/http/zipball/4dc2b741c778f5fc9efe251b1b9ceac8f4891ed4",
+                "reference": "4dc2b741c778f5fc9efe251b1b9ceac8f4891ed4",
                 "shasum": ""
             },
             "require": {
@@ -300,7 +305,7 @@
                 "http",
                 "protocol"
             ],
-            "time": "2015-07-21 03:07:36"
+            "time": "2015-07-28 09:19:36"
         },
         {
             "name": "fastd/logger",
@@ -430,16 +435,16 @@
         },
         {
             "name": "fastd/template",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/template.git",
-                "reference": "50d411bf9928f645488beeb089dee52c3dad46ef"
+                "reference": "b8fbe4ff7b9151ed9347b77d9c6e307a7e13ae47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/template/zipball/50d411bf9928f645488beeb089dee52c3dad46ef",
-                "reference": "50d411bf9928f645488beeb089dee52c3dad46ef",
+                "url": "https://api.github.com/repos/JanHuang/template/zipball/b8fbe4ff7b9151ed9347b77d9c6e307a7e13ae47",
+                "reference": "b8fbe4ff7b9151ed9347b77d9c6e307a7e13ae47",
                 "shasum": ""
             },
             "require": {
@@ -467,7 +472,7 @@
                 "templating",
                 "twig"
             ],
-            "time": "2015-06-30 04:28:54"
+            "time": "2015-07-26 06:49:26"
         },
         {
             "name": "maximebf/debugbar",
@@ -637,16 +642,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v2.7.2",
+            "version": "v2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "fde603d9f4b2418ff0f0315b93eb039c9aa41205"
+                "reference": "e8903ebba5eb019f5886ffce739ea9e3b7519579"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/fde603d9f4b2418ff0f0315b93eb039c9aa41205",
-                "reference": "fde603d9f4b2418ff0f0315b93eb039c9aa41205",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/e8903ebba5eb019f5886ffce739ea9e3b7519579",
+                "reference": "e8903ebba5eb019f5886ffce739ea9e3b7519579",
                 "shasum": ""
             },
             "require": {
@@ -692,20 +697,20 @@
                 "debug",
                 "dump"
             ],
-            "time": "2015-07-01 12:07:40"
+            "time": "2015-07-28 15:18:12"
         },
         {
             "name": "twig/twig",
-            "version": "v1.18.2",
+            "version": "v1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "e8e6575abf6102af53ec283f7f14b89e304fa602"
+                "reference": "edbeaf43b0a606cdaadc32a11d2673614a377b90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e8e6575abf6102af53ec283f7f14b89e304fa602",
-                "reference": "e8e6575abf6102af53ec283f7f14b89e304fa602",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/edbeaf43b0a606cdaadc32a11d2673614a377b90",
+                "reference": "edbeaf43b0a606cdaadc32a11d2673614a377b90",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +719,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.18-dev"
+                    "dev-master": "1.19-dev"
                 }
             },
             "autoload": {
@@ -749,26 +754,26 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-06-06 23:31:24"
+            "time": "2015-07-31 13:45:26"
         }
     ],
     "packages-dev": [
         {
             "name": "fastd/fastd-module",
-            "version": "dev-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/fast-module.git",
-                "reference": "78e48bef46062bd7e7b16463c90886a5c4681071"
+                "reference": "992b80737be4388ab943a7d8c8e3ab41491080f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/fast-module/zipball/78e48bef46062bd7e7b16463c90886a5c4681071",
-                "reference": "78e48bef46062bd7e7b16463c90886a5c4681071",
+                "url": "https://api.github.com/repos/JanHuang/fast-module/zipball/992b80737be4388ab943a7d8c8e3ab41491080f9",
+                "reference": "992b80737be4388ab943a7d8c8e3ab41491080f9",
                 "shasum": ""
             },
             "require": {
-                "fastd/framework": "~0.1.0",
+                "fastd/framework": "~1.1.2",
                 "php": ">=5.4.0"
             },
             "type": "library",
@@ -797,7 +802,7 @@
             "keywords": [
                 "module develop framework."
             ],
-            "time": "2015-07-20 14:13:50"
+            "time": "2015-07-30 16:10:39"
         }
     ],
     "aliases": [],
