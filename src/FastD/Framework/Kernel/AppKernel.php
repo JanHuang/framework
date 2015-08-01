@@ -173,6 +173,8 @@ abstract class AppKernel extends Terminal
     {
         $config = new Config();
 
+        $this->container->set('kernel.config', $config);
+
         $variables = array_merge($this->registerConfigVariable(), array(
             'root.path' => $this->getRootPath(),
             'env'       => $this->getEnvironment(),
@@ -182,6 +184,15 @@ abstract class AppKernel extends Terminal
         ));
 
         $config->setVariable($variables);
+
+        $cache = $this->getRootPath() . '/config.php.cache';
+
+        if (file_exists($cache)) {
+            $all = include $cache;
+            $config->set($all);
+            unset($all);
+            return true;
+        }
 
         $config->load($this->getRootPath() . '/config/global.php');
 
@@ -193,8 +204,6 @@ abstract class AppKernel extends Terminal
                 $config->load($file);
             }
         }
-
-        $this->container->set('kernel.config', $config);
 
         unset($config);
     }
