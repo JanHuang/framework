@@ -33,7 +33,7 @@ abstract class AppKernel extends Terminal
      *
      * @const string
      */
-    const VERSION = 'v1.0.x';
+    const VERSION = 'v1.0.x-dev';
 
     /**
      * @var string
@@ -188,10 +188,7 @@ abstract class AppKernel extends Terminal
         $cache = $this->getRootPath() . '/config.php.cache';
 
         if (file_exists($cache)) {
-            $all = include $cache;
-            $config->set($all);
-            unset($all);
-            return true;
+            return $config->set(include $cache);
         }
 
         $config->load($this->getRootPath() . '/config/global.php');
@@ -267,6 +264,7 @@ abstract class AppKernel extends Terminal
             $event->setContainer($this->container);
         }
 
+        // Initialize assert.
         if (method_exists($event, '__initialize')) {
             $response = $this->container->getProvider()->callServiceMethod($event, '__initialize');
             if (null !== $response && $response instanceof Response) {

@@ -47,7 +47,7 @@ interface AppKernelInterface
      *
      * @return array
      */
-    public function registerHelpers();
+    public function registerService();
 
     /**
      * Register application configuration

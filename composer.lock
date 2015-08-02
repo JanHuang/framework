@@ -4,26 +4,31 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1188d8da0cfccf962de052658af5b69b",
+    "hash": "6c29214d2cddfcec4949bb9a331addf5",
     "packages": [
         {
             "name": "fastd/config",
-            "version": "v0.1.0",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/config.git",
-                "reference": "bfed962b51df3eb9aeca5f95c5cedd035cf6a6c3"
+                "reference": "bd8dbc7b70189c14a2de8d6b95bfdcc6df29be7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/config/zipball/bfed962b51df3eb9aeca5f95c5cedd035cf6a6c3",
-                "reference": "bfed962b51df3eb9aeca5f95c5cedd035cf6a6c3",
+                "url": "https://api.github.com/repos/JanHuang/config/zipball/bd8dbc7b70189c14a2de8d6b95bfdcc6df29be7c",
+                "reference": "bd8dbc7b70189c14a2de8d6b95bfdcc6df29be7c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "FastD\\": "src/FastD"
@@ -44,7 +49,7 @@
                 "FastD",
                 "config"
             ],
-            "time": "2015-06-21 02:17:59"
+            "time": "2015-08-02 02:16:30"
         },
         {
             "name": "fastd/console",
