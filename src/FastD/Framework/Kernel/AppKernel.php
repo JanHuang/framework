@@ -91,7 +91,7 @@ abstract class AppKernel extends Terminal
         $this->debug = 'prod' === $this->environment ? false : true;
 
         $this->components = array_merge(
-            $this->registerHelpers(),
+            $this->registerService(),
             $this->components
         );
 
