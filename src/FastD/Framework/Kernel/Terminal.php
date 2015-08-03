@@ -14,6 +14,7 @@
 
 namespace FastD\Framework\Kernel;
 
+use FastD\Console\Command;
 use FastD\Console\Environment\BaseEnvironment;
 use FastD\Framework\Bundle;
 
@@ -39,9 +40,12 @@ abstract class Terminal extends BaseEnvironment implements TerminalInterface, Ap
                     }
                     $fileName = $bundle->getNamespace() . '\\Commands\\' . pathinfo($file, PATHINFO_FILENAME);
                     $command = new $fileName();
-                    $command->setEnv($this);
-                    $command->setContainer($this->getContainer());
-                    $this->setCommand($command);
+                    if ($command instanceof Command) {
+                        $command->setEnv($this);
+                        $command->setContainer($this->getContainer());
+                        $this->setCommand($command);
+                    }
+
                 }
                 closedir($dh);
             }
