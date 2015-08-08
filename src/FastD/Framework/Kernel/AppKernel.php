@@ -33,7 +33,7 @@ abstract class AppKernel extends Terminal
      *
      * @const string
      */
-    const VERSION = 'v1.0.x-dev';
+    const VERSION = 'v1.1.x-dev';
 
     /**
      * @var string
@@ -145,7 +145,17 @@ abstract class AppKernel extends Terminal
 
         $config = $this->container->get('kernel.config');
 
-        Debug::enable($this->container->get('kernel.logger')->createLogger($config->get('logger.error')), $config->get('error.page'));
+        $debug = Debug::enable($this->isDebug(), $this->container->get('kernel.logger')->createLogger($config->get('logger.error')));
+
+        if (!$this->isDebug()) {
+            $customs = $config->get('error.page');
+            foreach ($customs as $code => $content) {
+                $debug->setCustom($code, $content);
+            }
+            unset($customs);
+        }
+
+        $this->container->set('kernel.debug', $debug);
 
         unset($config);
 
@@ -181,6 +191,7 @@ abstract class AppKernel extends Terminal
             'debug'     => $this->isDebug(),
             'version'   => AppKernel::VERSION,
             'date'      => date('Ymd'),
+            'storage.path' => $this->getRootPath() . '/storage',
         ));
 
         $config->setVariable($variables);
@@ -309,13 +320,8 @@ abstract class AppKernel extends Terminal
                 ->createLogger($this->container->get('kernel.config')->get('logger.access'))
                 ->addInfo($request->getPathInfo(), $context)
             ;
-        } else if(false === strpos($response->header->has('Content-Type') ? $response->header->get('Content-Type') : '', 'application')) {
-            $path = 'http://resources.fast-d.cn';
-            if (file_exists($this->getRootPath() . '/../public/debugbar')) {
-                $path = $request->getSchemeAndHttpAndHost() . $request->getRootPath();
-            }
-
-            Debug::showDebugBar($path . '/debugbar', $context);
+        } else if(false === strpos($response->header->hasGet('Content-Type', ''), 'application')) {
+            $this->container->get('kernel.debug')->showDebugBar($context);
         }
 
         unset($context);
@@ -333,5 +339,10 @@ abstract class AppKernel extends Terminal
         }
 
         return $this->rootPath;
+    }
+
+    public function __destruct()
+    {
+        $this->container = null;
     }
 }

@@ -140,7 +140,7 @@ class BaseEvent
      */
     public function dump($vars)
     {
-        return Debug::dump($vars);
+        return $this->container->get('kernel.debug')->dump($vars);
     }
 
     /**
