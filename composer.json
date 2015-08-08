@@ -35,9 +35,6 @@
         "fastd/debug": "~1.0.0",
         "fastd/template": "~0.1.0"
     },
-    "require-dev": {
-        "fastd/fastd-module": "1.0.x-dev"
-    },
     "autoload": {
         "psr-4": {
             "": "src"

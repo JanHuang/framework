@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e950cac06a7218d9d922c77e17bce8c3",
+    "hash": "76b233f15a5cea9713efa1f9fec30daa",
     "packages": [
         {
             "name": "fastd/config",
@@ -189,7 +189,7 @@
         },
         {
             "name": "fastd/debug",
-            "version": "v1.0.0-BETA1",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JanHuang/debug.git",
@@ -768,60 +768,10 @@
             "time": "2015-07-31 13:45:26"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "fastd/fastd-module",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JanHuang/fast-module.git",
-                "reference": "39e279871290dedd1f341f7d6a3d289c56efa784"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JanHuang/fast-module/zipball/39e279871290dedd1f341f7d6a3d289c56efa784",
-                "reference": "39e279871290dedd1f341f7d6a3d289c56efa784",
-                "shasum": ""
-            },
-            "require": {
-                "fastd/framework": "~1.2.0",
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "": "src/",
-                    "Module\\": "module"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "janhuang",
-                    "email": "bboyjanhuang@gmail.com"
-                }
-            ],
-            "description": "The fastd module framework.",
-            "keywords": [
-                "module develop framework."
-            ],
-            "time": "2015-08-02 03:01:55"
-        }
-    ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "fastd/debug": 10,
-        "fastd/fastd-module": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
