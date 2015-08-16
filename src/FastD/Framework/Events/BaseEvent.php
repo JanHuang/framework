@@ -17,7 +17,6 @@ use FastD\Config\Config;
 use FastD\Container\Container;
 use FastD\Database\Database;
 use FastD\Database\Driver\Driver;
-use FastD\Debug\Debug;
 use FastD\Logger\Logger;
 use FastD\Http\RedirectResponse;
 use FastD\Http\Request;
@@ -84,7 +83,7 @@ class BaseEvent
      * @param       $event
      * @param       $handle
      * @param array $parameters
-     * @return \FastD\Protocol\Http\Response|string
+     * @return \FastD\Http\Response|string
      */
     public function call($event, $handle, array $parameters = [])
     {
@@ -239,5 +238,35 @@ class BaseEvent
     public function redirect($url, $statusCode = 302, array $headers = [])
     {
         return new RedirectResponse($url, $statusCode, $headers);
+    }
+
+    /**
+     * @param       $name
+     * @param array $parameters
+     * @return  mixed
+     */
+    public function forward($name, array $parameters = [])
+    {
+        $route = $this->getRouting()->getRoute($name);
+        $callback = $route->getCallback();
+        if (is_array($callback)) {
+            $event = $callback[0];
+            $handle = $callback[1];
+        } else {
+            list ($event, $handle) = explode('@', $callback);
+        }
+
+        $event = $this->container->set($name, $event)->get($name);
+
+        if ($event instanceof BaseEvent) {
+            $event->setContainer($this->container);
+        }
+        if (method_exists($event, '__initialize')) {
+            $response = $this->container->getProvider()->callServiceMethod($event, '__initialize');
+            if (null !== $response && $response instanceof Response) {
+                return $response;
+            }
+        }
+        return $response = $this->container->getProvider()->callServiceMethod($event, $handle, array_merge($route->getParameters(), $parameters));
     }
 }
