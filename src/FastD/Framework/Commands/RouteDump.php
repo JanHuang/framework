@@ -119,7 +119,7 @@ class RouteDump extends Command
         $output->write('"' . $routeInterface->getName() . '"', Output::STYLE_SUCCESS);
         $output->writeln(']');
         $output->writeln("Group:\t\t" . str_replace('//', '/', $group));
-        $output->writeln("Path:\t\t" . $routeInterface->getPath());
+        $output->writeln("Path:\t\t" . str_replace('//', '/', $routeInterface->getPath()));
         $output->writeln("Method:\t\t" . implode(', ', $routeInterface->getMethods()));
         $output->writeln("Format:\t\t" . implode(', ', $routeInterface->getFormats()));
         $output->writeln("Callback:\t" . (is_callable($routeInterface->getCallback()) ? 'Closure' : $routeInterface->getCallback()));
