@@ -35,7 +35,7 @@ class App extends AppKernel
      *
      * @return array
      */
-    public function registerHelpers()
+    public function registerService()
     {
         return [];
     }
