@@ -68,7 +68,7 @@ class RouteDump extends Command
             $this->showRouteCollections($router, $output, $bundle);
         } else {
             $route = $router->getRoute($name);
-            $this->formatOutput($route);
+            $this->formatOutput($route, $output);
         }
 
         return 0;
@@ -114,10 +114,11 @@ class RouteDump extends Command
 
     public function formatOutput(RouteInterface $routeInterface, Output $output)
     {
+        $group = ('' == ($group = str_replace('//', '/', $routeInterface->getGroup())) ? '/' : $group);
         $output->write('Route [');
         $output->write('"' . $routeInterface->getName() . '"', Output::STYLE_SUCCESS);
         $output->writeln(']');
-        $output->writeln("Group:\t\t" . ('' == ($group = str_replace('//', '/', $routeInterface->getGroup())) ? '/' : $group));
+        $output->writeln("Group:\t\t" . str_replace('//', '/', $group));
         $output->writeln("Path:\t\t" . $routeInterface->getPath());
         $output->writeln("Method:\t\t" . implode(', ', $routeInterface->getMethods()));
         $output->writeln("Format:\t\t" . implode(', ', $routeInterface->getFormats()));
