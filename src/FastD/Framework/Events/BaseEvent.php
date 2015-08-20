@@ -185,12 +185,12 @@ class BaseEvent
     /**
      * @param       $name
      * @param array $parameters
-     * @param bool  $suffix
+     * @param string$format
      * @return string
      */
-    public function generateUrl($name, array $parameters = array(), $suffix = false)
+    public function generateUrl($name, array $parameters = array(), $format = '')
     {
-        $url = $this->getRouting()->generateUrl($name, $parameters, $suffix);
+        $url = $this->getRouting()->generateUrl($name, $parameters, $format);
         if ('http' !== substr($url, 0, 4)) {
             $url = ('/' === ($path = $this->getRequest()->getBaseUrl()) ? '' : $path) . $url;
             $url = str_replace('//', '/', $url);
