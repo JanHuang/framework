@@ -320,8 +320,6 @@ abstract class AppKernel extends Terminal
                 ->createLogger($this->container->get('kernel.config')->get('logger.access'))
                 ->addInfo($request->getPathInfo(), $context)
             ;
-        } else if(false === strpos($response->header->hasGet('Content-Type', ''), 'application')) {
-            $this->container->get('kernel.debug')->showDebugBar($context);
         }
 
         unset($context);
