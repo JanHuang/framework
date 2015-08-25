@@ -52,10 +52,10 @@ class TemplateEvent extends BaseEvent
             $self = $this;
             $this->template = $this->container->get('kernel.template', [$paths, $options]);
             $this->template->addGlobal('request', $this->getRequest());
-            $this->template->addFunction('url', new \Twig_SimpleFunction('url', function ($name, array $parameters = [], $format = '') use ($self) {
+            $this->template->addFunction(new \Twig_SimpleFunction('url', function ($name, array $parameters = [], $format = '') use ($self) {
                 return $self->generateUrl($name, $parameters, $format);
             }));
-            $this->template->addFunction('asset', new \Twig_SimpleFunction('asset', function ($name, $host = null, $path = null) use ($self) {
+            $this->template->addFunction(new \Twig_SimpleFunction('asset', function ($name, $host = null, $path = null) use ($self) {
                 return $self->asset($name, $host, $path);
             }));
             unset($paths, $options);
