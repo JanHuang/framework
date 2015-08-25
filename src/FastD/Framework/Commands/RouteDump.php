@@ -87,6 +87,8 @@ class RouteDump extends Command
                 if (0 === strpos($callback, $bundle->getNamespace())) {
                     $allRoutes[$bundle->getFullName()][] = $route;
                     break;
+                } else {
+                    $allRoutes['others'][] = $route;
                 }
             }
         }
