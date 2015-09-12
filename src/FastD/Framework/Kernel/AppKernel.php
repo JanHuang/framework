@@ -16,6 +16,7 @@ namespace FastD\Framework\Kernel;
 use FastD\Config\Config;
 use FastD\Container\Container;
 use FastD\Debug\Debug;
+use FastD\Debug\Exceptions\ServerInternalErrorException;
 use FastD\Framework\Bundle;
 use FastD\Http\Request;
 use FastD\Http\Response;
@@ -33,7 +34,7 @@ abstract class AppKernel extends Terminal
      *
      * @const string
      */
-    const VERSION = 'v1.3.*';
+    const VERSION = 'v1.4.*';
 
     /**
      * @var string
@@ -254,6 +255,7 @@ abstract class AppKernel extends Terminal
      *
      * @param Request $request
      * @return Response
+     * @throws ServerInternalErrorException
      */
     public function handleHttpRequest(Request $request)
     {
@@ -263,14 +265,13 @@ abstract class AppKernel extends Terminal
 
         $callback = $route->getCallback();
 
-        if (is_array($callback)) {
-            $event = $callback[0];
-            $handle = $callback[1];
-        } else {
-            list ($event, $handle) = explode('@', $callback);
+        if (!is_string($callback)) {
+            throw new ServerInternalErrorException(sprintf("Request '%s' handle bind error.", $route->getName()));
         }
 
-        $event = $this->container->set('callback', $event)->get('callback');
+        list ($event, $handle) = explode('@', $callback);
+
+        $event = $this->container->set('callback', str_replace(':', '\\', $event))->get('callback');
         if ($event instanceof BaseEvent) {
             $event->setContainer($this->container);
         }
