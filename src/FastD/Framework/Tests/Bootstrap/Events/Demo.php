@@ -17,6 +17,7 @@ namespace FastD\Framework\Tests\Bootstrap\Events;
 use FastD\Debug\Exceptions\ForbiddenHttpException;
 use FastD\Framework\Api\Counter;
 use FastD\Framework\Events\RestEvent;
+use FastD\Http\Response;
 
 class Demo extends RestEvent
 {
@@ -25,7 +26,7 @@ class Demo extends RestEvent
         $id = md5($this->getRequest()->server->get('HTTP_USER_AGENT'));
         $this->counter = new Counter($this->getStorage('counter'), $id, 10, 0.01);
         if (!$this->counter->validation()) {
-            throw new ForbiddenHttpException('Your die');
+            return $this->responseJson(['Access over.'], Response::HTTP_FORBIDDEN);
         }
     }
 
@@ -36,12 +37,7 @@ class Demo extends RestEvent
 
     public function sessionAction()
     {
-        $session = $this->getSession();
-//        $session->setSession('name', [
-//            'name' => 'janhuang',
-//            'age' => 18
-//        ]);
-        return $this->responseJson($session->getSession('name'));
+        return $this->responseJson(['name' => 'janhuang']);
     }
 
     public function apiAction()

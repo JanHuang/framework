@@ -54,6 +54,11 @@ class Counter implements CounterInterface, CounterSerializeInterface
     protected $reset;
 
     /**
+     * @var int
+     */
+    protected $timeout;
+
+    /**
      * @param StorageInterface $storageInterface
      * @param null             $id
      * @param int              $limited
@@ -69,7 +74,27 @@ class Counter implements CounterInterface, CounterSerializeInterface
 
         $this->setRemaining($limited);
 
+        $this->timeout = $timeout;
+
         $this->setResetTime(time() + (3600 * $timeout));
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * @param int $timeout
+     * @return $this
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+        return $this;
     }
 
     /**
@@ -179,13 +204,13 @@ class Counter implements CounterInterface, CounterSerializeInterface
         if (!$this->decode()) {
             return false;
         }
-
-        if ($this->remaining <= 0) {
-            if (time() < $this->reset) {
+        if (time() < $this->reset) {
+            if ($this->remaining <= 0) {
                 return false;
             }
-            $this->setResetTime(time() + 3600 * 24);
+        } else {
             $this->setRemaining($this->limited);
+            $this->setResetTime(time() + 3600 * $this->timeout);
         }
 
         $this->setResetTime($this->reset);
