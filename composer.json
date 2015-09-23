@@ -23,7 +23,7 @@
     },
     "require": {
         "php": ">=5.5",
-        "fastd/http": "1.0.*@BETA",
+        "fastd/http": "~1.0.0",
         "fastd/routing": "~0.1.1",
         "fastd/database": "~0.2.0",
         "fastd/container": "~0.1.1",
