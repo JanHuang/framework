@@ -197,6 +197,13 @@ class Counter implements CounterInterface, CounterSerializeInterface
      */
     public function validation()
     {
+        if (!$this->storage->exists($this->getId())) {
+            $this->setResetTime(time() + 3600 * $this->timeout);
+            $this->setRemaining(--$this->remaining);
+            $this->flush();
+            return true;
+        }
+
         if (null === $this->getContent()) {
             $this->content = $this->storage->get($this->getId());
         }

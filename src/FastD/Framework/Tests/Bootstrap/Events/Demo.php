@@ -14,7 +14,6 @@
 
 namespace FastD\Framework\Tests\Bootstrap\Events;
 
-use FastD\Debug\Exceptions\ForbiddenHttpException;
 use FastD\Framework\Api\Counter;
 use FastD\Framework\Events\RestEvent;
 use FastD\Http\Response;
