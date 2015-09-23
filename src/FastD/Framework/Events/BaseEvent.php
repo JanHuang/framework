@@ -17,6 +17,9 @@ use FastD\Config\Config;
 use FastD\Container\Container;
 use FastD\Database\Database;
 use FastD\Database\Driver\Driver;
+use FastD\Http\Session\Session;
+use FastD\Http\Session\SessionHandler;
+use FastD\Http\Session\Storage\RedisStorage;
 use FastD\Logger\Logger;
 use FastD\Http\RedirectResponse;
 use FastD\Http\Request;
@@ -59,6 +62,11 @@ class BaseEvent
      * @var Router
      */
     protected $routing;
+
+    /**
+     * @var Session
+     */
+    protected $session;
 
     /**
      * @param Container $container
@@ -117,6 +125,28 @@ class BaseEvent
     public function getRequest()
     {
         return $this->get('kernel.request');
+    }
+
+    /**
+     * @return Session
+     */
+    public function getSession()
+    {
+        if ($this->session instanceof Session) {
+            return $this->session;
+        }
+
+        $config = $this->getParameters('session');
+
+        $storage = new RedisStorage($config['host'], $config['port'], isset($config['auth']) ? $config['auth'] : null);
+
+        $handler = new SessionHandler($storage);
+
+        $this->session = $this->getRequest()->getSessionHandle($handler);
+
+        unset($storage, $handler);
+
+        return $this->session;
     }
 
     /**

@@ -34,7 +34,7 @@ abstract class AppKernel extends Terminal
      *
      * @const string
      */
-    const VERSION = 'v1.4.*';
+    const VERSION = 'v1.4.x';
 
     /**
      * @var string

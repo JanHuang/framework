@@ -14,6 +14,7 @@
 
 namespace FastD\Framework\Events;
 
+use FastD\Framework\Api\Counter;
 use FastD\Http\Response;
 use FastD\Http\JsonResponse;
 
@@ -22,117 +23,49 @@ use FastD\Http\JsonResponse;
  *
  * @package FastD\Framework\Events
  */
-class RestEvent extends BaseEvent
+abstract class RestEvent extends BaseEvent
 {
     /**
-     * @var string
+     * @var Counter
      */
-    protected $version = 'v1';
-
-    /**
-     * @var string
-     */
-    protected $title = 'fast-d';
-
-    /**
-     * @var string
-     */
-    protected $accept = 'application/vnd.%s.%s+json';
-
-    /**
-     * @var array
-     */
-    protected $headers = [];
-
-    /**
-     * @var string
-     */
-    protected $allowOrigin = '*';
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        $this->headers = [
-            'Version'   => $this->getVersion(),
-            'X-' . strtoupper($this->getTitle()) . '-Media-Type' => strtolower($this->getTitle() . '.' . $this->getVersion()),
-        ];
-    }
-
-    /**
-     * @return null
-     */
-    public function getAllowOrigin()
-    {
-        return $this->allowOrigin;
-    }
-
-    /**
-     * @param null $allowOrigin
-     * @return $this
-     */
-    public function setAllowOrigin($allowOrigin)
-    {
-        $this->allowOrigin = $allowOrigin;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     * @return $this
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * @param array $responseData
-     * @param int   $status
-     * @param array $headers
-     * @return JsonResponse
-     */
-    public function responseJson(array $responseData, $status  = Response::HTTP_OK, array $headers = array())
-    {
-        $headers['Status'] = sprintf('%s %s', $status, Response::$statusTexts[$status]);
-        $headers['Access-Control-Allow-Origin'] = null === ($allowOrigin = $this->getAllowOrigin()) ? '*' : $allowOrigin;
-        $headers['Access-Control-Allow-Credentials'] = true;
-        $headers['Access-Control-Expose-Headers'] = 'ETag, Link';
-
-        return new JsonResponse($responseData, $status, array_merge(
-            $this->headers,
-            $headers
-        ));
-    }
-
-    /**
-     * @param $version
-     * @return $this
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
+    protected $counter;
 
     /**
      * @return string
      */
     public function getVersion()
     {
-        return $this->version;
+        return 'v1';
+    }
+
+    /**
+     * @return string
+     */
+    public function getServer()
+    {
+        return 'FastD';
+    }
+
+    /**
+     * @param array $data
+     * @param int   $status
+     * @param array $headers
+     * @return JsonResponse
+     */
+    public function responseJson(array $data, $status = Response::HTTP_OK, array $headers = [])
+    {
+        if ($this->counter instanceof Counter) {
+            $headers['Access-Control-Allow-Credentials'] = true;
+            $headers['Access-Control-Allow-Origin'] = '*';
+            $headers['Access-Control-Expose-Headers'] = 'ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset';
+            $headers['X-' . $this->getServer() . '-Media-Type'] = strtolower($this->getServer()) . '.' . $this->getVersion();
+            $headers['X-' . $this->getServer() . '-Request-Id'] = $this->counter->getId();
+            $headers['X-RateLimit-Limit'] = $this->counter->getLimited();
+            $headers['X-RateLimit-Remaining'] = $this->counter->getRemaining();
+            $headers['X-RateLimit-Reset'] = $this->counter->getResetTime();
+            $headers['X-Served-By'] = $this->getServer();
+        }
+
+        return new JsonResponse($data, $status, $headers);
     }
 }

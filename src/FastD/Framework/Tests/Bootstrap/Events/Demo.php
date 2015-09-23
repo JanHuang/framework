@@ -14,11 +14,39 @@
 
 namespace FastD\Framework\Tests\Bootstrap\Events;
 
-use FastD\Framework\Events\BaseEvent;
+use FastD\Debug\Exceptions\ForbiddenHttpException;
+use FastD\Framework\Api\Counter;
+use FastD\Framework\Events\RestEvent;
 
-class Demo extends BaseEvent
+class Demo extends RestEvent
 {
+    protected $counter;
+
+    public function __initialize()
+    {
+        $id = md5($this->getRequest()->server->get('HTTP_USER_AGENT'));
+        $this->counter = new Counter($this->getStorage('counter'), $id, 10, 0.01);
+        if (!$this->counter->validation()) {
+            throw new ForbiddenHttpException('Your die');
+        }
+    }
+
     public function indexAction()
+    {
+        return 'hello world';
+    }
+
+    public function sessionAction()
+    {
+        $session = $this->getSession();
+//        $session->setSession('name', [
+//            'name' => 'janhuang',
+//            'age' => 18
+//        ]);
+        return $this->responseJson($session->getSession('name'));
+    }
+
+    public function apiAction()
     {
         return 'hello world';
     }

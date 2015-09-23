@@ -22,6 +22,19 @@ return [
         'cache' => __DIR__ . '/../storage/templates',
     ],
 
+    'storage' => [
+        'counter' => [
+            'type' => 'redis',
+            'host' => '11.11.11.33',
+            'port' => '6379',
+        ],
+    ],
+
+    'session' => [
+        'host' => '11.11.11.33',
+        'port' => '6379',
+    ],
+
     // 日志对象
     'logger' => [
         'access' => '%root.path%/storage/logs/%date%/access.log',

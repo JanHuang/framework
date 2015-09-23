@@ -13,3 +13,5 @@
  */
 
 Routes::get('/', 'FastD:Framework:Tests:Bootstrap:Events:Demo@indexAction');
+Routes::get('/session', 'FastD:Framework:Tests:Bootstrap:Events:Demo@sessionAction');
+Routes::get('/rest', 'FastD:Framework:Tests:Bootstrap:Events:Demo@apiAction');

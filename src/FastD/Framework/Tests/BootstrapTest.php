@@ -66,7 +66,17 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $request = new Request([], [], [], [], $this->getServer());
         $request->server->set('PATH_INFO', '/');
         $response = $app->handleHttpRequest($request);
-        $response->send();
-        $app->terminate($request, $response);
+        $this->assertEquals('hello world', $response->getContent());
+    }
+
+    public function testRestAPI()
+    {
+        $app = new App('test');
+        $app->boot();
+        include __DIR__ . '/Bootstrap/config/routes.php';
+        $request = new Request([], [], [], [], $this->getServer());
+        $request->server->set('PATH_INFO', '/rest');
+        $response = $app->handleHttpRequest($request);
+        $this->assertEquals('hello world', $response->getContent());
     }
 }
