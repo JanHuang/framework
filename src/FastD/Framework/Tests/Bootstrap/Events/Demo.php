@@ -20,8 +20,6 @@ use FastD\Framework\Events\RestEvent;
 
 class Demo extends RestEvent
 {
-    protected $counter;
-
     public function __initialize()
     {
         $id = md5($this->getRequest()->server->get('HTTP_USER_AGENT'));

@@ -55,7 +55,7 @@ abstract class RestEvent extends BaseEvent
     public function responseJson(array $data, $status = Response::HTTP_OK, array $headers = [])
     {
         if ($this->counter instanceof Counter) {
-            $headers['Access-Control-Allow-Credentials'] = true;
+            $headers['Access-Control-Allow-Credentials'] = 'true';
             $headers['Access-Control-Allow-Origin'] = '*';
             $headers['Access-Control-Expose-Headers'] = 'ETag, Link, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset';
             $headers['X-' . $this->getServer() . '-Media-Type'] = strtolower($this->getServer()) . '.' . $this->getVersion();
