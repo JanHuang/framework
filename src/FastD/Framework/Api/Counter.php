@@ -66,7 +66,7 @@ class Counter implements CounterInterface, CounterSerializeInterface
      * @param int              $limited
      * @param int              $timeout
      */
-    public function __construct(StorageInterface $storageInterface, $id = null, $limited = 10, $timeout = 1)
+    public function __construct(StorageInterface $storageInterface, $id = null, $limited = 10, $timeout = 0)
     {
         $this->storage = $storageInterface;
 
@@ -78,7 +78,7 @@ class Counter implements CounterInterface, CounterSerializeInterface
 
         $this->timeout = $timeout;
 
-        $this->setResetTime(time() + 3600);
+        $this->setResetTime($timeout);
 
         if (null === $this->getContent()) {
             $this->content = $storageInterface->get($this->getId());
@@ -235,7 +235,7 @@ class Counter implements CounterInterface, CounterSerializeInterface
 
         if (time() > $this->content['reset'] || ($this->limited != $this->content['limit'])) {
             $this->setRemaining(--$this->remaining);
-            $this->setResetTime(time() + 3600);
+            $this->setResetTime($this->timeout);
             $this->setExcess(0);
         } else {
             if ($this->content['remaining'] <= 0) {
