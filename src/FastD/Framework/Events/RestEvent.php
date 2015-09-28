@@ -62,6 +62,7 @@ abstract class RestEvent extends BaseEvent
             $headers['X-' . $this->getServer() . '-Request-Id'] = $this->counter->getId();
             $headers['X-RateLimit-Limit'] = $this->counter->getLimited();
             $headers['X-RateLimit-Remaining'] = $this->counter->getRemaining();
+            $headers['X-RateLimit-Excess'] = $this->counter->getExcess();
             $headers['X-RateLimit-Reset'] = $this->counter->getResetTime();
             $headers['X-Served-By'] = $this->getServer();
         }

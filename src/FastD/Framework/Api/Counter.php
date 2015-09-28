@@ -58,6 +58,26 @@ class Counter implements CounterInterface, CounterSerializeInterface
      */
     protected $timeout;
 
+    protected $excess = 0;
+
+    /**
+     * @return int
+     */
+    public function getExcess()
+    {
+        return $this->excess;
+    }
+
+    /**
+     * @param int $excess
+     * @return $this
+     */
+    public function setExcess($excess)
+    {
+        $this->excess = $excess;
+        return $this;
+    }
+
     /**
      * @param StorageInterface $storageInterface
      * @param null             $id
@@ -198,6 +218,9 @@ class Counter implements CounterInterface, CounterSerializeInterface
     public function validation()
     {
         if (!$this->storage->exists($this->getId())) {
+            if ($this->limited <= 0) {
+                return false;
+            }
             $this->setResetTime(time() + 3600 * $this->timeout);
             $this->setRemaining(--$this->remaining);
             $this->flush();
@@ -237,6 +260,7 @@ class Counter implements CounterInterface, CounterSerializeInterface
             'limit' => $this->getLimited(),
             'reset' => $this->getResetTime(),
             'remaining' => $this->getRemaining(),
+            'excess'    => $this->getExcess(),
         ];
 
         $this->storage->set($this->getId(), $this->encode());
