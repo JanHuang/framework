@@ -61,6 +61,32 @@ class Counter implements CounterInterface, CounterSerializeInterface
     protected $excess = 0;
 
     /**
+     * @param StorageInterface $storageInterface
+     * @param null             $id
+     * @param int              $limited
+     * @param int              $timeout
+     */
+    public function __construct(StorageInterface $storageInterface, $id = null, $limited = 10, $timeout = 1)
+    {
+        $this->storage = $storageInterface;
+
+        $this->setId($id);
+
+        $this->setLimited($limited);
+
+        $this->setRemaining($limited);
+
+        $this->timeout = $timeout;
+
+        $this->setResetTime(time() + 3600);
+
+        if (null === $this->getContent()) {
+            $this->content = $storageInterface->get($this->getId());
+            $this->decode();
+        }
+    }
+
+    /**
      * @return int
      */
     public function getExcess()
@@ -76,27 +102,6 @@ class Counter implements CounterInterface, CounterSerializeInterface
     {
         $this->excess = $excess;
         return $this;
-    }
-
-    /**
-     * @param StorageInterface $storageInterface
-     * @param null             $id
-     * @param int              $limited
-     * @param int              $timeout
-     */
-    public function __construct(StorageInterface $storageInterface, $id = null, $limited = 10, $timeout = 24)
-    {
-        $this->storage = $storageInterface;
-
-        $this->setId($id);
-
-        $this->setLimited($limited);
-
-        $this->setRemaining($limited);
-
-        $this->timeout = $timeout;
-
-        $this->setResetTime(time() + (3600 * $timeout));
     }
 
     /**
@@ -213,41 +218,37 @@ class Counter implements CounterInterface, CounterSerializeInterface
     }
 
     /**
+     * @param bool $isAuthorization
      * @return bool
      */
-    public function validation()
+    public function validation($isAuthorization = false)
     {
         if (!$this->storage->exists($this->getId())) {
-            if ($this->limited <= 0) {
-                return false;
-            }
-            $this->setResetTime(time() + 3600 * $this->timeout);
             $this->setRemaining(--$this->remaining);
             $this->flush();
             return true;
         }
 
-        if (null === $this->getContent()) {
-            $this->content = $this->storage->get($this->getId());
-        }
-
-        if (!$this->decode()) {
+        if (false == $this->content) {
             return false;
         }
-        if (time() < $this->reset) {
-            if ($this->remaining <= 0) {
-                return false;
-            }
+
+        if (time() > $this->content['reset'] || ($this->limited != $this->content['limit'])) {
+            $this->setRemaining(--$this->remaining);
+            $this->setResetTime(time() + 3600);
+            $this->setExcess(0);
         } else {
-            $this->setRemaining($this->limited);
-            $this->setResetTime(time() + 3600 * $this->timeout);
+            if ($this->content['remaining'] <= 0) {
+                if (!$isAuthorization) {
+                    return false;
+                }
+                $this->setExcess(++$this->content['excess']);
+            }
+            $remaing = --$this->content['remaining'];
+            $this->setRemaining($remaing <= 0 ? 0 : $remaing);
         }
 
-        $this->setResetTime($this->reset);
-        $this->setRemaining(--$this->remaining);
-
         $this->flush();
-
         return true;
     }
 
@@ -260,7 +261,7 @@ class Counter implements CounterInterface, CounterSerializeInterface
             'limit' => $this->getLimited(),
             'reset' => $this->getResetTime(),
             'remaining' => $this->getRemaining(),
-            'excess'    => $this->getExcess(),
+            'excess' => $this->getExcess(),
         ];
 
         $this->storage->set($this->getId(), $this->encode());
@@ -273,9 +274,7 @@ class Counter implements CounterInterface, CounterSerializeInterface
      */
     public function encode()
     {
-        $this->content = json_encode($this->content, JSON_UNESCAPED_UNICODE);
-
-        return $this->content;
+        return json_encode($this->content, JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -283,13 +282,6 @@ class Counter implements CounterInterface, CounterSerializeInterface
      */
     public function decode()
     {
-        $this->content = json_decode($this->content, true);
-        if (!is_array($this->content)) {
-            return false;
-        }
-        $this->setRemaining($this->content['remaining']);
-        $this->setResetTime($this->content['reset']);
-        $this->setLimited($this->content['limit']);
-        return true;
+        return !is_array($this->content = json_decode($this->content, true)) ? false : $this->content;
     }
 }
