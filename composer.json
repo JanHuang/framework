@@ -25,7 +25,7 @@
         "php": ">=5.5",
         "fastd/http": "~1.0.0",
         "fastd/routing": "~0.1.1",
-        "fastd/database": "~0.2.0",
+        "fastd/database": "1.0.*@alpha",
         "fastd/container": "~0.1.1",
         "fastd/config": "~1.0.0",
         "fastd/storage": "~0.1.0",
@@ -35,14 +35,13 @@
         "fastd/debug": "~1.0.1",
         "fastd/template": "~0.1.0"
     },
-    "autoload": {
-        "psr-4": {
-            "": "src"
-        }
+    "require-dev": {
+        "fastd/swoole": "1.0.x-dev",
+        "fastd/swoole-bundle": "1.0.x-dev"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.4.x-dev"
+            "dev-master": "1.5.x-dev"
         }
     }
 }
