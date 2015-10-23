@@ -240,7 +240,7 @@ class BaseEvent
             try {
                 $host = $this->getParameters('assets.host');
             } catch (\InvalidArgumentException $e) {
-                $host = $this->getRequest()->getSchemeAndHttpAndHost();
+                $host = str_replace(['http:', 'https:'], '', $this->getRequest()->getSchemeAndHttpAndHost());
             }
         }
 
