@@ -24,7 +24,7 @@
     "require": {
         "php": ">=5.5",
         "fastd/http": "~1.0.0",
-        "fastd/routing": "~0.1.1",
+        "fastd/routing": "1.0.x-dev",
         "fastd/database": "1.0.*@alpha",
         "fastd/container": "~0.1.1",
         "fastd/config": "~1.0.0",
@@ -41,7 +41,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.5.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

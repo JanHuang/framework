@@ -12,7 +12,7 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Tests\Bootstrap;
+namespace FastD\Framework\Tests\KernelTesting\Bootstrap;
 
 use FastD\Config\Config;
 use FastD\Framework\Bundle;

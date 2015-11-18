@@ -12,12 +12,13 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Tests;
+namespace FastD\Framework\Tests\KernelTesting;
 
-use FastD\Framework\Tests\Bootstrap\App;
+use FastD\Framework\Tests\KernelTesting\Bootstrap\App;
 use FastD\Http\Request;
+use FastD\Framework\Tests\FrameworkTestCase;
 
-class BootstrapTest extends \PHPUnit_Framework_TestCase
+class BootstrapTest extends FrameworkTestCase
 {
     protected function getServer()
     {
@@ -58,25 +59,17 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testKernel()
-    {
-        $app = new App('test');
-        $app->boot();
-        include __DIR__ . '/Bootstrap/config/routes.php';
-        $request = new Request([], [], [], [], $this->getServer());
-        $request->server->set('PATH_INFO', '/');
-        $response = $app->handleHttpRequest($request);
-        $this->assertEquals('hello world', $response->getContent());
-    }
-
     public function testRestAPI()
     {
-        $app = new App('test');
+        $app = self::kernelBootstrap();
+
+        print_r($app);
+    }
+
+    public static function kernelBootstrap($env = 'dev')
+    {
+        $app = new App($env);
         $app->boot();
-        include __DIR__ . '/Bootstrap/config/routes.php';
-        $request = new Request([], [], [], [], $this->getServer());
-        $request->server->set('PATH_INFO', '/rest');
-        $response = $app->handleHttpRequest($request);
-        $this->assertEquals('hello world', $response->getContent());
+        return $app;
     }
 }
