@@ -15,12 +15,9 @@ namespace FastD\Framework\Kernel;
 
 use FastD\Config\Config;
 use FastD\Container\Container;
-use FastD\Debug\Debug;
-use FastD\Debug\Exceptions\ServerInternalErrorException;
-use FastD\Framework\Bundle;
+use FastD\Framework\Dispatch\Dispatcher;
 use FastD\Http\Request;
-use FastD\Http\Response;
-use FastD\Framework\Events\BaseEvent;
+use FastD\Framework\Bundle;
 
 /**
  * Class AppKernel
@@ -34,31 +31,17 @@ abstract class AppKernel extends Terminal
      *
      * @const string
      */
-    const VERSION = 'v2.0.x';
+    const VERSION = '2.0.x';
 
     /**
      * @var string
      */
-    private $environment;
+    protected $environment;
 
     /**
      * @var string
      */
-    private $rootPath;
-
-    /**
-     * App containers.
-     * Storage app component.
-     *
-     * @var array
-     */
-    protected $components = array(
-        'kernel.template'   => 'FastD\\Template\\Template',
-        'kernel.logger'     => 'FastD\\Logger\\Logger',
-        'kernel.database'   => 'FastD\\Database\\Database',
-        'kernel.storage'    => 'FastD\\Storage\\StorageManager',
-        'kernel.request'    => 'FastD\\Http\\Request::createRequestHandle',
-    );
+    protected $rootPath;
 
     /**
      * @var Container
@@ -68,17 +51,12 @@ abstract class AppKernel extends Terminal
     /**
      * @var bool
      */
-    private $debug;
+    protected $debug;
 
     /**
-     * @var Bundle
+     * @var Bundle[]
      */
-    private $bundles = array();
-
-    /**
-     * @var static
-     */
-    protected static $app;
+    protected $bundles = array();
 
     /**
      * Constructor. Initialize framework components.
@@ -90,17 +68,10 @@ abstract class AppKernel extends Terminal
         $this->environment = $env;
 
         $this->debug = 'prod' === $this->environment ? false : true;
-
-        $this->components = array_merge(
-            $this->registerService(),
-            $this->components
-        );
-
-        $this->bundles = $this->registerBundles();
     }
 
     /**
-     * @return Bundle
+     * @return Bundle[]
      */
     public function getBundles()
     {
@@ -140,27 +111,21 @@ abstract class AppKernel extends Terminal
      */
     public function boot()
     {
+        $this->initializeBundles();
+
         $this->initializeContainer();
 
         $this->initializeConfigure();
 
-        $config = $this->container->get('kernel.config');
-
-        $debug = Debug::enable($this->isDebug(), $this->container->get('kernel.logger')->createLogger($config->get('logger.error')));
-
-        if (!$this->isDebug()) {
-            $customs = $config->get('error.page');
-            foreach ($customs as $code => $content) {
-                $debug->setCustom($code, $content);
-            }
-            unset($customs);
-        }
-
-        $this->container->set('kernel.debug', $debug);
-
-        unset($config);
-
         $this->initializeRouting();
+    }
+
+    /**
+     * Initialize application register bundles.
+     */
+    public function initializeBundles()
+    {
+        $this->registerBundles();
     }
 
     /**
@@ -170,7 +135,17 @@ abstract class AppKernel extends Terminal
      */
     public function initializeContainer()
     {
-        $this->container = new Container($this->components);
+        $this->container = new Container(array_merge([
+            'kernel.template'   => 'FastD\\Template\\Template',
+            'kernel.logger'     => 'FastD\\Logger\\Logger',
+            'kernel.database'   => 'FastD\\Database\\Database',
+            'kernel.config'     => 'FastD\\Config\\Config',
+            'kernel.storage'    => 'FastD\\Storage\\StorageManager',
+            'kernel.request'    => 'FastD\\Http\\Request::createRequestHandle',
+            'kernel.http.handler' => 'FastD\\Framework\\Handle\\HttpHandler',
+        ], (null === ($services = $this->registerService()) ? [] : $services)));
+
+        unset($services);
 
         $this->container->set('kernel', $this);
     }
@@ -182,25 +157,20 @@ abstract class AppKernel extends Terminal
      */
     public function initializeConfigure()
     {
-        $config = new Config();
+        $config = $this->container->get('kernel.config');
 
-        $this->container->set('kernel.config', $config);
-
-        $variables = array_merge($this->registerConfigVariable(), array(
+        $config->setVariable([
             'root.path' => $this->getRootPath(),
             'env'       => $this->getEnvironment(),
             'debug'     => $this->isDebug(),
             'version'   => AppKernel::VERSION,
-            'date'      => date('Ymd'),
-            'storage.path' => $this->getRootPath() . '/storage',
-        ));
-
-        $config->setVariable($variables);
+        ]);
 
         $cache = $this->getRootPath() . '/config.php.cache';
 
         if (file_exists($cache)) {
-            return $config->set(include $cache);
+            $config->set(include $cache);
+            return $config;
         }
 
         $config->load($this->getRootPath() . '/config/global.php');
@@ -214,7 +184,7 @@ abstract class AppKernel extends Terminal
             }
         }
 
-        unset($config);
+        return $config;
     }
 
     /**
@@ -224,106 +194,28 @@ abstract class AppKernel extends Terminal
      */
     public function initializeRouting()
     {
-        foreach ($this->getBundles() as $bundle) {
-            if (file_exists($routes = $bundle->getRootPath() . '/Resources/config/routes.php')) {
-                include $routes;
-            }
-        }
+        $router = \Routes::getRouter();
 
-        $this->container->set('kernel.routing', \Routes::getRouter());
+        $this->container->set('kernel.routing', $router);
     }
 
     /**
-     * @param Request $request
-     * @return \FastD\Routing\Route
+     * @return \FastD\Http\Request
      */
-    public function detachRoute(Request $request)
+    public function createHttpRequestClient()
     {
-        $router = $this->container->get('kernel.routing');
+        $request = Request::createRequestHandle();
 
-        $route = $router->match($request->getPathInfo());
-
-        $router->matchMethod($request->getMethod(), $route);
-
-        $router->matchFormat($request->getFormat(), $route);
-
-        return $route;
-    }
-
-    /**
-     * Handle http request.
-     *
-     * @param Request $request
-     * @return Response
-     * @throws ServerInternalErrorException
-     */
-    public function handleHttpRequest(Request $request)
-    {
         $this->container->set('kernel.request', $request);
 
-        $route = $this->detachRoute($request);
-
-        $callback = $route->getCallback();
-
-        if (!is_string($callback)) {
-            throw new ServerInternalErrorException(sprintf("Request '%s' handle bind error.", $route->getName()));
-        }
-
-        list ($event, $handle) = explode('@', $callback);
-
-        $event = $this->container->set('callback', str_replace(':', '\\', $event))->get('callback');
-        if ($event instanceof BaseEvent) {
-            $event->setContainer($this->container);
-        }
-
-        // Initialize assert.
-        if (method_exists($event, '__initialize')) {
-            $response = $this->container->getProvider()->callServiceMethod($event, '__initialize');
-            if (null !== $response && $response instanceof Response) {
-                return $response;
-            }
-        }
-
-        $response = $this->container->getProvider()->callServiceMethod($event, $handle, $route->getParameters());
-
-        if ($response instanceof Response) {
-            return $response;
-        }
-
-        return new Response($response);
+        return $request;
     }
 
-    /**
-     * Application running terminate. Now, The application should be exit.
-     * Here application can save request log in log.
-     *
-     * @param Request $request
-     * @param Response $response
-     * @return void
-     */
-    public function terminate(Request $request, Response $response)
+    public function createHttpRequestHandler()
     {
-        $context = [
-            'request_date'  => date('Y-m-d H:i:s', $request->getRequestTime()),
-            'response_date' => date('Y-m-d H:i:s', microtime(true)),
-            'ip'            => $request->getClientIp(),
-            'format'        => $request->getFormat(),
-            'method'        => $request->getMethod(),
-            'status_code'   => $response->getStatusCode(),
-            '_GET'          => $request->query->all(),
-            '_POST'         => $request->request->all(),
-        ];
+        $client = $this->createHttpRequestClient();
 
-        if (!$this->isDebug()) {
-            $this
-                ->container
-                ->get('kernel.logger')
-                ->createLogger($this->container->get('kernel.config')->get('logger.access'))
-                ->addInfo($request->getPathInfo(), $context)
-            ;
-        }
-
-        unset($context);
+        return $this->container->get('kernel.http.handler')->handle($client);
     }
 
     /**
@@ -338,10 +230,5 @@ abstract class AppKernel extends Terminal
         }
 
         return $this->rootPath;
-    }
-
-    public function __destruct()
-    {
-        $this->container = null;
     }
 }

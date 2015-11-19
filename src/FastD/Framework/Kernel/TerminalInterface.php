@@ -13,9 +13,6 @@
 
 namespace FastD\Framework\Kernel;
 
-use FastD\Http\Request;
-use FastD\Http\Response;
-
 /**
  * Interface TerminalInterface
  *
@@ -24,9 +21,8 @@ use FastD\Http\Response;
 interface TerminalInterface
 {
     /**
-     * @param Request  $request
-     * @param Response $response
-     * @return mixed
+     * @param AppKernel $appKernel
+     * @return void
      */
-    public function terminate(Request $request, Response $response);
+    public function terminate(AppKernel $appKernel);
 }

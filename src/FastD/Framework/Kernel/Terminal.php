@@ -15,7 +15,6 @@
 namespace FastD\Framework\Kernel;
 
 use FastD\Console\Command;
-use FastD\Console\Environment\BaseEnvironment;
 use FastD\Framework\Bundle;
 
 /**
@@ -23,7 +22,7 @@ use FastD\Framework\Bundle;
  *
  * @package FastD\Framework\Kernel
  */
-abstract class Terminal extends BaseEnvironment implements TerminalInterface, AppKernelInterface
+abstract class Terminal implements TerminalInterface, AppKernelInterface
 {
     public function register()
     {
@@ -50,5 +49,10 @@ abstract class Terminal extends BaseEnvironment implements TerminalInterface, Ap
                 closedir($dh);
             }
         }
+    }
+
+    public function terminate(AppKernel $appKernel)
+    {
+
     }
 }

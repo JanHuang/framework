@@ -33,9 +33,7 @@
         "fastd/console": "~0.1.3",
         "fastd/finder": "~1.0.0",
         "fastd/debug": "~1.0.1",
-        "fastd/template": "~0.1.0"
-    },
-    "require-dev": {
+        "fastd/template": "~0.1.0",
         "fastd/swoole": "1.0.x-dev",
         "fastd/swoole-bundle": "1.0.x-dev"
     },

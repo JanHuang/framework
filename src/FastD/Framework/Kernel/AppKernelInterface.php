@@ -58,6 +58,8 @@ interface AppKernelInterface
     public function registerConfiguration(Config $config);
 
     /**
+     * Register application configuration dynamic variable.
+     *
      * @return array
      */
     public function registerConfigVariable();

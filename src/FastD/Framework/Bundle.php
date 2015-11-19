@@ -51,7 +51,7 @@ class Bundle
         return $this->namespace;
     }
 
-    public function getShortname()
+    public function getShortName()
     {
         if (null === $this->shortname) {
             $this->shortname = (new \ReflectionClass($this))->getShortName();
@@ -60,7 +60,7 @@ class Bundle
         return $this->shortname;
     }
 
-    public function getFullname()
+    public function getName()
     {
         if (null === $this->fullname) {
             $this->fullname = (new \ReflectionClass($this))->getName();
