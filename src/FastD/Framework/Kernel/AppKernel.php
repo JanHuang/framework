@@ -15,9 +15,8 @@ namespace FastD\Framework\Kernel;
 
 use FastD\Config\Config;
 use FastD\Container\Container;
-use FastD\Framework\Dispatch\Dispatcher;
 use FastD\Http\Request;
-use FastD\Framework\Bundle;
+use FastD\Framework\Bundle\Bundle;
 
 /**
  * Class AppKernel
@@ -115,9 +114,14 @@ abstract class AppKernel extends Terminal
 
         $this->initializeContainer();
 
-        $this->initializeConfigure();
+        $config = $this->initializeConfigure();
 
-        $this->initializeRouting();
+        $routing = $this->initializeRouting();
+
+        foreach ($this->bundles as $bundle) {
+            $bundle->registerConfiguration($config);
+            $bundle->registerRouting($routing);
+        }
     }
 
     /**
@@ -125,7 +129,7 @@ abstract class AppKernel extends Terminal
      */
     public function initializeBundles()
     {
-        $this->registerBundles();
+        $this->bundles = $this->registerBundles();
     }
 
     /**
@@ -166,23 +170,7 @@ abstract class AppKernel extends Terminal
             'version'   => AppKernel::VERSION,
         ]);
 
-        $cache = $this->getRootPath() . '/config.php.cache';
-
-        if (file_exists($cache)) {
-            $config->set(include $cache);
-            return $config;
-        }
-
-        $config->load($this->getRootPath() . '/config/global.php');
-
         $this->registerConfiguration($config);
-
-        foreach ($this->getBundles() as $bundle) {
-            $file = $bundle->getRootPath() . '/Resources/config/config.php';
-            if (file_exists($file)) {
-                $config->load($file);
-            }
-        }
 
         return $config;
     }
@@ -197,6 +185,8 @@ abstract class AppKernel extends Terminal
         $router = \Routes::getRouter();
 
         $this->container->set('kernel.routing', $router);
+
+        return $router;
     }
 
     /**

@@ -15,6 +15,7 @@
 namespace FastD\Framework\Handle;
 
 use FastD\Http\Request;
+use FastD\Routing\Route;
 use FastD\Routing\Router;
 
 class HttpHandler
@@ -26,15 +27,27 @@ class HttpHandler
         $this->router = $router;
     }
 
-    public function getEvent(Request $request)
+    public function getEvent(Route $route)
     {
-//        $this->router->match($request->getPathInfo());
+        return function () use ($route) {
+            $callback = $route->getCallback();
+            switch (gettype($callback)) {
+                case 'string':
+                default:
+                    list($controller, $action) = explode('@', $callback);
+                    $controller = str_replace(':', '\\', $controller);
+            }
+
+            return call_user_func_array([$controller, $action], $route->getParameters());
+        };
     }
 
     public function handle(Request $request)
     {
-        //$event = $this->getEvent($request);
+        $route = $this->router->match($request->getPathInfo());
 
-        return 'hello world';
+        $event = $this->getEvent($route);
+
+        return $event();
     }
 }

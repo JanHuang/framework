@@ -21,7 +21,7 @@ use FastD\Template\Template;
  *
  * @package FastD\Framework\Events
  */
-class TemplateEvent extends BaseEvent
+trait TemplateTrait
 {
     /**
      * @var Template

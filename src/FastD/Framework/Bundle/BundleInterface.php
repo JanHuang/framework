@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: janhuang
- * Date: 15/11/19
- * Time: 下午11:31
+ * Date: 15/11/22
+ * Time: 上午11:23
  * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
@@ -12,9 +12,14 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Dispatch;
+namespace FastD\Framework\Bundle;
 
-interface DispatchInterface
+use FastD\Config\Config;
+use FastD\Routing\Router;
+
+interface BundleInterface
 {
-    public function execution();
+    public function registerRouting(Router $router);
+
+    public function registerConfiguration(Config $config);
 }

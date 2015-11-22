@@ -10,14 +10,17 @@
  * Blog: http://segmentfault.com/blog/janhuang
  */
 
-namespace FastD\Framework;
+namespace FastD\Framework\Bundle;
+
+use FastD\Config\Config;
+use FastD\Routing\Router;
 
 /**
  * Class Bundle
  *
  * @package FastD\Framework
  */
-class Bundle
+class Bundle extends \ReflectionClass implements BundleInterface
 {
     /**
      * @var string
@@ -29,6 +32,17 @@ class Bundle
     protected $shortname;
 
     protected $fullname;
+
+    /**
+     * Constructs a ReflectionClass
+     *
+     * @link  http://php.net/manual/en/reflectionclass.construct.php
+     * @since 5.0
+     */
+    public function __construct()
+    {
+        parent::__construct($this);
+    }
 
     /**
      * @return string
@@ -67,5 +81,15 @@ class Bundle
         }
 
         return $this->fullname;
+    }
+
+    public function registerRouting(Router $router)
+    {
+        // TODO: Implement registerRouting() method.
+    }
+
+    public function registerConfiguration(Config $config)
+    {
+        // TODO: Implement registerConfiguration() method.
     }
 }
