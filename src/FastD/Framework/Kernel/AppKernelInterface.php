@@ -16,7 +16,7 @@ namespace FastD\Framework\Kernel;
 
 use FastD\Config\Config;
 use FastD\Container\Container;
-use FastD\Framework\Bundle;
+use FastD\Framework\Bundle\Bundle;
 
 /**
  * Interface AppKernelInterface
@@ -45,9 +45,10 @@ interface AppKernelInterface
     /**
      * Register application plugins.
      *
-     * @return array
+     * @param Container $container
+     * @return void
      */
-    public function registerService();
+    public function registerService(Container $container);
 
     /**
      * Register application configuration
@@ -60,7 +61,8 @@ interface AppKernelInterface
     /**
      * Register application configuration dynamic variable.
      *
-     * @return array
+     * @param Config $config
+     * @return void
      */
-    public function registerConfigVariable();
+    public function registerConfigVariable(Config $config);
 }

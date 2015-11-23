@@ -12,7 +12,7 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Handle;
+namespace FastD\Framework\Kernel\Handle;
 
 use FastD\Http\Request;
 use FastD\Routing\Route;

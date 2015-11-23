@@ -16,7 +16,9 @@ namespace FastD\Framework\Kernel;
 use FastD\Config\Config;
 use FastD\Container\Container;
 use FastD\Http\Request;
+use FastD\Http\Response;
 use FastD\Framework\Bundle\Bundle;
+use FastD\Routing\Router;
 
 /**
  * Class AppKernel
@@ -41,16 +43,15 @@ abstract class AppKernel extends Terminal
      * @var string
      */
     protected $rootPath;
+    /**
+     * @var bool
+     */
+    protected $debug;
 
     /**
      * @var Container
      */
     protected $container;
-
-    /**
-     * @var bool
-     */
-    protected $debug;
 
     /**
      * @var Bundle[]
@@ -66,7 +67,7 @@ abstract class AppKernel extends Terminal
     {
         $this->environment = $env;
 
-        $this->debug = 'prod' === $this->environment ? false : true;
+        $this->debug = in_array($env, ['dev', 'test']) ? true : false;
     }
 
     /**
@@ -126,6 +127,8 @@ abstract class AppKernel extends Terminal
 
     /**
      * Initialize application register bundles.
+     *
+     * @return void
      */
     public function initializeBundles()
     {
@@ -139,17 +142,16 @@ abstract class AppKernel extends Terminal
      */
     public function initializeContainer()
     {
-        $this->container = new Container(array_merge([
-            'kernel.template'   => 'FastD\\Template\\Template',
-            'kernel.logger'     => 'FastD\\Logger\\Logger',
-            'kernel.database'   => 'FastD\\Database\\Database',
-            'kernel.config'     => 'FastD\\Config\\Config',
-            'kernel.storage'    => 'FastD\\Storage\\StorageManager',
-            'kernel.request'    => 'FastD\\Http\\Request::createRequestHandle',
-            'kernel.http.handler' => 'FastD\\Framework\\Handle\\HttpHandler',
-        ], (null === ($services = $this->registerService()) ? [] : $services)));
+        $this->container = new Container([
+            'kernel.template'       => 'FastD\\Template\\Template',
+            'kernel.logger'         => 'FastD\\Logger\\Logger',
+            'kernel.database'       => 'FastD\\Database\\Database',
+            'kernel.config'         => 'FastD\\Config\\Config',
+            'kernel.storage'        => 'FastD\\Storage\\StorageManager',
+            'kernel.http.handler'   => 'FastD\\Framework\\Kernel\\Handle\\HttpHandler',
+        ]);
 
-        unset($services);
+        $this->registerService($this->container);
 
         $this->container->set('kernel', $this);
     }
@@ -170,6 +172,7 @@ abstract class AppKernel extends Terminal
             'version'   => AppKernel::VERSION,
         ]);
 
+        $this->registerConfigVariable($config);
         $this->registerConfiguration($config);
 
         return $config;
@@ -179,6 +182,8 @@ abstract class AppKernel extends Terminal
      * Loaded application routing.
      *
      * Loaded register bundle routes configuration.
+     *
+     * @return Router
      */
     public function initializeRouting()
     {
@@ -201,6 +206,9 @@ abstract class AppKernel extends Terminal
         return $request;
     }
 
+    /**
+     * @return Response
+     */
     public function createHttpRequestHandler()
     {
         $client = $this->createHttpRequestClient();

@@ -51,7 +51,7 @@ abstract class Terminal implements TerminalInterface, AppKernelInterface
         }
     }
 
-    public function terminate(AppKernel $appKernel)
+    public function shutdown(AppKernel $appKernel)
     {
 
     }

@@ -24,5 +24,5 @@ interface TerminalInterface
      * @param AppKernel $appKernel
      * @return void
      */
-    public function terminate(AppKernel $appKernel);
+    public function shutdown(AppKernel $appKernel);
 }
