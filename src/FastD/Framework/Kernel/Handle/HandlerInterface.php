@@ -14,7 +14,9 @@
 
 namespace FastD\Framework\Handle;
 
+use FastD\Http\Request;
+
 interface HandlerInterface
 {
-    public function handle();
+    public function handleHttpRequest(Request $request);
 }

@@ -64,5 +64,5 @@ interface AppKernelInterface
      * @param Config $config
      * @return void
      */
-    public function registerConfigVariable(Config $config);
+    public function registerConfigurationVariable(Config $config);
 }

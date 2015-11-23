@@ -14,11 +14,12 @@
 
 namespace FastD\Framework\Kernel\Handle;
 
+use FastD\Framework\Handle\HandlerInterface;
 use FastD\Http\Request;
 use FastD\Routing\Route;
 use FastD\Routing\Router;
 
-class HttpHandler
+class HttpHandler implements HandlerInterface
 {
     protected $router;
 
@@ -32,17 +33,21 @@ class HttpHandler
         return function () use ($route) {
             $callback = $route->getCallback();
             switch (gettype($callback)) {
+                case 'object':
+                case 'closure':
+                    return $callback();
+                case 'array':
+                    return call_user_func_array($callback, $route->getParameters());
                 case 'string':
                 default:
                     list($controller, $action) = explode('@', $callback);
                     $controller = str_replace(':', '\\', $controller);
+                    return call_user_func_array([$controller, $action], $route->getParameters());
             }
-
-            return call_user_func_array([$controller, $action], $route->getParameters());
         };
     }
 
-    public function handle(Request $request)
+    public function handleHttpRequest(Request $request)
     {
         $route = $this->router->match($request->getPathInfo());
 

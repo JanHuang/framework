@@ -59,7 +59,7 @@ abstract class AppKernel extends Terminal
     protected $bundles = array();
 
     /**
-     * Constructor. Initialize framework components.
+     * Constructor. Initialize framework environment.
      *
      * @param $env
      */
@@ -71,6 +71,8 @@ abstract class AppKernel extends Terminal
     }
 
     /**
+     * Get custom bundles method.
+     *
      * @return Bundle[]
      */
     public function getBundles()
@@ -120,8 +122,8 @@ abstract class AppKernel extends Terminal
         $routing = $this->initializeRouting();
 
         foreach ($this->bundles as $bundle) {
-            $bundle->registerConfiguration($config);
-            $bundle->registerRouting($routing);
+            $bundle->registerConfiguration($config, $this->environment);
+            $bundle->registerRouting($routing, $this->environment);
         }
     }
 
@@ -172,7 +174,7 @@ abstract class AppKernel extends Terminal
             'version'   => AppKernel::VERSION,
         ]);
 
-        $this->registerConfigVariable($config);
+        $this->registerConfigurationVariable($config);
         $this->registerConfiguration($config);
 
         return $config;
@@ -213,7 +215,7 @@ abstract class AppKernel extends Terminal
     {
         $client = $this->createHttpRequestClient();
 
-        return $this->container->get('kernel.http.handler')->handle($client);
+        return $this->container->get('kernel.http.handler')->handleHttpRequest($client);
     }
 
     /**

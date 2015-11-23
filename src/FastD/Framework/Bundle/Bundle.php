@@ -18,7 +18,7 @@ use FastD\Routing\Router;
 /**
  * Class Bundle
  *
- * @package FastD\Framework
+ * @package FastD\Framework\Bundle
  */
 class Bundle extends \ReflectionClass implements BundleInterface
 {
@@ -26,12 +26,6 @@ class Bundle extends \ReflectionClass implements BundleInterface
      * @var string
      */
     protected $rootPath;
-
-    protected $namespace;
-
-    protected $shortname;
-
-    protected $fullname;
 
     /**
      * Constructs a ReflectionClass
@@ -50,46 +44,51 @@ class Bundle extends \ReflectionClass implements BundleInterface
     public function getRootPath()
     {
         if (null === $this->rootPath) {
-            $this->rootPath = dirname((new \ReflectionClass($this))->getFileName());
+            $this->rootPath = dirname($this->getFileName());
         }
 
         return $this->rootPath;
     }
 
+    /**
+     * Get namespace. Alias getNamespaceName
+     *
+     * @return string
+     */
     public function getNamespace()
     {
-        if (null === $this->namespace) {
-            $this->namespace = (new \ReflectionClass($this))->getNamespaceName();
+        return $this->getNamespaceName();
+    }
+
+    /**
+     * Register bundle routing list.
+     *
+     * @param Router $router
+     * @param string $env
+     * @return void
+     */
+    public function registerRouting(Router $router, $env)
+    {
+        $routes = $this->getRootPath() . '/Resources/config/routes.php';
+
+        if (file_exists($routes)) {
+            include $routes;
         }
-
-        return $this->namespace;
     }
 
-    public function getShortName()
+    /**
+     * Register bundle configuration.
+     *
+     * @param Config $config
+     * @param string $env
+     * @return void
+     */
+    public function registerConfiguration(Config $config, $env)
     {
-        if (null === $this->shortname) {
-            $this->shortname = (new \ReflectionClass($this))->getShortName();
+        $routes = $this->getRootPath() . '/Resources/config/config.php';
+
+        if (file_exists($routes)) {
+            include $routes;
         }
-
-        return $this->shortname;
-    }
-
-    public function getName()
-    {
-        if (null === $this->fullname) {
-            $this->fullname = (new \ReflectionClass($this))->getName();
-        }
-
-        return $this->fullname;
-    }
-
-    public function registerRouting(Router $router)
-    {
-        // TODO: Implement registerRouting() method.
-    }
-
-    public function registerConfiguration(Config $config)
-    {
-        // TODO: Implement registerConfiguration() method.
     }
 }

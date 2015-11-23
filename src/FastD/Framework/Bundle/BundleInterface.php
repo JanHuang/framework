@@ -17,9 +17,24 @@ namespace FastD\Framework\Bundle;
 use FastD\Config\Config;
 use FastD\Routing\Router;
 
+/**
+ * Interface BundleInterface
+ *
+ * @package FastD\Framework\Bundle
+ */
 interface BundleInterface
 {
-    public function registerRouting(Router $router);
+    /**
+     * @param Router $router
+     * @param string $env
+     * @return void
+     */
+    public function registerRouting(Router $router, $env);
 
-    public function registerConfiguration(Config $config);
+    /**
+     * @param Config $config
+     * @param string $env
+     * @return void
+     */
+    public function registerConfiguration(Config $config, $env);
 }

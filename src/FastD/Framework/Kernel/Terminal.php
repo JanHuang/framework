@@ -14,7 +14,6 @@
 
 namespace FastD\Framework\Kernel;
 
-use FastD\Console\Command;
 use FastD\Framework\Bundle;
 
 /**
@@ -24,33 +23,6 @@ use FastD\Framework\Bundle;
  */
 abstract class Terminal implements TerminalInterface, AppKernelInterface
 {
-    public function register()
-    {
-        $bundles = array_merge($this->getBundles(), [new Bundle()]);
-        foreach ($bundles as $bundle) {
-            $dir = $bundle->getRootPath() . '/Commands';
-            if (!is_dir($dir)) {
-                continue;
-            }
-            if ($dh = opendir($dir)) {
-                while (($file = readdir($dh)) !== false) {
-                    if (in_array($file, ['.', '..']) || is_dir($dir. DIRECTORY_SEPARATOR . $file)) {
-                        continue;
-                    }
-                    $fileName = $bundle->getNamespace() . '\\Commands\\' . pathinfo($file, PATHINFO_FILENAME);
-                    $command = new $fileName();
-                    if ($command instanceof Command) {
-                        $command->setEnv($this);
-                        $command->setContainer($this->getContainer());
-                        $this->setCommand($command);
-                    }
-
-                }
-                closedir($dh);
-            }
-        }
-    }
-
     public function shutdown(AppKernel $appKernel)
     {
 
