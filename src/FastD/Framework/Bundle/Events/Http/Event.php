@@ -21,6 +21,9 @@ use FastD\Http\Session\SessionHandler;
 use FastD\Database\Database;
 use FastD\Http\RedirectResponse;
 use FastD\Storage\StorageManager;
+use FastD\Http\Response;
+use FastD\Http\JsonResponse;
+use FastD\Http\XmlResponse;
 
 /**
  * Class Event
@@ -29,6 +32,9 @@ use FastD\Storage\StorageManager;
  */
 class Event extends ContainerAware implements EventInterface
 {
+    const SERVER_NAME = 'FastD';
+    const SERVER_VERSION = '2.0';
+
     /**
      * @var Database
      */
@@ -173,5 +179,70 @@ class Event extends ContainerAware implements EventInterface
         unset($paths, $options);
 
         return $this->template->render($template, $parameters);
+    }
+
+    /**
+     * @param       $data
+     * @param int   $status
+     * @param array $headers
+     * @return JsonResponse|Response|XmlResponse
+     */
+    public function response($data, $status = Response::HTTP_OK, array $headers = [])
+    {
+        switch ($this->get('kernel.request')->getFormat()) {
+            case 'json':
+                return $this->responseJson($data, $status, $headers);
+            case 'xml':
+                return $this->responseXml($data, $status, $headers);
+            case 'text':
+                return $this->responseText($data, $status, $headers);
+            case 'html':
+            default:
+                return $this->responseHtml($data, $status, $headers);
+        }
+    }
+
+    /**
+     * @param array $data
+     * @param int   $status
+     * @param array $headers
+     * @return XmlResponse
+     */
+    public function responseXml(array $data, $status = Response::HTTP_OK, array $headers = [])
+    {
+        return new XmlResponse($data, $status, $headers);
+    }
+
+    /**
+     * @param       $data
+     * @param int   $status
+     * @param array $headers
+     * @return Response
+     */
+    public function responseText($data, $status = Response::HTTP_OK, array $headers = [])
+    {
+        return new Response($data, $status, $headers);
+    }
+
+    /**
+     * @param       $data
+     * @param int   $status
+     * @param array $headers
+     * @return Response
+     */
+    public function responseHtml($data, $status = Response::HTTP_OK, array $headers = [])
+    {
+        return new Response($data, $status, $headers);
+    }
+
+    /**
+     * @param array $data
+     * @param int   $status
+     * @param array $headers
+     * @return JsonResponse
+     */
+    public function responseJson(array $data, $status = Response::HTTP_OK, array $headers = [])
+    {
+        return new JsonResponse($data, $status, $headers);
     }
 }
