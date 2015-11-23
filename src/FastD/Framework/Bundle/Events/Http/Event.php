@@ -4,7 +4,7 @@
  * User: janhuang
  * Date: 15/1/30
  * Time: 上午11:18
- * Github: https://www.github.com/janhuang 
+ * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
  * Blog: http://segmentfault.com/blog/janhuang
@@ -194,9 +194,9 @@ class Event extends ContainerAware implements EventInterface
                 return $this->responseJson($data, $status, $headers);
             case 'xml':
                 return $this->responseXml($data, $status, $headers);
-            case 'text':
-                return $this->responseText($data, $status, $headers);
             case 'html':
+            case 'text':
+            case 'php':
             default:
                 return $this->responseHtml($data, $status, $headers);
         }
@@ -211,17 +211,6 @@ class Event extends ContainerAware implements EventInterface
     public function responseXml(array $data, $status = Response::HTTP_OK, array $headers = [])
     {
         return new XmlResponse($data, $status, $headers);
-    }
-
-    /**
-     * @param       $data
-     * @param int   $status
-     * @param array $headers
-     * @return Response
-     */
-    public function responseText($data, $status = Response::HTTP_OK, array $headers = [])
-    {
-        return new Response($data, $status, $headers);
     }
 
     /**
