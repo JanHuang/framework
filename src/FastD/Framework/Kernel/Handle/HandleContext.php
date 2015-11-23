@@ -69,7 +69,7 @@ class HandleContext
 
     public function getResponse(Container $container)
     {
-        $event = $container->set('http_request_handle_callback', str_replace(':', '\\', $this->getEventName()))->get('callback');
+        $event = $container->set('http_request_handle_callback', str_replace(':', '\\', $this->getEventName()))->get('http_request_handle_callback');
         if ($event instanceof Event) {
             $event->setContainer($container);
         }
