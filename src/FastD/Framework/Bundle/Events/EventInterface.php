@@ -45,14 +45,14 @@ interface EventInterface
      * @param array|null $options
      * @return Driver
      */
-    public function getConnection($connection, array $options = null);
+    public function getConnection($connection, array $options = []);
 
     /**
      * @param            $connection
      * @param array|null $options
      * @return StorageInterface
      */
-    public function getStorage($connection, array $options = null);
+    public function getStorage($connection, array $options = []);
 
     /**
      * @param       $name
@@ -74,7 +74,7 @@ interface EventInterface
      * @param array $parameters
      * @return RedirectResponse
      */
-    public function redirect($name, array $parameters = []);
+    public function redirect($name, array $parameters = [], $statusCode = 302, array $header = []);
 
     /**
      * @param       $name

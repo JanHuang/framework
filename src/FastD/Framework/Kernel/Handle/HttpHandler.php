@@ -14,7 +14,6 @@
 
 namespace FastD\Framework\Kernel\Handle;
 
-use FastD\Framework\Handle\HandlerInterface;
 use FastD\Http\Request;
 use FastD\Routing\Route;
 use FastD\Routing\Router;

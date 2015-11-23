@@ -17,22 +17,22 @@ use FastD\Config\Config;
 use FastD\Database\Database;
 use FastD\Database\Driver\Driver;
 use FastD\Framework\Bundle\Events\ContainerAware;
+use FastD\Framework\Bundle\Events\EventInterface;
 use FastD\Http\Response;
 use FastD\Http\Session\Session;
 use FastD\Http\Session\SessionHandler;
 use FastD\Http\Session\Storage\RedisStorage;
 use FastD\Logger\Logger;
 use FastD\Http\RedirectResponse;
-use FastD\Http\Request;
 use FastD\Routing\Router;
 use FastD\Storage\StorageManager;
 
 /**
- * Class BaseEvent
+ * Class Event
  *
- * @package FastD\Framework\Events
+ * @package FastD\Framework\Bundle\Events\Http
  */
-class Event extends ContainerAware
+class Event extends ContainerAware implements EventInterface
 {
     /**
      * @var Database
@@ -40,24 +40,9 @@ class Event extends ContainerAware
     protected $database;
 
     /**
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
      * @var StorageManager
      */
     protected $storage;
-
-    /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var Router
-     */
-    protected $routing;
 
     /**
      * @var Session
@@ -72,7 +57,7 @@ class Event extends ContainerAware
      * @param bool $newInstance
      * @return mixed
      */
-    public function get($helper, $parameters = array(), $newInstance = false)
+    public function get($helper, array $parameters = array(), $newInstance = false)
     {
         return $this->container->get($helper, $parameters, $newInstance);
     }
@@ -92,20 +77,14 @@ class Event extends ContainerAware
 
         $handler = new SessionHandler($storage);
 
-        $this->session = $this->getRequest()->getSessionHandle($handler);
+        $this->session = $this->get('kernel.request')->getSessionHandle($handler);
 
         unset($storage, $handler);
 
         return $this->session;
     }
 
-    /**
-     * get database connection driver
-     *
-     * @param string $connection
-     * @return Driver
-     */
-    public function getConnection($connection = null)
+    public function getConnection($connection = null, array $options = [])
     {
         if (null === $this->database) {
             $this->database = $this->get('kernel.database', [$this->getParameters('database')]);
@@ -114,19 +93,7 @@ class Event extends ContainerAware
         return $this->database->getConnection($connection);
     }
 
-    /**
-     * @param $vars
-     */
-    public function dump($vars)
-    {
-        return $this->container->get('kernel.debug')->dump($vars);
-    }
-
-    /**
-     * @param $connection
-     * @return \FastD\Storage\StorageInterface
-     */
-    public function getStorage($connection)
+    public function getStorage($connection, array $options = [])
     {
         if (null === $this->storage) {
             $this->storage = $this->get('kernel.storage', [$this->getParameters('storage')]);
@@ -143,11 +110,7 @@ class Event extends ContainerAware
      */
     public function getParameters($name = null)
     {
-        if (null === $this->config) {
-            $this->config = $this->get('kernel.config');
-        }
-
-        return $this->config->get($name);
+        return $this->get('kernel.config')->get($name);
     }
 
     /**
@@ -158,52 +121,24 @@ class Event extends ContainerAware
      */
     public function generateUrl($name, array $parameters = array(), $format = '')
     {
-        $url = $this->getRouting()->generateUrl($name, $parameters, $format);
+        $url = $this->get('kernel.routing')->generateUrl($name, $parameters, $format);
         if ('http' !== substr($url, 0, 4)) {
-            $url = ('/' === ($path = $this->getRequest()->getBaseUrl()) ? '' : $path) . $url;
+            $url = ('/' === ($path = $this->get('kernel.request')->getBaseUrl()) ? '' : $path) . $url;
             $url = str_replace('//', '/', $url);
         }
-        return $this->getRequest()->getSchemeAndHttpAndHost() . $url;
+
+        return $this->get('kernel.request')->getSchemeAndHttpAndHost() . $url;
     }
 
     /**
      * @param      $name
-     * @param null $host
-     * @param null $path
      * @return string
      */
-    public function asset($name, $host = null, $path = null)
+    public function asset($name, $verion = null)
     {
-        if (null === $host) {
-            try {
-                $host = $this->getParameters('assets.host');
-            } catch (\InvalidArgumentException $e) {
-                $host = str_replace(['http:', 'https:'], '', $this->getRequest()->getSchemeAndHttpAndHost());
-            }
-        }
-
-        if (null === $path) {
-            try {
-                $path = $this->getParameters('assets.path');
-            } catch (\InvalidArgumentException $e) {
-                $path = $this->getRequest()->getRootPath();
-
-                if ('' != pathinfo($path, PATHINFO_EXTENSION)) {
-                    $path = pathinfo($path, PATHINFO_DIRNAME);
-                }
-            }
-        }
-
-        return $host . str_replace('//', '/', $path . '/' . $name);
     }
 
-    /**
-     * @param     $url
-     * @param int $statusCode
-     * @param array $headers
-     * @return \FastD\Http\RedirectResponse
-     */
-    public function redirect($url, $statusCode = 302, array $headers = [])
+    public function redirect($url, array $parameters = [], $statusCode = 302, array $headers = [])
     {
         return new RedirectResponse($url, $statusCode, $headers);
     }
@@ -215,27 +150,7 @@ class Event extends ContainerAware
      */
     public function forward($name, array $parameters = [])
     {
-        $route = $this->getRouting()->getRoute($name);
-        $callback = $route->getCallback();
-        if (is_array($callback)) {
-            $event = $callback[0];
-            $handle = $callback[1];
-        } else {
-            list ($event, $handle) = explode('@', $callback);
-        }
 
-        $event = $this->container->set($name, $event)->get($name);
-
-        if ($event instanceof Event) {
-            $event->setContainer($this->container);
-        }
-        if (method_exists($event, '__initialize')) {
-            $response = $this->container->getProvider()->callServiceMethod($event, '__initialize');
-            if (null !== $response && $response instanceof Response) {
-                return $response;
-            }
-        }
-        return $response = $this->container->getProvider()->callServiceMethod($event, $handle, array_merge($route->getParameters(), $parameters));
     }
 
     public function render($template, array $parameters = array())
