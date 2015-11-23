@@ -14,9 +14,10 @@
 namespace FastD\Framework\Bundle\Events\Http;
 
 use FastD\Config\Config;
-use FastD\Container\Container;
 use FastD\Database\Database;
 use FastD\Database\Driver\Driver;
+use FastD\Framework\Bundle\Events\ContainerAware;
+use FastD\Http\Response;
 use FastD\Http\Session\Session;
 use FastD\Http\Session\SessionHandler;
 use FastD\Http\Session\Storage\RedisStorage;
@@ -31,13 +32,8 @@ use FastD\Storage\StorageManager;
  *
  * @package FastD\Framework\Events
  */
-class BaseEvent
+class Event extends ContainerAware
 {
-    /**
-     * @var Container
-     */
-    protected $container;
-
     /**
      * @var Database
      */
@@ -69,40 +65,6 @@ class BaseEvent
     protected $session;
 
     /**
-     * @param Container $container
-     * @return $this
-     */
-    public function setContainer(Container $container)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * @return Container
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
-     * @param       $event
-     * @param       $handle
-     * @param array $parameters
-     * @return \FastD\Http\Response|string
-     */
-    public function call($event, $handle, array $parameters = [])
-    {
-        if (is_string($event)) {
-            $event = $this->container->get($event, [], true);
-        }
-
-        return $this->container->getProvider()->callServiceMethod($event, $handle, $parameters);
-    }
-
-    /**
      * Get custom defined helper obj.
      *
      * @param string $helper
@@ -112,19 +74,7 @@ class BaseEvent
      */
     public function get($helper, $parameters = array(), $newInstance = false)
     {
-        if (is_string($parameters)) {
-            $parameters = $this->getParameters($parameters);
-        }
-
         return $this->container->get($helper, $parameters, $newInstance);
-    }
-
-    /**
-     * @return Request
-     */
-    public function getRequest()
-    {
-        return $this->get('kernel.request');
     }
 
     /**
@@ -198,18 +148,6 @@ class BaseEvent
         }
 
         return $this->config->get($name);
-    }
-
-    /**
-     * @return Router
-     */
-    public function getRouting()
-    {
-        if (null === $this->routing) {
-            $this->routing = $this->get('kernel.routing');
-        }
-
-        return $this->routing;
     }
 
     /**
@@ -288,7 +226,7 @@ class BaseEvent
 
         $event = $this->container->set($name, $event)->get($name);
 
-        if ($event instanceof BaseEvent) {
+        if ($event instanceof Event) {
             $event->setContainer($this->container);
         }
         if (method_exists($event, '__initialize')) {
@@ -298,5 +236,32 @@ class BaseEvent
             }
         }
         return $response = $this->container->getProvider()->callServiceMethod($event, $handle, array_merge($route->getParameters(), $parameters));
+    }
+
+    public function render($template, array $parameters = array())
+    {
+        $paths = $this->getParameters('template.paths');
+        foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
+            $paths[] = dirname($bundle->getRootPath());
+        }
+        $options = [];
+        if (!($isDebug = $this->container->get('kernel')->isDebug())) {
+            $options = [
+                'cache' => $this->getParameters('template.cache'),
+                'debug' => $isDebug,
+            ];
+        }
+        $self = $this;
+        $this->template = $this->container->get('kernel.template', [$paths, $options]);
+        $this->template->addGlobal('request', $this->getRequest());
+        $this->template->addFunction(new \Twig_SimpleFunction('url', function ($name, array $parameters = [], $format = '') use ($self) {
+            return $self->generateUrl($name, $parameters, $format);
+        }));
+        $this->template->addFunction(new \Twig_SimpleFunction('asset', function ($name, $host = null, $path = null) use ($self) {
+            return $self->asset($name, $host, $path);
+        }));
+        unset($paths, $options);
+
+        return $this->template->render($template, $parameters);
     }
 }
