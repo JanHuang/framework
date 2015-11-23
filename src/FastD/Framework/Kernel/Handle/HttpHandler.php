@@ -27,7 +27,7 @@ class HttpHandler implements HandlerInterface
         $this->router = $router;
     }
 
-    public function getEvent(Route $route)
+    public function dispatchEventCallback(Route $route)
     {
         return function () use ($route) {
             $callback = $route->getCallback();
@@ -50,8 +50,6 @@ class HttpHandler implements HandlerInterface
     {
         $route = $this->router->match($request->getPathInfo());
 
-        $event = $this->getEvent($route);
-
-        return $event();
+        return $this->dispatchEventCallback($route);
     }
 }

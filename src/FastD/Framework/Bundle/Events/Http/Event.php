@@ -13,18 +13,13 @@
 
 namespace FastD\Framework\Bundle\Events\Http;
 
-use FastD\Config\Config;
-use FastD\Database\Database;
-use FastD\Database\Driver\Driver;
 use FastD\Framework\Bundle\Events\ContainerAware;
 use FastD\Framework\Bundle\Events\EventInterface;
-use FastD\Http\Response;
+use FastD\Http\Session\Storage\RedisStorage;
 use FastD\Http\Session\Session;
 use FastD\Http\Session\SessionHandler;
-use FastD\Http\Session\Storage\RedisStorage;
-use FastD\Logger\Logger;
+use FastD\Database\Database;
 use FastD\Http\RedirectResponse;
-use FastD\Routing\Router;
 use FastD\Storage\StorageManager;
 
 /**
