@@ -24,6 +24,11 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
      */
     public static function kernelBootstrap($env = 'dev')
     {
-        
+
+    }
+
+    public static function createFastDClient($env = 'dev')
+    {
+
     }
 }
