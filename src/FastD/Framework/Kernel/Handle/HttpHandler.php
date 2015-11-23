@@ -14,40 +14,38 @@
 
 namespace FastD\Framework\Kernel\Handle;
 
+use FastD\Container\Container;
 use FastD\Http\Request;
+use FastD\Http\Response;
 use FastD\Routing\Route;
-use FastD\Routing\Router;
 
 class HttpHandler implements HandlerInterface
 {
-    protected $router;
+    /**
+     * @var Container
+     */
+    protected $container;
 
-    public function __construct(Router $router)
+    public function __construct(Container $container)
     {
-        $this->router = $router;
+        $this->container = $container;
     }
 
-    public function dispatchEventCallback(Route $route)
+    public function dispatchRoute(Route $route)
     {
-        $callback = $route->getCallback();
-        switch (gettype($callback)) {
-            case 'object':
-            case 'closure':
-                return $callback();
-            case 'array':
-                return call_user_func_array($callback, $route->getParameters());
-            case 'string':
-            default:
-                list($controller, $action) = explode('@', $callback);
-                $controller = str_replace(':', '\\', $controller);
-                return call_user_func_array([$controller, $action], $route->getParameters());
-        }
+        return new HandleContext($route);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function handleHttpRequest(Request $request)
     {
-        $route = $this->router->match($request->getPathInfo());
+        $route = $this->container->get('kernel.routing')->match($request->getPathInfo());
 
-        return $this->dispatchEventCallback($route);
+        $handlerContext = $this->dispatchRoute($route);
+
+        return $handlerContext->getResponse($this->container);
     }
 }

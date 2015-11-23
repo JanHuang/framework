@@ -215,7 +215,7 @@ abstract class AppKernel extends Terminal
     {
         $client = $this->createHttpRequestClient();
 
-        return $this->container->get('kernel.http.handler')->handleHttpRequest($client);
+        return $this->container->get('kernel.http.handler', [$this->container])->handleHttpRequest($client);
     }
 
     /**
