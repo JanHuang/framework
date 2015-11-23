@@ -12,7 +12,7 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Bundle\Http\Events;
+namespace FastD\Framework\Bundle\Events\Http;
 
 use FastD\Framework\Api\Counter;
 use FastD\Http\Response;
