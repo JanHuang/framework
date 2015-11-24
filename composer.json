@@ -18,21 +18,23 @@
     ],
     "autoload": {
         "psr-4": {
-            "FastD\\": "src/FastD"
+            "FastD\\": "src/FastD",
+            "": "app/src/Bundles"
         }
     },
     "require": {
         "php": ">=5.5",
-        "fastd/http": "~1.0.0",
-        "fastd/database": "1.0.*@alpha",
-        "fastd/container": "~0.1.1",
+        "fastd/http": "2.0.x-dev",
+        "fastd/template": "2.0.x-dev",
+        "fastd/routing": "2.0.x-dev",
+        "fastd/container": "2.0.x-dev",
+        "fastd/database": "2.0.x-dev",
         "fastd/config": "~1.0.0",
         "fastd/storage": "~0.1.0",
         "fastd/logger": "~0.1.0",
         "fastd/console": "~0.1.3",
         "fastd/finder": "~1.0.0",
         "fastd/debug": "~1.0.1",
-        "fastd/template": "~0.1.0",
         "fastd/swoole": "1.0.x-dev",
         "fastd/swoole-bundle": "1.0.x-dev"
     },

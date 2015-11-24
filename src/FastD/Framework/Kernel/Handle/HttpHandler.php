@@ -29,21 +29,20 @@ class HttpHandler implements HandlerInterface
 
     public function dispatchEventCallback(Route $route)
     {
-        return function () use ($route) {
-            $callback = $route->getCallback();
-            switch (gettype($callback)) {
-                case 'object':
-                case 'closure':
-                    return $callback();
-                case 'array':
-                    return call_user_func_array($callback, $route->getParameters());
-                case 'string':
-                default:
-                    list($controller, $action) = explode('@', $callback);
-                    $controller = str_replace(':', '\\', $controller);
-                    return call_user_func_array([$controller, $action], $route->getParameters());
-            }
-        };
+        $callback = $route->getCallback();
+        switch (gettype($callback)) {
+            case 'object':
+            case 'closure':
+                return $callback();
+            case 'array':
+                return call_user_func_array($callback, $route->getParameters());
+            case 'string':
+            default:
+                list($controller, $action) = explode('@', $callback);
+                $controller = str_replace(':', '\\', $controller);
+
+                return call_user_func_array([$controller, $action], $route->getParameters());
+        }
     }
 
     public function handleHttpRequest(Request $request)

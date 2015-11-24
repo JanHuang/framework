@@ -165,7 +165,7 @@ abstract class AppKernel extends Terminal
      */
     public function initializeConfigure()
     {
-        $config = $this->container->get('kernel.config');
+        $config = $this->container->get('kernel.config')->singleton();
 
         $config->setVariable([
             'root.path' => $this->getRootPath(),
@@ -215,7 +215,9 @@ abstract class AppKernel extends Terminal
     {
         $client = $this->createHttpRequestClient();
 
-        return $this->container->get('kernel.http.handler')->handleHttpRequest($client);
+        $routing = $this->container->get('kernel.routing')->singleton();
+
+        return $this->container->get('kernel.http.handler')->singleton([$routing])->handleHttpRequest($client);
     }
 
     /**
