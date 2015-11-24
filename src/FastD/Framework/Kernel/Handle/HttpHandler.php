@@ -14,17 +14,18 @@
 
 namespace FastD\Framework\Kernel\Handle;
 
+use FastD\Container\Container;
+use FastD\Framework\Bundle\Events\Http\HttpEvent;
 use FastD\Http\Request;
 use FastD\Routing\Route;
-use FastD\Routing\Router;
 
 class HttpHandler implements HandlerInterface
 {
-    protected $router;
+    protected $container;
 
-    public function __construct(Router $router)
+    public function __construct(Container $container)
     {
-        $this->router = $router;
+        $this->container = $container;
     }
 
     public function dispatchEventCallback(Route $route)
@@ -40,14 +41,17 @@ class HttpHandler implements HandlerInterface
             default:
                 list($controller, $action) = explode('@', $callback);
                 $controller = str_replace(':', '\\', $controller);
-
+                $controller = $this->container->set('request_callback', $controller)->singleton('request_callback');
+                if ($controller instanceof HttpEvent) {
+                    $controller->setContainer($this->container);
+                }
                 return call_user_func_array([$controller, $action], $route->getParameters());
         }
     }
 
     public function handleHttpRequest(Request $request)
     {
-        $route = $this->router->match($request->getPathInfo());
+        $route = $this->container->singleton('kernel.routing')->match($request->getPathInfo());
 
         return $this->dispatchEventCallback($route);
     }

@@ -6,8 +6,8 @@
     "minimum-stability": "stable",
     "keywords": [
         "FastD",
+        "FastD Kernel",
         "FastD Framework",
-        "FastD Module",
         "FastD Bootstrap"
     ],
     "authors": [

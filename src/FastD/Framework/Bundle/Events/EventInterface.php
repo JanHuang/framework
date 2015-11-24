@@ -29,10 +29,9 @@ interface EventInterface
     /**
      * @param            $name
      * @param array      $parameters
-     * @param bool|false $newInstance
      * @return mixed
      */
-    public function get($name, array $parameters = [], $newInstance = false);
+    public function get($name, array $parameters = []);
 
     /**
      * @param $name
