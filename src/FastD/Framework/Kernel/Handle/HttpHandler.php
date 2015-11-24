@@ -15,7 +15,7 @@
 namespace FastD\Framework\Kernel\Handle;
 
 use FastD\Container\Container;
-use FastD\Framework\Bundle\Events\Http\HttpEvent;
+use FastD\Framework\Bundle\Events\Http\Event;
 use FastD\Http\Request;
 use FastD\Routing\Route;
 
@@ -42,7 +42,7 @@ class HttpHandler implements HandlerInterface
                 list($controller, $action) = explode('@', $callback);
                 $controller = str_replace(':', '\\', $controller);
                 $controller = $this->container->set('request_callback', $controller)->singleton('request_callback');
-                if ($controller instanceof HttpEvent) {
+                if ($controller instanceof Event) {
                     $controller->setContainer($this->container);
                 }
                 return call_user_func_array([$controller, $action], $route->getParameters());
