@@ -136,7 +136,7 @@ class Event extends ContainerAware implements EventInterface
      */
     public function asset($name, $verion = null)
     {
-        echo 1;
+
     }
 
     public function redirect($url, array $parameters = [], $statusCode = 302, array $headers = [])
