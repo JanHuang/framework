@@ -67,7 +67,7 @@ class Event extends ContainerAware implements EventInterface
      */
     public function get($name, array $parameters = array(), $flag = false)
     {
-        if ($flag) {
+        if (!$flag) {
             return $this->container->singleton($name, $parameters);
         }
 
@@ -183,7 +183,10 @@ class Event extends ContainerAware implements EventInterface
     {
         if (null === $this->template) {
             $extensions = [new Preset()];
-            $paths = $this->getParameters('template.paths');
+            $paths = [
+                $this->get('kernel')->getRootPath() . '/views',
+                $this->get('kernel')->getRootPath() . '/../src'
+            ];
             $bundles = $this->getContainer()->singleton('kernel')->getBundles();
             foreach ($bundles as $bundle) {
                 $paths[] = dirname($bundle->getRootPath());
@@ -193,7 +196,7 @@ class Event extends ContainerAware implements EventInterface
             $options = [];
             if (!($isDebug = $this->container->singleton('kernel')->isDebug())) {
                 $options = [
-                    'cache' => $this->getParameters('template.cache'),
+                    'cache' => $this->get('kernel')->getRootPath() . '/storage/templates',
                     'debug' => $isDebug,
                 ];
             }
