@@ -155,6 +155,7 @@ abstract class AppKernel extends Terminal
 
         $this->registerService($this->container);
 
+        $this->container->set('kernel.container', $this->container);
         $this->container->set('kernel', $this);
     }
 
@@ -165,7 +166,7 @@ abstract class AppKernel extends Terminal
      */
     public function initializeConfigure()
     {
-        $config = $this->container->get('kernel.config');
+        $config = $this->container->get('kernel.config')->singleton();
 
         $config->setVariable([
             'root.path' => $this->getRootPath(),
