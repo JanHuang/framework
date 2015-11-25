@@ -15,6 +15,7 @@ namespace FastD\Framework\Bundle\Events\Http;
 
 use FastD\Framework\Bundle\Events\ContainerAware;
 use FastD\Framework\Bundle\Events\EventInterface;
+use FastD\Framework\Extensions\Preset;
 use FastD\Http\Session\Storage\RedisStorage;
 use FastD\Http\Session\Session;
 use FastD\Http\Session\SessionHandler;
@@ -24,6 +25,7 @@ use FastD\Storage\StorageManager;
 use FastD\Http\Response;
 use FastD\Http\JsonResponse;
 use FastD\Http\XmlResponse;
+use FastD\Template\Template;
 
 /**
  * Class Event
@@ -51,15 +53,25 @@ class Event extends ContainerAware implements EventInterface
     protected $session;
 
     /**
+     * @var Template
+     */
+    protected $template;
+
+    /**
      * Get custom defined helper obj.
      *
      * @param string $name
      * @param array $parameters
+     * @param bool  $flag
      * @return mixed
      */
-    public function get($name, array $parameters = array())
+    public function get($name, array $parameters = array(), $flag = false)
     {
-        return $this->container->singleton($name, $parameters);
+        if ($flag) {
+            return $this->container->singleton($name, $parameters);
+        }
+
+        return $this->container->instance($name, $parameters);
     }
 
     /**
@@ -84,6 +96,11 @@ class Event extends ContainerAware implements EventInterface
         return $this->session;
     }
 
+    /**
+     * @param null  $connection
+     * @param array $options
+     * @return \FastD\Database\Driver\Driver
+     */
     public function getConnection($connection = null, array $options = [])
     {
         if (null === $this->database) {
@@ -93,6 +110,11 @@ class Event extends ContainerAware implements EventInterface
         return $this->database->getConnection($connection);
     }
 
+    /**
+     * @param       $connection
+     * @param array $options
+     * @return \FastD\Storage\StorageInterface
+     */
     public function getStorage($connection, array $options = [])
     {
         if (null === $this->storage) {
@@ -139,46 +161,71 @@ class Event extends ContainerAware implements EventInterface
 
     }
 
-    public function redirect($url, array $parameters = [], $statusCode = 302, array $headers = [])
-    {
-        return new RedirectResponse($url, $statusCode, $headers);
-    }
-
     /**
      * @param       $name
      * @param array $parameters
-     * @return  mixed
+     * @return  Response
      */
     public function forward($name, array $parameters = [])
     {
 
     }
 
-    public function render($template, array $parameters = array())
+    /**
+     * Render template to html or return content.
+     *
+     * @param            $view
+     * @param array      $parameters
+     * @param bool|false $flog
+     * @return Response|string
+     */
+    public function render($view, array $parameters = array(), $flog = false)
     {
-        $paths = $this->getParameters('template.paths');
-        foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
-            $paths[] = dirname($bundle->getRootPath());
-        }
-        $options = [];
-        if (!($isDebug = $this->container->get('kernel')->isDebug())) {
-            $options = [
-                'cache' => $this->getParameters('template.cache'),
-                'debug' => $isDebug,
-            ];
-        }
-        $self = $this;
-        $this->template = $this->container->get('kernel.template', [$paths, $options]);
-        $this->template->addGlobal('request', $this->getRequest());
-        $this->template->addFunction(new \Twig_SimpleFunction('url', function ($name, array $parameters = [], $format = '') use ($self) {
-            return $self->generateUrl($name, $parameters, $format);
-        }));
-        $this->template->addFunction(new \Twig_SimpleFunction('asset', function ($name, $host = null, $path = null) use ($self) {
-            return $self->asset($name, $host, $path);
-        }));
-        unset($paths, $options);
+        if (null === $this->template) {
+            $extensions = [new Preset()];
+            $paths = $this->getParameters('template.paths');
+            $bundles = $this->getContainer()->singleton('kernel')->getBundles();
+            foreach ($bundles as $bundle) {
+                $paths[] = dirname($bundle->getRootPath());
+                $extensions = array_merge($extensions, $bundle->registerExtensions());
+            }
 
-        return $this->template->render($template, $parameters);
+            $options = [];
+            if (!($isDebug = $this->container->singleton('kernel')->isDebug())) {
+                $options = [
+                    'cache' => $this->getParameters('template.cache'),
+                    'debug' => $isDebug,
+                ];
+            }
+
+            $this->template = $this->container->singleton('kernel.template', [$paths, $options]);
+            foreach ($extensions as $extension) {
+                $extension->setContainer($this->getContainer());
+                $this->template->addExtension($extension);
+            }
+        }
+
+        $content = $this->template->render($view, $parameters);
+
+        if ($flog) {
+            return $content;
+        }
+
+        return $this->responseHtml($content);
+    }
+
+    /**
+     * Redirect url.
+     *
+     * @param       $url
+     * @param array $parameters
+     * @param int   $statusCode
+     * @param array $headers
+     * @return RedirectResponse
+     */
+    public function redirect($url, array $parameters = [], $statusCode = 302, array $headers = [])
+    {
+        return new RedirectResponse($url, $statusCode, $headers);
     }
 
     /**

@@ -37,4 +37,9 @@ interface BundleInterface
      * @return void
      */
     public function registerConfiguration(Config $config, $env);
+
+    /**
+     * @return array
+     */
+    public function registerExtensions();
 }

@@ -91,4 +91,9 @@ class Bundle extends \ReflectionClass implements BundleInterface
             include $routes;
         }
     }
+
+    public function registerExtensions()
+    {
+        return [];
+    }
 }

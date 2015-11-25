@@ -146,7 +146,6 @@ abstract class AppKernel extends Terminal
     {
         $this->container = new Container([
             'kernel.template'       => 'FastD\\Template\\Template',
-            'kernel.template.exts'  => 'FastD\\Template\\TemplateExtension',
             'kernel.logger'         => 'FastD\\Logger\\Logger',
             'kernel.database'       => 'FastD\\Database\\Database',
             'kernel.config'         => 'FastD\\Config\\Config',
