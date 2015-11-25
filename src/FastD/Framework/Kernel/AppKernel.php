@@ -150,7 +150,7 @@ abstract class AppKernel extends Terminal
             'kernel.database'       => 'FastD\\Database\\Database',
             'kernel.config'         => 'FastD\\Config\\Config',
             'kernel.storage'        => 'FastD\\Storage\\StorageManager',
-            'kernel.http.handler'   => 'FastD\\Framework\\Kernel\\Handle\\HttpHandler',
+            'kernel.dispatch'       => 'FastD\\Framework\\Kernel\\Handle\\HttpHandler',
         ]);
 
         $this->registerService($this->container);
@@ -216,7 +216,7 @@ abstract class AppKernel extends Terminal
     {
         $client = $this->createHttpRequestClient();
 
-        return $this->container->get('kernel.http.handler')->handleHttpRequest($client);
+        return $this->container->get('kernel.dispatch')->handleHttpRequest($client);
     }
 
     /**

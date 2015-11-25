@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: janhuang
- * Date: 15/11/19
- * Time: 下午11:41
+ * Date: 15/11/26
+ * Time: 上午12:07
  * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
@@ -14,9 +14,7 @@
 
 namespace FastD\Framework\Kernel\Handle;
 
-use FastD\Http\Request;
-
-interface HandlerInterface
+class TplHandler
 {
-    public function handleHttpRequest(Request $request);
+
 }

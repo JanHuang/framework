@@ -14,19 +14,14 @@
 
 namespace FastD\Framework\Kernel\Handle;
 
-use FastD\Container\Container;
 use FastD\Framework\Bundle\Events\Http\Event;
+use FastD\Framework\Dispatcher\Dispatch;
 use FastD\Http\Request;
 use FastD\Routing\Route;
 
-class HttpHandler implements HandlerInterface
+class HttpHandler extends Dispatch
 {
     protected $container;
-
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
 
     public function dispatchEventCallback(Route $route)
     {
@@ -54,5 +49,15 @@ class HttpHandler implements HandlerInterface
         $route = $this->container->singleton('kernel.routing')->match($request->getPathInfo());
 
         return $this->dispatchEventCallback($route);
+    }
+
+    public function getName()
+    {
+        return 'http.handle';
+    }
+
+    public function dispatch()
+    {
+        // TODO: Implement dispatch() method.
     }
 }
