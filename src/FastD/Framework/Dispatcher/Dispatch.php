@@ -65,7 +65,8 @@ abstract class Dispatch implements DispatchInterface
     abstract public function getName();
 
     /**
+     * @param array|null $parameters
      * @return mixed
      */
-    abstract public function dispatch();
+    abstract public function dispatch(array $parameters = null);
 }

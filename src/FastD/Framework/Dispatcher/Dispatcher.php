@@ -14,27 +14,59 @@
 
 namespace FastD\Framework\Dispatcher;
 
+use FastD\Container\Container;
 use FastD\Framework\Container\ContainerAware;
-use FastD\Framework\Kernel\Handle\HttpHandler;
-use FastD\Framework\Kernel\Handle\TplHandler;
+use FastD\Framework\Dispatcher\Handle\HttpHandler;
+use FastD\Framework\Dispatcher\Handle\TplHandler;
 
+/**
+ * Class Dispatcher
+ *
+ * @package FastD\Framework\Dispatcher
+ */
 class Dispatcher extends ContainerAware
 {
+    /**
+     * @var Dispatch[]
+     */
     protected $dispatchArray = [];
 
-    public function __construct()
+    /**
+     * Dispatcher constructor.
+     *
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
+        $this->setContainer($container);
         $this->dispatchArray['http.handle'] = new HttpHandler();
         $this->dispatchArray['event.tpl'] = new TplHandler();
     }
 
+    /**
+     * @param DispatchInterface $dispatchInterface
+     */
     public function setDispatch(DispatchInterface $dispatchInterface)
     {
         $this->dispatchArray[] = $dispatchInterface;
     }
 
+    /**
+     * @param $name
+     * @return Dispatch
+     */
     public function getDispatch($name)
     {
-        return $this->dispatchArray[$name];
+        return $this->dispatchArray[$name]->setContainer($this->getContainer());
+    }
+
+    /**
+     * @param       $name
+     * @param array $paramters
+     * @return mixed
+     */
+    public function dispatch($name, array $paramters = [])
+    {
+        return $this->getDispatch($name)->dispatch($paramters);
     }
 }

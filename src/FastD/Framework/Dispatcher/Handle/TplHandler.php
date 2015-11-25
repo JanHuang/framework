@@ -12,7 +12,7 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Kernel\Handle;
+namespace FastD\Framework\Dispatcher\Handle;
 
 class TplHandler
 {

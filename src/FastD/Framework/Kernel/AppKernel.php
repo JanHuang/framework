@@ -15,6 +15,7 @@ namespace FastD\Framework\Kernel;
 
 use FastD\Config\Config;
 use FastD\Container\Container;
+use FastD\Framework\Dispatcher\Dispatcher;
 use FastD\Http\Request;
 use FastD\Http\Response;
 use FastD\Framework\Bundle\Bundle;
@@ -150,12 +151,12 @@ abstract class AppKernel extends Terminal
             'kernel.database'       => 'FastD\\Database\\Database',
             'kernel.config'         => 'FastD\\Config\\Config',
             'kernel.storage'        => 'FastD\\Storage\\StorageManager',
-            'kernel.dispatch'       => 'FastD\\Framework\\Kernel\\Handle\\HttpHandler',
         ]);
 
         $this->registerService($this->container);
 
         $this->container->set('kernel.container', $this->container);
+        $this->container->set('kernel.dispatch', new Dispatcher($this->container));
         $this->container->set('kernel', $this);
     }
 
@@ -216,7 +217,7 @@ abstract class AppKernel extends Terminal
     {
         $client = $this->createHttpRequestClient();
 
-        return $this->container->get('kernel.dispatch')->handleHttpRequest($client);
+        return $this->container->singleton('kernel.dispatch')->dispatch('http.handle', [$client]);
     }
 
     /**

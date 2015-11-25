@@ -13,7 +13,7 @@
 
 namespace FastD\Framework\Bundle\Events\Http;
 
-use FastD\Framework\Bundle\Events\ContainerAware;
+use FastD\Framework\Container\ContainerAware;
 use FastD\Framework\Bundle\Events\EventInterface;
 use FastD\Framework\Extensions\Preset;
 use FastD\Http\Session\Storage\RedisStorage;

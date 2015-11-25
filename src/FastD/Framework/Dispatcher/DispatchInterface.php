@@ -29,7 +29,8 @@ interface DispatchInterface extends ContainerAwareInterface
     public function getName();
 
     /**
+     * @param array|null $parameters
      * @return mixed
      */
-    public function dispatch();
+    public function dispatch(array $parameters = null);
 }

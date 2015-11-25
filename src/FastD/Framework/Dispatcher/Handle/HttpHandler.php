@@ -12,7 +12,7 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Kernel\Handle;
+namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Bundle\Events\Http\Event;
 use FastD\Framework\Dispatcher\Dispatch;
@@ -46,7 +46,7 @@ class HttpHandler extends Dispatch
 
     public function handleHttpRequest(Request $request)
     {
-        $route = $this->container->singleton('kernel.routing')->match($request->getPathInfo());
+        $route = $this->getContainer()->singleton('kernel.routing')->match($request->getPathInfo());
 
         return $this->dispatchEventCallback($route);
     }
@@ -56,8 +56,8 @@ class HttpHandler extends Dispatch
         return 'http.handle';
     }
 
-    public function dispatch()
+    public function dispatch(array $parameters = null)
     {
-        // TODO: Implement dispatch() method.
+        return $this->handleHttpRequest($parameters[0]);
     }
 }
