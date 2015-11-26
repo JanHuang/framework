@@ -19,6 +19,7 @@ use FastD\Framework\Container\ContainerAware;
 use FastD\Framework\Dispatcher\Handle\AssetHandler;
 use FastD\Framework\Dispatcher\Handle\ForwardHandler;
 use FastD\Framework\Dispatcher\Handle\HttpHandler;
+use FastD\Framework\Dispatcher\Handle\TestCaseHandle;
 use FastD\Framework\Dispatcher\Handle\TplHandler;
 use FastD\Framework\Dispatcher\Handle\UrlHandler;
 
@@ -47,6 +48,7 @@ class Dispatcher extends ContainerAware
         $this->setDispatch(new AssetHandler());
         $this->setDispatch(new UrlHandler());
         $this->setDispatch(new ForwardHandler());
+        $this->setDispatch(new TestCaseHandle());
     }
 
     /**

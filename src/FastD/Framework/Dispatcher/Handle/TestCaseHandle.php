@@ -14,7 +14,27 @@
 
 namespace FastD\Framework\Dispatcher\Handle;
 
-class TestCaseHandle
-{
+use FastD\Framework\Dispatcher\Dispatch;
+use FastD\Framework\Tests\TestClient;
 
+class TestCaseHandle extends Dispatch
+{
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'handle.testing';
+    }
+
+    /**
+     * @param array|null $parameters
+     * @return mixed
+     */
+    public function dispatch(array $parameters = null)
+    {
+        $client = $this->getContainer()->singleton('kernel')->createHttpRequestClient();
+
+        return new TestClient($client);
+    }
 }

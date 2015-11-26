@@ -28,8 +28,10 @@ abstract class WebTestCase extends FrameworkTestCase
     {
         static::kernelBootstrap();
 
-        $dispatcher = static::$application->getContainer()->singleton('kernel.dispatch');
-
-        return static::$application->createHttpRequestClient();
+        return static::$application
+            ->getContainer()
+            ->singleton('kernel.dispatch')
+            ->dispatch('handle.testing')
+            ;
     }
 }
