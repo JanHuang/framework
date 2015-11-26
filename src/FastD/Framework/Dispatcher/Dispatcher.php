@@ -16,8 +16,11 @@ namespace FastD\Framework\Dispatcher;
 
 use FastD\Container\Container;
 use FastD\Framework\Container\ContainerAware;
+use FastD\Framework\Dispatcher\Handle\AssetHandler;
+use FastD\Framework\Dispatcher\Handle\ForwardHandler;
 use FastD\Framework\Dispatcher\Handle\HttpHandler;
 use FastD\Framework\Dispatcher\Handle\TplHandler;
+use FastD\Framework\Dispatcher\Handle\UrlHandler;
 
 /**
  * Class Dispatcher
@@ -41,6 +44,9 @@ class Dispatcher extends ContainerAware
         $this->setContainer($container);
         $this->setDispatch(new HttpHandler());
         $this->setDispatch(new TplHandler());
+        $this->setDispatch(new AssetHandler());
+        $this->setDispatch(new UrlHandler());
+        $this->setDispatch(new ForwardHandler());
     }
 
     /**
@@ -62,11 +68,11 @@ class Dispatcher extends ContainerAware
 
     /**
      * @param       $name
-     * @param array $paramters
+     * @param array $parameters
      * @return mixed
      */
-    public function dispatch($name, array $paramters = [])
+    public function dispatch($name, array $parameters = [])
     {
-        return $this->getDispatch($name)->dispatch($paramters);
+        return $this->getDispatch($name)->dispatch($parameters);
     }
 }

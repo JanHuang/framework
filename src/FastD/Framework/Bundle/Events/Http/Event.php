@@ -15,7 +15,6 @@ namespace FastD\Framework\Bundle\Events\Http;
 
 use FastD\Framework\Container\ContainerAware;
 use FastD\Framework\Bundle\Events\EventInterface;
-use FastD\Framework\Extensions\Preset;
 use FastD\Http\Session\Storage\RedisStorage;
 use FastD\Http\Session\Session;
 use FastD\Http\Session\SessionHandler;
@@ -65,7 +64,7 @@ class Event extends ContainerAware implements EventInterface
      * @param bool  $flag
      * @return mixed
      */
-    public function get($name, array $parameters = array(), $flag = false)
+    public function get($name, array $parameters = [], $flag = false)
     {
         if (!$flag) {
             return $this->container->singleton($name, $parameters);
@@ -143,22 +142,17 @@ class Event extends ContainerAware implements EventInterface
      */
     public function generateUrl($name, array $parameters = array(), $format = '')
     {
-        $url = $this->get('kernel.routing')->generateUrl($name, $parameters, $format);
-        if ('http' !== substr($url, 0, 4)) {
-            $url = ('/' === ($path = $this->get('kernel.request')->getBaseUrl()) ? '' : $path) . $url;
-            $url = str_replace('//', '/', $url);
-        }
-
-        return $this->get('kernel.request')->getSchemeAndHttpAndHost() . $url;
+        return $this->get('kernel.dispatch')->dispatch('handle.url', [$name, $parameters, $format]);
     }
 
     /**
-     * @param      $name
+     * @param               $name
+     * @param   string|int  $version
      * @return string
      */
-    public function asset($name, $verion = null)
+    public function asset($name, $version = null)
     {
-
+        return $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.asset', [$name, $version]);
     }
 
     /**
@@ -182,30 +176,7 @@ class Event extends ContainerAware implements EventInterface
     public function render($view, array $parameters = array(), $flog = false)
     {
         if (null === $this->template) {
-            $extensions = [new Preset()];
-            $paths = [
-                $this->get('kernel')->getRootPath() . '/views',
-                $this->get('kernel')->getRootPath() . '/../src'
-            ];
-            $bundles = $this->getContainer()->singleton('kernel')->getBundles();
-            foreach ($bundles as $bundle) {
-                $paths[] = dirname($bundle->getRootPath());
-                $extensions = array_merge($extensions, $bundle->registerExtensions());
-            }
-
-            $options = [];
-            if (!($isDebug = $this->container->singleton('kernel')->isDebug())) {
-                $options = [
-                    'cache' => $this->get('kernel')->getRootPath() . '/storage/templates',
-                    'debug' => $isDebug,
-                ];
-            }
-
-            $this->template = $this->container->singleton('kernel.template', [$paths, $options]);
-            foreach ($extensions as $extension) {
-                $extension->setContainer($this->getContainer());
-                $this->template->addExtension($extension);
-            }
+            $this->template = $this->get('kernel.dispatch')->dispatch('handle.tpl');
         }
 
         $content = $this->template->render($view, $parameters);

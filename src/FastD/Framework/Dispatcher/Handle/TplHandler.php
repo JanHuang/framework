@@ -15,9 +15,12 @@
 namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Dispatcher\Dispatch;
+use FastD\Framework\Extensions\Preset;
 
 class TplHandler extends Dispatch
 {
+    protected $tpl;
+
     /**
      * @return string
      */
@@ -32,6 +35,37 @@ class TplHandler extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        // TODO: Implement dispatch() method.
+        if (null !== $this->tpl) {
+            return $this->tpl;
+        }
+
+        $appKernel = $this->getContainer()->singleton('kernel');
+
+        $extensions = [new Preset()];
+        $paths = [
+            $appKernel->getRootPath() . '/views',
+            $appKernel->getRootPath() . '/../src'
+        ];
+        $bundles = $appKernel->getBundles();
+        foreach ($bundles as $bundle) {
+            $paths[] = dirname($bundle->getRootPath());
+            $extensions = array_merge($extensions, $bundle->registerExtensions());
+        }
+
+        $options = [];
+        if (!($isDebug = $appKernel->isDebug())) {
+            $options = [
+                'cache' => $appKernel->getRootPath() . '/storage/templates',
+                'debug' => $isDebug,
+            ];
+        }
+
+        $this->tpl = $this->container->singleton('kernel.template', [$paths, $options]);
+        foreach ($extensions as $extension) {
+            $extension->setContainer($this->getContainer());
+            $this->tpl->addExtension($extension);
+        }
+
+        return $this->tpl;
     }
 }

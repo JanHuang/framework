@@ -48,10 +48,10 @@ class Preset extends TplExtension
     {
         return [
             new Twig_SimpleFunction('url', function ($name, array $parameters = [], $format = null) {
-                return $this->getContainer()->singleton('kernel.routing')->generateUrl($name, $parameters, $format);
+                return $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.url', [$name, $parameters, $format]);
             }),
             new Twig_SimpleFunction('asset', function ($name, $version = null) {
-                return $this->getContainer()->singleton('kernel.request')->getBaseUrl() . '/bundle/' . $name . (null === $version ? '' : '?v=' . $version);
+                return $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.asset', [$name, $version]);
             }),
         ];
     }

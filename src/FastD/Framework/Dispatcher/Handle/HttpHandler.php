@@ -21,8 +21,6 @@ use FastD\Routing\Route;
 
 class HttpHandler extends Dispatch
 {
-    protected $container;
-
     public function dispatchEventCallback(Route $route)
     {
         $callback = $route->getCallback();
