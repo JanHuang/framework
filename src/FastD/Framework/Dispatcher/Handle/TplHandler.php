@@ -17,6 +17,13 @@ namespace FastD\Framework\Dispatcher\Handle;
 use FastD\Framework\Dispatcher\Dispatch;
 use FastD\Framework\Extensions\Preset;
 
+/**
+ * Framework template generator.
+ *
+ * Class TplHandler
+ *
+ * @package FastD\Framework\Dispatcher\Handle
+ */
 class TplHandler extends Dispatch
 {
     protected $tpl;

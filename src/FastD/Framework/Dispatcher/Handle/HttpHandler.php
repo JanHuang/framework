@@ -19,6 +19,14 @@ use FastD\Framework\Dispatcher\Dispatch;
 use FastD\Http\Request;
 use FastD\Routing\Route;
 
+/**
+ * Framework kernel boot http handle.
+ * Handle every time user request.
+ *
+ * Class HttpHandler
+ *
+ * @package FastD\Framework\Dispatcher\Handle
+ */
 class HttpHandler extends Dispatch
 {
     public function dispatchEventCallback(Route $route)

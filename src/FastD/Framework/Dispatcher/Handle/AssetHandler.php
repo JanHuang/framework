@@ -16,6 +16,11 @@ namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Dispatcher\Dispatch;
 
+/**
+ * Class AssetHandler
+ *
+ * @package FastD\Framework\Dispatcher\Handle
+ */
 class AssetHandler extends Dispatch
 {
     /**

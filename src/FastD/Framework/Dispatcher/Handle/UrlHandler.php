@@ -16,6 +16,13 @@ namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Dispatcher\Dispatch;
 
+/**
+ * Framework route url generator.
+ *
+ * Class UrlHandler
+ *
+ * @package FastD\Framework\Dispatcher\Handle
+ */
 class UrlHandler extends Dispatch
 {
     /**

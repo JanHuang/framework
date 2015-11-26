@@ -16,6 +16,11 @@ namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Dispatcher\Dispatch;
 
+/**
+ * Class ForwardHandler
+ *
+ * @package FastD\Framework\Dispatcher\Handle
+ */
 class ForwardHandler extends Dispatch
 {
     /**
