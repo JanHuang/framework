@@ -14,7 +14,22 @@
 
 namespace FastD\Framework\Tests;
 
-class WebTestCase extends FrameworkTestCase
+/**
+ * Class WebTestCase
+ *
+ * @package FastD\Framework\Tests
+ */
+abstract class WebTestCase extends FrameworkTestCase
 {
+    /**
+     * @return \FastD\Http\Request
+     */
+    public static function createClient()
+    {
+        static::kernelBootstrap();
 
+        $dispatcher = static::$application->getContainer()->singleton('kernel.dispatch');
+
+        return static::$application->createHttpRequestClient();
+    }
 }

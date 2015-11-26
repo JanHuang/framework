@@ -38,6 +38,9 @@
         "fastd/swoole": "1.0.x-dev",
         "fastd/swoole-bundle": "1.0.x-dev"
     },
+    "require-dev": {
+        "phpunit/phpunit": "5.0"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "2.0.x-dev"

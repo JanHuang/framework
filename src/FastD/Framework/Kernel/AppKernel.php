@@ -217,7 +217,16 @@ abstract class AppKernel extends Terminal
     {
         $client = $this->createHttpRequestClient();
 
-        return $this->container->singleton('kernel.dispatch')->dispatch('handle.http', [$client]);
+        return $this->handleRequest($client);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function handleRequest(Request $request)
+    {
+        return $this->container->singleton('kernel.dispatch')->dispatch('handle.http', [$request]);
     }
 
     /**

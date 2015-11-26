@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: janhuang
- * Date: 15/9/12
- * Time: 下午3:18
+ * Date: 15/11/26
+ * Time: 下午2:16
  * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
@@ -12,6 +12,12 @@
  * WebSite: http://www.janhuang.me
  */
 
-Routes::get('/', 'FastD:Framework:Tests:Bootstrap:Events:Demo@indexAction');
-Routes::get('/session', 'FastD:Framework:Tests:Bootstrap:Events:Demo@sessionAction');
-Routes::get('/rest', 'FastD:Framework:Tests:Bootstrap:Events:Demo@apiAction');
+namespace FastD\Framework\Tests\KernelTesting;
+
+use FastD\Framework\Tests\FrameworkTestCase;
+
+class DispatchTest extends FrameworkTestCase
+{
+    public function testDispatch()
+    {}
+}
