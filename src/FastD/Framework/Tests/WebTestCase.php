@@ -22,7 +22,7 @@ namespace FastD\Framework\Tests;
 abstract class WebTestCase extends FrameworkTestCase
 {
     /**
-     * @return \FastD\Http\Request
+     * @return \FastD\Framework\Tests\TestClient
      */
     public static function createClient()
     {

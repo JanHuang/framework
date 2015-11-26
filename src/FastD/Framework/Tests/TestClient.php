@@ -14,18 +14,45 @@
 
 namespace FastD\Framework\Tests;
 
+use FastD\Container\Container;
 use FastD\Http\Request;
+use FastD\Http\Response;
 
 class TestClient
 {
+    protected $container;
+
     protected $request;
 
-    public function __construct(Request $request)
+    public function __construct(Container $container, Request $request = null)
     {
-        $this->request = $request;
+        $this->container = $container;
+
+        if (null !== $request) {
+            $this->request = $request;
+        }
     }
 
-    public function request()
+    /**
+     * @param       $method
+     * @param       $path
+     * @param array $parameters
+     * @return Response
+     */
+    public function testResponse($method, $path, array $parameters = [])
+    {
+        $this->request->server->set('REQUEST_METHOD', $method);
+        $this->request->server->set('PATH_INFO', $path);
+
+        return $this->container->singleton('kernel.dispatch')->dispatch('handle.http', [$this->request]);
+    }
+
+    public function testService($name, array $parameters = null)
+    {
+
+    }
+
+    public function testRepository($name, array $parameters = null)
     {
 
     }

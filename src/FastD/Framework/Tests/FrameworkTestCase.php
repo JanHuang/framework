@@ -15,7 +15,6 @@
 namespace FastD\Framework\Tests;
 
 use FastD\Finder\Finder;
-use FastD\Framework\Kernel\AppKernel;
 
 /**
  * Class FrameworkTestCase

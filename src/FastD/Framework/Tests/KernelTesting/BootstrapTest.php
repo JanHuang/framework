@@ -21,5 +21,9 @@ class BootstrapTest extends WebTestCase
     public function testKernelBoot()
     {
         $client = static::createClient();
+
+        $response = $client->testResponse('GET', '/');
+
+        $this->assertEquals('hello fastd', $response->getContent());
     }
 }

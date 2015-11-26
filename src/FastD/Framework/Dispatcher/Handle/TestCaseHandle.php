@@ -33,8 +33,8 @@ class TestCaseHandle extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        $client = $this->getContainer()->singleton('kernel')->createHttpRequestClient();
+        $request = $this->getContainer()->singleton('kernel')->createHttpRequestClient();
 
-        return new TestClient($client);
+        return new TestClient($this->getContainer(), $request);
     }
 }
