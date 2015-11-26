@@ -39,8 +39,8 @@ class Dispatcher extends ContainerAware
     public function __construct(Container $container)
     {
         $this->setContainer($container);
-        $this->dispatchArray['http.handle'] = new HttpHandler();
-        $this->dispatchArray['event.tpl'] = new TplHandler();
+        $this->setDispatch(new HttpHandler());
+        $this->setDispatch(new TplHandler());
     }
 
     /**
@@ -48,7 +48,7 @@ class Dispatcher extends ContainerAware
      */
     public function setDispatch(DispatchInterface $dispatchInterface)
     {
-        $this->dispatchArray[] = $dispatchInterface;
+        $this->dispatchArray[$dispatchInterface->getName()] = $dispatchInterface;
     }
 
     /**

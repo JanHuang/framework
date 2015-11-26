@@ -53,7 +53,7 @@ class HttpHandler extends Dispatch
 
     public function getName()
     {
-        return 'http.handle';
+        return 'handle.http';
     }
 
     public function dispatch(array $parameters = null)

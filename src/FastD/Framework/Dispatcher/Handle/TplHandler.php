@@ -14,7 +14,24 @@
 
 namespace FastD\Framework\Dispatcher\Handle;
 
-class TplHandler
-{
+use FastD\Framework\Dispatcher\Dispatch;
 
+class TplHandler extends Dispatch
+{
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'handle.tpl';
+    }
+
+    /**
+     * @param array|null $parameters
+     * @return mixed
+     */
+    public function dispatch(array $parameters = null)
+    {
+        // TODO: Implement dispatch() method.
+    }
 }
