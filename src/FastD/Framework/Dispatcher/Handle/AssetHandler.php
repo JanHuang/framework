@@ -23,6 +23,8 @@ use FastD\Framework\Dispatcher\Dispatch;
  */
 class AssetHandler extends Dispatch
 {
+    protected $baseUrl;
+
     /**
      * @return string
      */
@@ -37,6 +39,18 @@ class AssetHandler extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        // TODO: Implement dispatch() method.
+        list($name, $version) = $parameters;
+
+        if (null === $this->baseUrl) {
+            $request = $this->getContainer()->singleton('kernel.request');
+
+            $this->baseUrl = $request->getDomain() . $request->getBaseUrl();
+
+            if ('' != pathinfo($this->baseUrl, PATHINFO_EXTENSION)) {
+                $this->baseUrl = pathinfo($this->baseUrl, PATHINFO_DIRNAME);
+            }
+        }
+
+        return '//' . $this->baseUrl . '/' . $name . (null === $version ? '' : '?v=' . $version);
     }
 }

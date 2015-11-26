@@ -25,6 +25,8 @@ use FastD\Framework\Dispatcher\Dispatch;
  */
 class UrlHandler extends Dispatch
 {
+    protected $router;
+
     /**
      * @return string
      */
@@ -39,6 +41,8 @@ class UrlHandler extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        echo 1;
+        list($name, $params, $format) = $parameters;
+
+        return $this->getContainer()->singleton('kernel.routing')->generateUrl($name, $params, $format);
     }
 }
