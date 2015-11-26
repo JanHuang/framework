@@ -14,14 +14,12 @@
 
 namespace FastD\Framework\Dispatcher\Handle;
 
-use FastD\Framework\Dispatcher\Dispatch;
-
 /**
  * Class ForwardHandler
  *
  * @package FastD\Framework\Dispatcher\Handle
  */
-class ForwardHandler extends Dispatch
+class ForwardHandler extends HttpHandler
 {
     /**
      * @return string
@@ -37,6 +35,12 @@ class ForwardHandler extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        // TODO: Implement dispatch() method.
+        list($name, $params) = $parameters;
+
+        $route = $this->getContainer()->singleton('kernel.routing')->getRoute($name);
+
+        $route->mergeParameters($params);
+
+        return $this->handleRoute($route);
     }
 }

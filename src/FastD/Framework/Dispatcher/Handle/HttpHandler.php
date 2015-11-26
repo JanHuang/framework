@@ -29,41 +29,33 @@ use FastD\Routing\Route;
  */
 class HttpHandler extends Dispatch
 {
-    public function dispatchEventCallback(Route $route)
-    {
-        $callback = $route->getCallback();
-        switch (gettype($callback)) {
-            case 'object':
-            case 'closure':
-                return $callback();
-            case 'array':
-                return call_user_func_array($callback, $route->getParameters());
-            case 'string':
-            default:
-                list($controller, $action) = explode('@', $callback);
-                $controller = str_replace(':', '\\', $controller);
-                $controller = $this->container->set('request_callback', $controller)->singleton('request_callback');
-                if ($controller instanceof Event) {
-                    $controller->setContainer($this->container);
-                }
-                return call_user_func_array([$controller, $action], $route->getParameters());
-        }
-    }
-
-    public function handleHttpRequest(Request $request)
-    {
-        $route = $this->getContainer()->singleton('kernel.routing')->match($request->getPathInfo());
-
-        return $this->dispatchEventCallback($route);
-    }
-
     public function getName()
     {
         return 'handle.http';
     }
 
+    public function handleRoute(Route $route)
+    {
+        $callback = $route->getCallback();
+
+        list($controller, $action) = explode('@', $callback);
+        $controller = str_replace(':', '\\', $controller);
+        $service = $this->container->set('request_callback', $controller)->get('request_callback');
+        $controller = $service->singleton();
+        if ($controller instanceof Event) {
+            $controller->setContainer($this->container);
+        }
+        if (method_exists($controller, '__initialize')) {
+            $service->__initialize();
+        }
+
+        return call_user_func_array([$controller, $action], $route->getParameters());
+    }
+
     public function dispatch(array $parameters = null)
     {
-        return $this->handleHttpRequest($parameters[0]);
+        $route = $this->getContainer()->singleton('kernel.routing')->match($parameters[0]->getPathInfo());
+
+        return $this->handleRoute($route);
     }
 }
