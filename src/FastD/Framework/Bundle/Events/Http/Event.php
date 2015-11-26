@@ -66,11 +66,7 @@ class Event extends ContainerAware implements EventInterface
      */
     public function get($name, array $parameters = [], $flag = false)
     {
-        if (!$flag) {
-            return $this->container->singleton($name, $parameters);
-        }
-
-        return $this->container->instance($name, $parameters);
+        return $flag ? $this->container->instance($name, $parameters) : $this->container->singleton($name, $parameters);
     }
 
     /**
@@ -152,7 +148,7 @@ class Event extends ContainerAware implements EventInterface
      */
     public function asset($name, $version = null)
     {
-        return $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.asset', [$name, $version]);
+        return $this->get('kernel.dispatch')->dispatch('handle.asset', [$name, $version]);
     }
 
     /**
@@ -162,7 +158,7 @@ class Event extends ContainerAware implements EventInterface
      */
     public function forward($name, array $parameters = [])
     {
-
+        return $this->get('kernel.dispatch')->dispatch('handle.forward', [$name, $parameters]);
     }
 
     /**
