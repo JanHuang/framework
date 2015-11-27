@@ -71,9 +71,7 @@ class Bundle extends \ReflectionClass implements BundleInterface
     {
         $routes = $this->getRootPath() . '/Resources/config/routes.php';
 
-        if (file_exists($routes)) {
-            include $routes;
-        }
+        include $routes;
     }
 
     /**
@@ -85,11 +83,9 @@ class Bundle extends \ReflectionClass implements BundleInterface
      */
     public function registerConfiguration(Config $config, $env)
     {
-        $routes = $this->getRootPath() . '/Resources/config/config.php';
+        $config = $this->getRootPath() . '/Resources/config/config.php';
 
-        if (file_exists($routes)) {
-            include $routes;
-        }
+        include $config;
     }
 
     public function registerExtensions()

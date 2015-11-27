@@ -48,7 +48,7 @@ class Version extends Command
      */
     public function execute(Input $input, Output $output)
     {
-        $output->write('Doboee application version: ');
+        $output->write('FastD application version: ');
         $output->writeln(AppKernel::VERSION, Output::STYLE_SUCCESS);
     }
 }

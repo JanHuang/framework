@@ -15,7 +15,7 @@
 namespace FastD\Framework\Extensions;
 
 use FastD\Container\Container;
-use FastD\Framework\Bundle\Events\ContainerAwareInterface;
+use FastD\Framework\Container\ContainerAwareInterface;
 use FastD\Template\Extension;
 
 /**

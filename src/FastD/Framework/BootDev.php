@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: janhuang
- * Date: 15/11/19
- * Time: 下午11:41
+ * Date: 15/11/27
+ * Time: 下午12:31
  * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
@@ -12,11 +12,19 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Kernel\Handle;
+namespace FastD\Framework;
 
-use FastD\Http\Request;
-
-interface HandlerInterface
+/**
+ * AppKernel boot in product.
+ *
+ * Class BootDev
+ *
+ * @package FastD\Framework
+ */
+class BootDev extends BootProd
 {
-    public function handleHttpRequest(Request $request);
+    public function boot()
+    {
+
+    }
 }
