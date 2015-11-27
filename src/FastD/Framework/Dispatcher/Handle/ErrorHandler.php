@@ -33,8 +33,15 @@ class ErrorHandler extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        list($isDebug, $logger) = $parameters;
+        list($isDebug) = $parameters;
+
+        $logger = null;
+        if (!$isDebug) {
+            $logger = $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.log', [LogHandler::LOG_ERROR]);
+        }
 
         Debug::enable($isDebug, $logger);
+
+        unset($isDebug, $logger);
     }
 }

@@ -18,6 +18,8 @@ use FastD\Framework\Dispatcher\Dispatch;
 
 class LogHandler extends Dispatch
 {
+    const LOG_ACCESS = 1;
+    const LOG_ERROR = 2;
 
     /**
      * @return string
@@ -33,7 +35,26 @@ class LogHandler extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        list($level, $msg) = $parameters;
+        return $this->getLogger($parameters[0]);
+    }
 
+    public function getLogger($type)
+    {
+        $logger = $this->getContainer()->singleton('kernel.logger');
+
+        $log = $this->getContainer()->singleton('kernel')->getRootPath() . '/logs/' . date('Ymd');
+
+        switch ($type) {
+            case self::LOG_ACCESS:
+                $log .= '/access.log';
+                break;
+            case self::LOG_ERROR:
+                $log .= '/error.log';
+                break;
+            default:
+                $log .= '/log.log';
+        }
+
+        return $logger->createLogger($log);
     }
 }

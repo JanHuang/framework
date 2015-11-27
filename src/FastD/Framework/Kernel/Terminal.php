@@ -31,6 +31,6 @@ abstract class Terminal implements TerminalInterface, AppKernelInterface
      */
     public function shutdown(AppKernel $appKernel)
     {
-        $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.shutdown');
+        $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.shutdown', [$appKernel->isDebug()]);
     }
 }

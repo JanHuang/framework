@@ -32,6 +32,11 @@ class ShutdownHandler extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
+        list($isDebug) = $parameters;
 
+        if (!$isDebug) {
+            $logger = $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.log', [LogHandler::LOG_ACCESS]);
+            $logger->addInfo('/', []);
+        }
     }
 }

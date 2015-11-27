@@ -118,8 +118,6 @@ abstract class AppKernel extends Terminal
 
         $this->initializeContainer();
 
-        $this->container->singleton('kernel.dispatch')->dispatch('handle.error', [$this->isDebug(), null]);
-
         $config = $this->initializeConfigure();
 
         $routing = $this->initializeRouting();
@@ -160,6 +158,8 @@ abstract class AppKernel extends Terminal
         $this->container->set('kernel.container', $this->container);
         $this->container->set('kernel.dispatch', new Dispatcher($this->container));
         $this->container->set('kernel', $this);
+
+        $this->container->singleton('kernel.dispatch')->dispatch('handle.error', [$this->isDebug()]);
     }
 
     /**
