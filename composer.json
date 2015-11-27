@@ -7,8 +7,7 @@
     "keywords": [
         "FastD",
         "FastD Kernel",
-        "FastD Framework",
-        "FastD Bootstrap"
+        "FastD Framework Kernel"
     ],
     "authors": [
         {
@@ -40,8 +39,7 @@
         "fastd/swoole-bundle": "1.0.x-dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "5.0",
-        "filp/whoops": "2.0.x-dev"
+        "phpunit/phpunit": "5.0"
     },
     "extra": {
         "branch-alias": {

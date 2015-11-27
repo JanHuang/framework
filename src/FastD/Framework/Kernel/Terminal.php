@@ -23,8 +23,14 @@ use FastD\Framework\Bundle;
  */
 abstract class Terminal implements TerminalInterface, AppKernelInterface
 {
+    /**
+     * Application process shutdown.
+     *
+     * @param AppKernel $appKernel
+     * @return void
+     */
     public function shutdown(AppKernel $appKernel)
     {
-
+        $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.shutdown');
     }
 }

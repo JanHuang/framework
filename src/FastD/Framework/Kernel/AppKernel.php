@@ -118,6 +118,8 @@ abstract class AppKernel extends Terminal
 
         $this->initializeContainer();
 
+        $this->container->singleton('kernel.dispatch')->dispatch('handle.error', [$this->isDebug(), null]);
+
         $config = $this->initializeConfigure();
 
         $routing = $this->initializeRouting();
