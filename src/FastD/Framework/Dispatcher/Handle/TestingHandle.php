@@ -17,7 +17,7 @@ namespace FastD\Framework\Dispatcher\Handle;
 use FastD\Framework\Dispatcher\Dispatch;
 use FastD\Framework\Tests\TestClient;
 
-class TestCaseHandle extends Dispatch
+class TestingHandle extends Dispatch
 {
     /**
      * @return string
