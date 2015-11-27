@@ -29,17 +29,19 @@
         "fastd/routing": "2.0.x-dev",
         "fastd/container": "2.0.x-dev",
         "fastd/database": "2.0.x-dev",
-        "fastd/config": "~1.0.0",
-        "fastd/storage": "~0.1.0",
-        "fastd/logger": "~0.1.0",
-        "fastd/console": "~0.1.3",
-        "fastd/finder": "~1.0.0",
-        "fastd/debug": "~1.0.1",
+        "fastd/annotation": "2.0.x-dev",
+        "fastd/debug": "2.0.x-dev",
+        "fastd/finder": "2.0.x-dev",
+        "fastd/config": "2.0.x-dev",
+        "fastd/console": "2.0.x-dev",
+        "fastd/logger": "2.0.x-dev",
+        "fastd/storage": "2.0.x-dev",
         "fastd/swoole": "1.0.x-dev",
         "fastd/swoole-bundle": "1.0.x-dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "5.0"
+        "phpunit/phpunit": "5.0",
+        "filp/whoops": "2.0.x-dev"
     },
     "extra": {
         "branch-alias": {
