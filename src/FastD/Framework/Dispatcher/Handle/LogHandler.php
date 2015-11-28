@@ -42,7 +42,7 @@ class LogHandler extends Dispatch
     {
         $logger = $this->getContainer()->singleton('kernel.logger');
 
-        $log = $this->getContainer()->singleton('kernel')->getRootPath() . '/logs/' . date('Ymd');
+        $log = $this->getContainer()->singleton('kernel')->getRootPath() . '/storage/logs/' . date('Ymd');
 
         switch ($type) {
             case self::LOG_ACCESS:
