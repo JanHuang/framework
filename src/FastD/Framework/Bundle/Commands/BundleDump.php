@@ -12,7 +12,7 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Commands;
+namespace FastD\Framework\Bundle\Commands;
 
 use FastD\Console\Command;
 use FastD\Console\IO\Input;

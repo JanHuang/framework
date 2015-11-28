@@ -12,12 +12,11 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Commands;
+namespace FastD\Framework\Bundle\Commands;
 
 use FastD\Console\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
-use FastD\Finder\Directory\Directory;
 
 /**
  * Class AssetInstall
@@ -43,7 +42,7 @@ class AssetInstall extends Command
     {
         $bundles = $this->getContainer()->get('kernel')->getBundles();
 
-        $web = (null === ($web = $input->getParameterArgument(0)) ? 'public' : $web);
+        $web = (null === ($web = $input->getParameterArgument(0)) ? 'public/bundle' : $web);
 
         $targetRootDir = $this->getContainer()->get('kernel')->getRootPath() . '/../' . $web;
 
@@ -106,17 +105,17 @@ class AssetInstall extends Command
                 $this->remove(new \FilesystemIterator($file));
 
                 if (true !== @rmdir($file)) {
-                    throw new IOException(sprintf('Failed to remove directory "%s".', $file), 0, null, $file);
+                    throw new \RuntimeException(sprintf('Failed to remove directory "%s".', $file), 0, null, $file);
                 }
             } else {
                 // https://bugs.php.net/bug.php?id=52176
                 if ('\\' === DIRECTORY_SEPARATOR && is_dir($file)) {
                     if (true !== @rmdir($file)) {
-                        throw new IOException(sprintf('Failed to remove file "%s".', $file), 0, null, $file);
+                        throw new \RuntimeException(sprintf('Failed to remove file "%s".', $file), 0, null, $file);
                     }
                 } else {
                     if (true !== @unlink($file)) {
-                        throw new IOException(sprintf('Failed to remove file "%s".', $file), 0, null, $file);
+                        throw new \RuntimeException(sprintf('Failed to remove file "%s".', $file), 0, null, $file);
                     }
                 }
             }
