@@ -4,7 +4,7 @@
  * User: janhuang
  * Date: 15/3/18
  * Time: 下午4:32
- * Github: https://www.github.com/janhuang 
+ * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
  * Blog: http://segmentfault.com/blog/janhuang
@@ -101,9 +101,16 @@ class RouteDump extends Command
             }
         }
 
+        if ($style === self::STYLE_LIST) {
+            $output->write('Name' . str_repeat(' ', 25 - strlen('name')));
+            $output->write('Method' . str_repeat(' ', 15 - strlen('Method')));
+            $output->write('Schema' . str_repeat(' ', 15 - strlen('Schema')));
+            $output->writeln('Path');
+        }
+
         if (null === $bundleName) {
             foreach ($allRoutes as $name => $routes) {
-                $output->writeln($name, Output::STYLE_SUCCESS);
+                $output->writeln('Bundle: ' . $name, Output::STYLE_SUCCESS);
                 foreach ($router as $route) {
                     $this->formatOutput($route, $output, $style);
                 }
@@ -113,7 +120,7 @@ class RouteDump extends Command
 
         foreach ($allRoutes as $name => $routes) {
             if ($name == $bundleName) {
-                $output->writeln($name, Output::STYLE_SUCCESS);
+                $output->writeln('Bundle: ' . $name, Output::STYLE_SUCCESS);
                 foreach ($routes as $route) {
                     $this->formatOutput($route, $output, $style);
                 }
@@ -148,7 +155,6 @@ class RouteDump extends Command
                 $output->write($method . str_repeat(' ', 15 - strlen($method)));
                 $output->write($schema . str_repeat(' ', 15 - strlen($schema)));
                 $output->writeln($path);
-
         }
 
         return;
