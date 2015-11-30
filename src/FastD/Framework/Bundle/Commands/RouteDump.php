@@ -63,7 +63,7 @@ class RouteDump extends Command
         $name = $input->getParameterArgument(0);
 
         $bundle = '' == ($bundle = $input->getParameterOption('bundle')) ? null : $bundle;
-        $style = $input->hasParameterOption('list');
+        $style = $input->hasParameterOption('--list');
 
         if (false !== strpos($bundle, ':')) {
             $bundle = str_replace(':', '\\', $bundle);
