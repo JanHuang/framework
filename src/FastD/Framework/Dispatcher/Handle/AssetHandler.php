@@ -51,6 +51,6 @@ class AssetHandler extends Dispatch
             }
         }
 
-        return '//' . $this->baseUrl . '/' . $name . (null === $version ? '' : '?v=' . $version);
+        return '//' . $this->baseUrl . '/bundle/' . $name . (null === $version ? '' : '?v=' . $version);
     }
 }
