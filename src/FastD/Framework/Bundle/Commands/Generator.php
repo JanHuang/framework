@@ -98,6 +98,7 @@ class Generator extends Command
         $controller = sprintf(
             $this->getControllerTemplate(),
             str_replace(DIRECTORY_SEPARATOR, '\\', $bundle),
+            strtolower($bundleArray[0]),
             '/' . strtolower(end($bundleArray)),
             strtolower(str_replace(DIRECTORY_SEPARATOR, '_', $bundle)) . '_index'
         );
@@ -140,8 +141,14 @@ namespace %s\Events;
 
 use FastD\Framework\Bundle\Events\Http\Event;
 
+/**
+ * @Route("/%s")
+ */
 class Index extends Event
 {
+    /**
+     * @Route("/")
+     */
     public function indexAction()
     {
         return 'hello world';

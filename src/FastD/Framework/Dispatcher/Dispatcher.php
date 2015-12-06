@@ -16,6 +16,7 @@ namespace FastD\Framework\Dispatcher;
 
 use FastD\Container\Container;
 use FastD\Framework\Container\ContainerAware;
+use FastD\Framework\Dispatcher\Handle\AnnotationHandle;
 use FastD\Framework\Dispatcher\Handle\AssetHandler;
 use FastD\Framework\Dispatcher\Handle\ErrorHandler;
 use FastD\Framework\Dispatcher\Handle\ForwardHandler;
@@ -55,6 +56,7 @@ class Dispatcher extends ContainerAware
         $this->setDispatch(new ErrorHandler());
         $this->setDispatch(new LogHandler());
         $this->setDispatch(new ShutdownHandler());
+        $this->setDispatch(new AnnotationHandle());
     }
 
     /**

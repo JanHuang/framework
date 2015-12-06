@@ -197,6 +197,10 @@ abstract class AppKernel extends Terminal
 
         $this->container->set('kernel.routing', $router);
 
+        if ($this->isDebug()) {
+            $this->container->singleton('kernel.dispatch')->dispatch('handle.annotation.route');
+        }
+
         return $router;
     }
 
