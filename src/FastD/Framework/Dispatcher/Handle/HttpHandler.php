@@ -41,15 +41,12 @@ class HttpHandler extends Dispatch
         list($controller, $action) = explode('@', $callback);
         $controller = str_replace(':', '\\', $controller);
         $service = $this->container->set('request_callback', $controller)->get('request_callback');
-        $controller = $service->singleton();
-        if ($controller instanceof Event) {
-            $controller->setContainer($this->container);
-        }
-        if (method_exists($controller, '__initialize')) {
+        try {
+            $service->setContainer($this->container);
             $service->__initialize();
-        }
+        } catch (\Exception $e) {}
 
-        return call_user_func_array([$controller, $action], $route->getParameters());
+        return $service->$action($route->getParameters());
     }
 
     public function dispatch(array $parameters = null)
