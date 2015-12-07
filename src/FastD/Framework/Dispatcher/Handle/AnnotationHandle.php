@@ -45,8 +45,8 @@ class AnnotationHandle extends Dispatch
 
         $bundles = $this->getContainer()->singleton('kernel')->getBundles();
         foreach ($bundles as $bundle) {
-            $baseNamespace = $bundle->getNamespace() . '\\Events\\Http\\';
-            $path = $bundle->getRootPath() . '/Events/Http';
+            $baseNamespace = $bundle->getNamespace() . '\\Controllers\\';
+            $path = $bundle->getRootPath() . '/Controllers';
             $files = $finder->in($path)->files();
             foreach ($files as $file) {
                 $className = $baseNamespace . pathinfo($file->getFileName(), PATHINFO_FILENAME);

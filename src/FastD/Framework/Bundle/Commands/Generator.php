@@ -74,7 +74,7 @@ class Generator extends Command
         ));
 
         foreach (array(
-                     'Events/Http',
+                     'Controllers',
                      'Repository',
                      'Extensions',
                      'Commands',
@@ -103,7 +103,7 @@ class Generator extends Command
             strtolower(str_replace(DIRECTORY_SEPARATOR, '_', $bundle)) . '_index'
         );
 
-        $controllerFile = $bundlePath . DIRECTORY_SEPARATOR . 'Events/Http/Index.php';
+        $controllerFile = $bundlePath . DIRECTORY_SEPARATOR . 'Controllers/Index.php';
 
         if (!file_exists($controllerFile)) {
             file_put_contents($controllerFile, $controller);
@@ -139,12 +139,12 @@ class Generator extends Command
 
 namespace %s\Events;
 
-use FastD\Framework\Bundle\Events\Http\Event;
+use FastD\Framework\Bundle\Controllers\Controller;
 
 /**
  * @Route("/%s")
  */
-class Index extends Event
+class Index extends Controller
 {
     /**
      * @Route("/")

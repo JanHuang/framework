@@ -14,9 +14,8 @@
 
 namespace FastD\Framework\Dispatcher\Handle;
 
-use FastD\Framework\Bundle\Events\Http\Event;
+use FastD\Framework\Bundle\Controllers\ControllerInterface;
 use FastD\Framework\Dispatcher\Dispatch;
-use FastD\Http\Request;
 use FastD\Routing\Route;
 
 /**
@@ -41,7 +40,7 @@ class HttpHandler extends Dispatch
         list($controller, $action) = explode('@', $callback);
         $controller = str_replace(':', '\\', $controller);
         $service = $this->container->set('request_callback', $controller)->get('request_callback');
-        if ($service->singleton() instanceof Event) {
+        if ($service->singleton() instanceof ControllerInterface) {
             $service->singleton()->setContainer($this->container);
         }
         try {
