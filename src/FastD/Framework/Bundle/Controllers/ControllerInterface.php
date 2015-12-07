@@ -12,7 +12,7 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Bundle\Events;
+namespace FastD\Framework\Bundle\Controllers;
 
 use FastD\Database\Driver\Driver;
 use FastD\Storage\StorageInterface;
@@ -24,7 +24,7 @@ use FastD\Http\Response;
  *
  * @package FastD\Framework\Bundle\Events
  */
-interface EventInterface
+interface ControllerInterface
 {
     /**
      * @param            $name

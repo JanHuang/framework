@@ -11,27 +11,27 @@
  * Gmail: bboyjanhuang@gmail.com
  */
 
-namespace FastD\Framework\Bundle\Events\Http;
+namespace FastD\Framework\Bundle\Controllers;
 
 use FastD\Framework\Container\ContainerAware;
-use FastD\Framework\Bundle\Events\EventInterface;
-use FastD\Http\Session\Storage\RedisStorage;
-use FastD\Http\Session\Session;
-use FastD\Http\Session\SessionHandler;
 use FastD\Database\Database;
-use FastD\Http\RedirectResponse;
+use FastD\Template\Template;
 use FastD\Storage\StorageManager;
+use FastD\Http\RedirectResponse;
 use FastD\Http\Response;
 use FastD\Http\JsonResponse;
 use FastD\Http\XmlResponse;
-use FastD\Template\Template;
+use FastD\Http\Session\Storage\RedisStorage;
+use FastD\Http\Session\Session;
+use FastD\Http\Session\SessionHandler;
+
 
 /**
  * Class Event
  *
  * @package FastD\Framework\Bundle\Events\Http
  */
-class Event extends ContainerAware implements EventInterface
+class Controller extends ContainerAware implements ControllerInterface
 {
     const SERVER_NAME = 'FastD';
     const SERVER_VERSION = '2.0';
