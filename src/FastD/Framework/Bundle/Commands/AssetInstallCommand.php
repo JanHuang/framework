@@ -23,7 +23,7 @@ use FastD\Console\IO\Output;
  *
  * @package FastD\Framework\Commands
  */
-class AssetInstall extends Command
+class AssetInstallCommand extends Command
 {
     /**
      * @return string

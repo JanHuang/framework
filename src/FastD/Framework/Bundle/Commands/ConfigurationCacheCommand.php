@@ -18,7 +18,7 @@ use FastD\Console\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 
-class ConfCache extends Command
+class ConfigurationCacheCommand extends Command
 {
     public function getName()
     {

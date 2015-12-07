@@ -24,7 +24,7 @@ use FastD\Routing\Router;
  *
  * @package FastD\Framework\Commands
  */
-class RouteDump extends Command
+class RouteDumpCommand extends Command
 {
     const STYLE_LIST = 1;
     const STYLE_DETAIL = 2;

@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: janhuang
- * Date: 15/7/22
- * Time: 下午11:08
+ * Date: 15/12/7
+ * Time: 下午9:57
  * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
@@ -18,11 +18,11 @@ use FastD\Console\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 
-class BundleDump extends Command
+class HttpServerCommand extends Command
 {
     public function getName()
     {
-        return 'bundle:dump';
+        return 'http:server';
     }
 
     public function configure()
@@ -32,16 +32,6 @@ class BundleDump extends Command
 
     public function execute(Input $input, Output $output)
     {
-        $bundles = $this->getContainer()->get('kernel')->getBundles();
-        $output->write('Bundle length: ');
-        $output->writeln(count($bundles), Output::STYLE_SUCCESS);
-        $output->writeln('');
-        foreach ($bundles as $bundle) {
-            $output->write('Bundle: ');
-            $output->writeln($bundle->getFullname(), Output::STYLE_SUCCESS);
-            $output->write("Path to: ");
-            $output->writeln($bundle->getRootPath(), Output::STYLE_SUCCESS);
-            $output->writeln('');
-        }
+        // TODO: Implement execute() method.
     }
 }

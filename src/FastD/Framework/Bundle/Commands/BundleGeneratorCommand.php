@@ -22,7 +22,7 @@ use FastD\Console\IO\Output;
  *
  * @package FastD\Framework\Commands
  */
-class Generator extends Command
+class BundleGeneratorCommand extends Command
 {
     /**
      * @return string
