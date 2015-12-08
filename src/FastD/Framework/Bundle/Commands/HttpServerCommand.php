@@ -18,10 +18,13 @@ use FastD\Console\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Config\Config;
-use FastD\Http\Request;
+use FastD\Http\SwooleRequest;
 
 class HttpServerCommand extends Command
 {
+    protected $document_root;
+    protected $script_name;
+
     protected $pidFile;
 
     protected $handles = [];
@@ -61,6 +64,9 @@ class HttpServerCommand extends Command
         if (null === $conf) {
             $conf = $this->getContainer()->singleton('kernel')->getRootPath() . '/config/server.php';
         }
+
+        $this->document_root = $this->getContainer()->singleton('kernel')->getRootPath() . '/../public';
+        $this->script_name = $this->getContainer()->singleton('kernel')->getEnvironment() . '.php';
 
         if (!file_exists($conf)) {
             throw new \RuntimeException('Server is not configuration. In ' . $conf);
@@ -114,18 +120,26 @@ class HttpServerCommand extends Command
 
     public function onWorkerStart()
     {
+        $this->getEnv();
+
         $this->rename($this->name . ' worker');
     }
 
     public function onWorkerStop(){}
 
-    public function onRequest($request, $response)
+    public function onRequest($swoole_request, $swoole_response)
     {
-//        $request = Request::createSwooleRequestHandle($request);
+        $request = SwooleRequest::createSwooleRequestHandle($swoole_request, [
+            'document_root' => $this->document_root,
+            'script_name'   => $this->script_name,
+        ]);
 
+        $this->getContainer()->set('kernel.request', $request);
 
+        $response = $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.http', [$request]);
 
-        $response->end('hello fastd server.');
+        $swoole_response->end($response->getContent());
+        unset($request);
     }
 
     public function execute(Input $input, Output $output)
