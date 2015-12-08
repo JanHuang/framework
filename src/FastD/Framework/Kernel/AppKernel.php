@@ -145,21 +145,23 @@ abstract class AppKernel extends Terminal
      */
     public function initializeContainer()
     {
-        $this->container = new Container([
-            'kernel.template'       => 'FastD\\Template\\Template',
-            'kernel.logger'         => 'FastD\\Logger\\Logger',
-            'kernel.database'       => 'FastD\\Database\\Database',
-            'kernel.config'         => 'FastD\\Config\\Config',
-            'kernel.storage'        => 'FastD\\Storage\\StorageManager',
-        ]);
+        if (null === $this->container) {
+            $this->container = new Container([
+                'kernel.template'       => 'FastD\\Template\\Template',
+                'kernel.logger'         => 'FastD\\Logger\\Logger',
+                'kernel.database'       => 'FastD\\Database\\Database',
+                'kernel.config'         => 'FastD\\Config\\Config',
+                'kernel.storage'        => 'FastD\\Storage\\StorageManager',
+            ]);
 
-        $this->registerService($this->container);
+            $this->registerService($this->container);
 
-        $this->container->set('kernel.container', $this->container);
-        $this->container->set('kernel.dispatch', new Dispatcher($this->container));
-        $this->container->set('kernel', $this);
+            $this->container->set('kernel.container', $this->container);
+            $this->container->set('kernel.dispatch', new Dispatcher($this->container));
+            $this->container->set('kernel', $this);
 
-        $this->container->singleton('kernel.dispatch')->dispatch('handle.error', [$this->isDebug()]);
+            $this->container->singleton('kernel.dispatch')->dispatch('handle.error', [$this->isDebug()]);
+        }
     }
 
     /**

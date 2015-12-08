@@ -14,9 +14,11 @@
 
 namespace FastD\Framework\Kernel;
 
+use FastD\Console\ArgvInput;
 use FastD\Console\Environment\BaseEnvironment;
 use FastD\Framework\Bundle\Bundle;
 use FastD\Console\Command;
+use FastD\Console\Console;
 
 /**
  * Class Terminal
@@ -65,5 +67,20 @@ abstract class Terminal extends BaseEnvironment implements TerminalInterface, Ap
                 closedir($dh);
             }
         }
+    }
+
+    /**
+     * Run console.
+     *
+     * @param ArgvInput $argvInput
+     * @return int 0 or 1
+     */
+    public function run(ArgvInput $argvInput)
+    {
+        $this->initializeContainer();
+
+        $console = new Console($this);
+
+        return $console->run($argvInput);
     }
 }

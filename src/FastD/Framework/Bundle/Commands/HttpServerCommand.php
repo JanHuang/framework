@@ -19,11 +19,17 @@ use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Config\Config;
 use FastD\Http\SwooleRequest;
+use FastD\Framework\Kernel\AppKernel;
 
 class HttpServerCommand extends Command
 {
     protected $document_root;
     protected $script_name;
+
+    /**
+     * @var AppKernel
+     */
+    protected $application;
 
     protected $pidFile;
 
@@ -94,6 +100,8 @@ class HttpServerCommand extends Command
         if ($this->config->has('port')) {
             $this->port = $this->config->get('port');
         }
+
+        $this->application = $this->getEnv();
     }
 
     public function onStart(\swoole_server $server)
@@ -111,7 +119,10 @@ class HttpServerCommand extends Command
         }
     }
 
-    public function onShutdown(){}
+    public function onShutdown()
+    {
+
+    }
 
     public function onManagerStart()
     {
@@ -120,12 +131,15 @@ class HttpServerCommand extends Command
 
     public function onWorkerStart()
     {
-        $this->getEnv();
+        $this->application->boot();
 
         $this->rename($this->name . ' worker');
     }
 
-    public function onWorkerStop(){}
+    public function onWorkerStop()
+    {
+        $this->application->shutdown($this->application);
+    }
 
     public function onRequest($swoole_request, $swoole_response)
     {

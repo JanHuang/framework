@@ -66,4 +66,26 @@ interface AppKernelInterface extends ContainerAwareInterface
      * @return void
      */
     public function registerConfigurationVariable(Config $config);
+
+    /**
+     * Initialize Application Container.
+     *
+     * @return void
+     */
+    public function initializeContainer();
+
+    /**
+     * @return void
+     */
+    public function initializeBundles();
+
+    /**
+     * @return void
+     */
+    public function initializeConfigure();
+
+    /**
+     * @return void
+     */
+    public function initializeRouting();
 }
