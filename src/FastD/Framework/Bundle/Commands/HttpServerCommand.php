@@ -14,7 +14,7 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command;
+use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Config\Config;
@@ -50,7 +50,7 @@ class HttpServerCommand extends Command
 
     public function getName()
     {
-        return 'http:server';
+        return 'server:http';
     }
 
     public function rename($name)
@@ -62,17 +62,17 @@ class HttpServerCommand extends Command
 
     public function configure()
     {
-        $this->setOption('daemonize');
+        $this->setOption('daemonize', Input::ARG_NONE);
     }
 
     public function initConfiguration($conf = null)
     {
         if (null === $conf) {
-            $conf = $this->getContainer()->singleton('kernel')->getRootPath() . '/config/server.php';
+            $conf = $this->getApplication()->getContainer()->singleton('kernel')->getRootPath() . '/config/server.php';
         }
 
-        $this->document_root = $this->getContainer()->singleton('kernel')->getRootPath() . '/../public';
-        $this->script_name = $this->getContainer()->singleton('kernel')->getEnvironment() . '.php';
+        $this->document_root = $this->getApplication()->getContainer()->singleton('kernel')->getRootPath() . '/../public';
+        $this->script_name = $this->getApplication()->getContainer()->singleton('kernel')->getEnvironment() . '.php';
 
         if (!file_exists($conf)) {
             throw new \RuntimeException('Server is not configuration. In ' . $conf);
@@ -82,7 +82,7 @@ class HttpServerCommand extends Command
 
         $this->config->load($conf);
 
-        $this->pidFile = $this->getContainer()->singleton('kernel')->getRootPath() . '/storage/run/' . $this->name . '.pid';
+        $this->pidFile = $this->getApplication()->getContainer()->singleton('kernel')->getRootPath() . '/storage/run/' . $this->name . '.pid';
 
         if (!is_dir(dirname($this->pidFile))) {
             mkdir(dirname($this->pidFile), 0755, true);
@@ -101,7 +101,7 @@ class HttpServerCommand extends Command
             $this->port = $this->config->get('port');
         }
 
-        $this->application = $this->getEnv();
+        $this->application = $this->getKernel();
     }
 
     public function onStart(\swoole_server $server)

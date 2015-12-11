@@ -13,7 +13,7 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command;
+use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Routing\Route;
@@ -44,7 +44,8 @@ class RouteDumpCommand extends Command
     {
         $this
             ->setOption('bundle')
-            ->setOption('list')
+            ->setOption('list', Input::ARG_NONE)
+            ->setArgument('route')
             ->setDescription('Thank for you use routing dump tool.')
         ;
     }
@@ -60,16 +61,17 @@ class RouteDumpCommand extends Command
 
         $output->writeln('');
 
-        $name = $input->getParameterArgument(0);
-
-        $bundle = '' == ($bundle = $input->getParameterOption('bundle')) ? null : $bundle;
-        $style = $input->hasParameterOption('--list');
+        $name = $input->get('route');
+        $bundle = $input->get('bundle');
+        $style = $input->has('list');
 
         if (false !== strpos($bundle, ':')) {
             $bundle = str_replace(':', '\\', $bundle);
         }
 
-        if ('' == $name) {
+        $this->getApplication()->getKernel()->boot();
+
+        if (null === $name) {
             $this->showRouteCollections($router, $output, $bundle, $style ? self::STYLE_LIST : self::STYLE_DETAIL);
         } else {
             $route = $router->getRoute($name);
@@ -88,7 +90,8 @@ class RouteDumpCommand extends Command
     public function showRouteCollections(Router $router, Output $output, $bundleName = null, $style = self::STYLE_DETAIL)
     {
         $allRoutes = [];
-        $bundles = $this->getContainer()->singleton('kernel')->getBundles();
+
+        $bundles = $this->getApplication()->getKernel()->getBundles();
         foreach ($router as $name => $route) {
             $callback = $route->getCallback();
             foreach ($bundles as $bundle) {
@@ -129,20 +132,27 @@ class RouteDumpCommand extends Command
         return 0;
     }
 
-    public function formatOutput(Route $route, Output $output, $type = RouteDump::STYLE_DETAIL)
+    /**
+     * Format route output to command line.
+     *
+     * @param Route  $route
+     * @param Output $output
+     * @param        $type
+     */
+    public function formatOutput(Route $route, Output $output, $type = self::STYLE_DETAIL)
     {
         switch ($type) {
             case self::STYLE_DETAIL:
-                $output->write(' Route [');
+                $output->write('Route [');
                 $output->write('"' . $route->getName() . '"', Output::STYLE_SUCCESS);
                 $output->writeln(']');
-                $output->writeln(" Path:\t\t" . str_replace('//', '/', $route->getPath()));
-                $output->writeln(" Method:\t\t" . implode(', ', $route->getMethods()));
-                $output->writeln(" Format:\t\t" . implode(', ', $route->getFormats()));
-                $output->writeln(" Callback:\t" . (is_callable($route->getCallback()) ? 'Closure' : $route->getCallback()));
-                $output->writeln(" Defaults:\t" . implode(', ', $route->getDefaults()));
-                $output->writeln(" Requirements:\t" . implode(', ', $route->getRequirements()));
-                $output->writeln(" Path-Regex:\t" . $route->getPathRegex());
+                $output->writeln("Path:\t\t" . str_replace('//', '/', $route->getPath()));
+                $output->writeln("Method:\t\t" . implode(', ', $route->getMethods()));
+                $output->writeln("Format:\t\t" . implode(', ', $route->getFormats()));
+                $output->writeln("Callback:\t" . (is_callable($route->getCallback()) ? 'Closure' : $route->getCallback()));
+                $output->writeln("Defaults:\t" . implode(', ', $route->getDefaults()));
+                $output->writeln("Requirements:\t" . implode(', ', $route->getRequirements()));
+                $output->writeln("Path-Regex:\t" . $route->getPathRegex());
                 $output->writeln('');
                 break;
             case self::STYLE_LIST:

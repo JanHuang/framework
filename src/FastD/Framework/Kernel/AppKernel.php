@@ -107,6 +107,13 @@ abstract class AppKernel extends Terminal
         return $this->container;
     }
 
+    public function setContainer(Container $container)
+    {
+        $this->container = $container;
+
+        return $this;
+    }
+
     /**
      * Bootstrap application. Loading cache,bundles,configuration,router and other.
      *

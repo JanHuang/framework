@@ -22,6 +22,7 @@ use FastD\Framework\Dispatcher\Handle\ErrorHandler;
 use FastD\Framework\Dispatcher\Handle\ForwardHandler;
 use FastD\Framework\Dispatcher\Handle\HttpHandler;
 use FastD\Framework\Dispatcher\Handle\LogHandler;
+use FastD\Framework\Dispatcher\Handle\ScanCommandHandle;
 use FastD\Framework\Dispatcher\Handle\ShutdownHandler;
 use FastD\Framework\Dispatcher\Handle\TestingHandle;
 use FastD\Framework\Dispatcher\Handle\TplHandler;
@@ -57,6 +58,7 @@ class Dispatcher extends ContainerAware
         $this->setDispatch(new LogHandler());
         $this->setDispatch(new ShutdownHandler());
         $this->setDispatch(new AnnotationHandle());
+        $this->setDispatch(new ScanCommandHandle());
     }
 
     /**

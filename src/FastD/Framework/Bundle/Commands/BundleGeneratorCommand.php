@@ -13,7 +13,7 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command;
+use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 
@@ -37,6 +37,7 @@ class BundleGeneratorCommand extends Command
      */
     public function configure()
     {
+        $this->setArgument('bundle');
         $this->setDescription('Thank for you use bundle generator tool.');
     }
 
@@ -48,7 +49,7 @@ class BundleGeneratorCommand extends Command
     public function execute(Input $input, Output $output)
     {
         try {
-            $bundle = $input->getParameterArgument(0);
+            $bundle = $input->get('bundle');
         } catch(\Exception $e) {
             $output->writeln('Bundle name is empty or null. Please you try again.');
             exit;
@@ -61,9 +62,11 @@ class BundleGeneratorCommand extends Command
 
         $bundle = str_replace(':', DIRECTORY_SEPARATOR, $bundle);
 
-        $source = $this->getEnv()->getRootPath() . '/../src';
+        $source = $this->getApplication()->getKernel()->getRootPath() . '/../src';
 
         $this->builderStructure($source, $bundle, str_replace(DIRECTORY_SEPARATOR, '', $bundle));
+
+        $output->writeln('Building in ' . $source);
     }
 
     public function builderStructure($path, $bundle, $fullName)
