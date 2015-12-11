@@ -40,11 +40,11 @@ class AssetInstallCommand extends Command
 
     public function execute(Input $input, Output $output)
     {
-        $bundles = $this->getContainer()->singleton('kernel')->getBundles();
+        $bundles = $this->getApplication()->getContainer()->singleton('kernel')->getBundles();
 
-        $web = (null === ($web = $input->getParameterArgument(0)) ? 'public/bundle' : $web);
+        $web = 'public/bundle';
 
-        $targetRootDir = $this->getContainer()->singleton('kernel')->getRootPath() . '/../' . $web;
+        $targetRootDir = $this->getApplication()->getContainer()->singleton('kernel')->getRootPath() . '/../' . $web;
 
         $output->writeln('Trying to install assets as symbolic links.');
 
