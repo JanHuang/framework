@@ -63,16 +63,19 @@ class HttpServerCommand extends Command
     public function configure()
     {
         $this->setOption('daemonize', Input::ARG_NONE);
+        $this->setArgument('action');
     }
 
     public function initConfiguration($conf = null)
     {
+        $this->application = $this->getApplication()->getKernel();
+
         if (null === $conf) {
-            $conf = $this->getApplication()->getContainer()->singleton('kernel')->getRootPath() . '/config/server.php';
+            $conf = $this->application->getContainer()->singleton('kernel')->getRootPath() . '/config/server.php';
         }
 
-        $this->document_root = $this->getApplication()->getContainer()->singleton('kernel')->getRootPath() . '/../public';
-        $this->script_name = $this->getApplication()->getContainer()->singleton('kernel')->getEnvironment() . '.php';
+        $this->document_root = $this->application->getContainer()->singleton('kernel')->getRootPath() . '/../public';
+        $this->script_name = $this->application->getContainer()->singleton('kernel')->getEnvironment() . '.php';
 
         if (!file_exists($conf)) {
             throw new \RuntimeException('Server is not configuration. In ' . $conf);
@@ -82,7 +85,7 @@ class HttpServerCommand extends Command
 
         $this->config->load($conf);
 
-        $this->pidFile = $this->getApplication()->getContainer()->singleton('kernel')->getRootPath() . '/storage/run/' . $this->name . '.pid';
+        $this->pidFile = $this->application->getContainer()->singleton('kernel')->getRootPath() . '/storage/run/' . $this->name . '.pid';
 
         if (!is_dir(dirname($this->pidFile))) {
             mkdir(dirname($this->pidFile), 0755, true);
@@ -100,8 +103,6 @@ class HttpServerCommand extends Command
         if ($this->config->has('port')) {
             $this->port = $this->config->get('port');
         }
-
-        $this->application = $this->getKernel();
     }
 
     public function onStart(\swoole_server $server)
@@ -143,14 +144,19 @@ class HttpServerCommand extends Command
 
     public function onRequest($swoole_request, $swoole_response)
     {
+        if (in_array($swoole_request->server['path_info'], ['favicon', 'favicon.ico'])) {
+            $swoole_response->end('');
+            return 0;
+        }
+
         $request = SwooleRequest::createSwooleRequestHandle($swoole_request, [
             'document_root' => $this->document_root,
             'script_name'   => $this->script_name,
         ]);
 
-        $this->getContainer()->set('kernel.request', $request);
+        $this->application->getContainer()->set('kernel.request', $request);
 
-        $response = $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.http', [$request]);
+        $response = $this->application->getContainer()->singleton('kernel.dispatch')->dispatch('handle.http', [$request]);
 
         $swoole_response->end($response->getContent());
         unset($request);
@@ -176,13 +182,13 @@ class HttpServerCommand extends Command
             $server->on($event, $handle);
         }
 
-        if ($input->hasParameterOption('--daemonize')) {
+        if ($input->has('daemonize')) {
             $this->config->add('dzemonize', true);
         }
 
         $server->set($this->config->all());
 
-        switch ($input->getParameterArgument(0)) {
+        switch ($input->get('action')) {
             case 'start':
                 $server->start();
                 break;
