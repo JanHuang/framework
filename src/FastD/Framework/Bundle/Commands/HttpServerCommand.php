@@ -160,6 +160,7 @@ class HttpServerCommand extends Command
 
         $swoole_response->end($response->getContent());
         unset($request);
+        return 0;
     }
 
     public function execute(Input $input, Output $output)
