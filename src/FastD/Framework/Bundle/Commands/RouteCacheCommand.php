@@ -42,7 +42,7 @@ class RouteCacheCommand extends Command
             $path = "['{$route->getPath()}', {$name}]";
             $routeCaching = "Routes::match({$methods}, {$path}, '{$route->getCallback()}')";
             // Routes::match();
-            file_put_contents($caching, $routeCaching . PHP_EOL, FILE_APPEND);
+            file_put_contents($caching, $routeCaching . ';' . PHP_EOL, FILE_APPEND);
         }
         $output->write('Caching to ' . $caching . '......');
         $output->writeln('    [OK]', OutputInterface::STYLE_SUCCESS);
