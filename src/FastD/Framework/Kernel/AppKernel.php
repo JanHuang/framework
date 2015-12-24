@@ -208,6 +208,8 @@ abstract class AppKernel extends Terminal
 
         if ($this->isDebug()) {
             $this->container->singleton('kernel.dispatch')->dispatch('handle.annotation.route');
+        } else {
+            @include $this->getRootPath() . '/route.cache';
         }
 
         return $router;
