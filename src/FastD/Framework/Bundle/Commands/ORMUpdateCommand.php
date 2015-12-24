@@ -14,7 +14,6 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Config\Config;
 use FastD\Config\Loader\YmlFileLoader;
 use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
@@ -23,7 +22,7 @@ use FastD\Database\ORM\Generator\Builder;
 use FastD\Finder\Finder;
 use FastD\Framework\Bundle\Controllers\Controller;
 
-class ORMUpdate extends Command
+class ORMUpdateCommand extends Command
 {
     /**
      * @return string
@@ -39,7 +38,6 @@ class ORMUpdate extends Command
     public function configure()
     {
         $this->setArgument('connection');
-        $this->setOption('force', Input::ARG_NONE);
     }
 
     /**
@@ -49,7 +47,6 @@ class ORMUpdate extends Command
      */
     public function execute(Input $input, Output $output)
     {
-        $action = $input->get('action');
         $connection = $input->get('connection');
         if (empty($connection)) {
             $connection = 'read';
@@ -63,19 +60,20 @@ class ORMUpdate extends Command
         $controller = new Controller();
         $controller->setContainer($kernel->getContainer());
 
-        $builder = new Builder($controller->getDriver($connection));
+        $driver = $controller->getDriver($connection);
+
         $finder = new Finder();
 
-        $tables = [];
         foreach ($kernel->getBundles() as $bundle) {
+            $builder = new Builder($driver);
             $path = $bundle->getRootPath() . '/Resources/orm';
             $files = $finder->in($path)->depth(0)->files();
             foreach ($files as $file) {
                 $config = new YmlFileLoader($file->getPathname());
                 $builder->addTable($config->getParameters());
             }
+            $builder->updateTables();
+            $builder->buildEntity($bundle->getRootPath(), $bundle->getNamespace());
         }
-        $builder->updateTables();
-        $builder->buildEntity();
     }
 }
