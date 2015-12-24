@@ -17,7 +17,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "FastD\\": "src/FastD"
+            "FastD\\": "src/FastD",
+            "": "app/src/Bundles"
         }
     },
     "require": {

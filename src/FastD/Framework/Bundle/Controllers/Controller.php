@@ -14,7 +14,7 @@
 namespace FastD\Framework\Bundle\Controllers;
 
 use FastD\Framework\Container\ContainerAware;
-use FastD\Database\Database;
+use FastD\Database\Drivers\DriverInterface;
 use FastD\Template\Template;
 use FastD\Storage\StorageManager;
 use FastD\Http\RedirectResponse;
@@ -37,9 +37,9 @@ class Controller extends ContainerAware implements ControllerInterface
     const SERVER_VERSION = '2.0';
 
     /**
-     * @var Database
+     * @var DriverInterface
      */
-    protected $database;
+    protected $driver;
 
     /**
      * @var StorageManager
@@ -94,15 +94,15 @@ class Controller extends ContainerAware implements ControllerInterface
     /**
      * @param null  $connection
      * @param array $options
-     * @return \FastD\Database\Driver\Driver
+     * @return DriverInterface
      */
-    public function getConnection($connection = null, array $options = [])
+    public function getDriver($connection = null, array $options = [])
     {
-        if (null === $this->database) {
-            $this->database = $this->get('kernel.database', [$this->getParameters('database')]);
+        if (null === $this->driver) {
+            $this->driver = $this->get('kernel.database', [$this->getParameters('database')]);
         }
 
-        return $this->database->getConnection($connection);
+        return $this->driver->getDriver($connection);
     }
 
     /**

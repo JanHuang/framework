@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: janhuang
- * Date: 15/12/18
- * Time: 下午12:20
+ * Date: 15/12/24
+ * Time: 下午7:01
  * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
@@ -18,14 +18,14 @@ use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 
-class ORMCommand extends Command
+class ORMRevert extends Command
 {
     /**
      * @return string
      */
     public function getName()
     {
-        return 'db:orm';
+        return 'db:revert';
     }
 
     /**
@@ -33,7 +33,7 @@ class ORMCommand extends Command
      */
     public function configure()
     {
-        $this->setArgument('action');
+        // TODO: Implement configure() method.
     }
 
     /**
@@ -43,6 +43,6 @@ class ORMCommand extends Command
      */
     public function execute(Input $input, Output $output)
     {
-        
+        // TODO: Implement execute() method.
     }
 }

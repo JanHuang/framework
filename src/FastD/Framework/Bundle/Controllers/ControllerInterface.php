@@ -14,7 +14,8 @@
 
 namespace FastD\Framework\Bundle\Controllers;
 
-use FastD\Database\Driver\Driver;
+
+use FastD\Database\Drivers\DriverInterface;
 use FastD\Storage\StorageInterface;
 use FastD\Http\RedirectResponse;
 use FastD\Http\Response;
@@ -43,9 +44,9 @@ interface ControllerInterface
     /**
      * @param            $connection
      * @param array|null $options
-     * @return Driver
+     * @return DriverInterface
      */
-    public function getConnection($connection, array $options = []);
+    public function getDriver($connection, array $options = []);
 
     /**
      * @param            $connection
