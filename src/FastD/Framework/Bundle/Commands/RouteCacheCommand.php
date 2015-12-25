@@ -40,7 +40,19 @@ class RouteCacheCommand extends Command
             $methods = '[\'' . implode('\', \'', $route->getMethods()) . '\']';
             $name = '' == $route->getName() ? '' : "'name' => '{$route->getName()}'";
             $path = "['{$route->getPath()}', {$name}]";
-            $routeCaching = "Routes::match({$methods}, {$path}, '{$route->getCallback()}')";
+            $default = array() === $route->getDefaults() ? '[]' : '[]';
+            $requirements = array() === $route->getRequirements() ? '[]' : '[]';
+            $routeCaching = "Routes::match({$methods}, {$path}, '{$route->getCallback()}', {$default}, {$requirements})";
+            if (null != $route->getHost()) {
+                $routeCaching .= '->setHost([\'' . implode('\',\'', $route->getHost() ?? []) .'\'])';
+            }
+            if (null != $route->getSchema() && $route->getSchema() != ['http']) {
+                $routeCaching .= '->setSchema([\'' . implode('\',\'', $route->getSchema() ?? []) .'\'])';
+            }
+            if (null != $route->getFormats()) {
+                $routeCaching .= '->setFormats([\'' . implode('\',\'', $route->getFormats() ?? []) . '\'])';
+            }
+
             // Routes::match();
             file_put_contents($caching, $routeCaching . ';' . PHP_EOL, FILE_APPEND);
         }

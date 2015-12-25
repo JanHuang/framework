@@ -16,5 +16,7 @@
  - 调整命令行, 修改Swole Http Server onWorkerStart 引导应用程序
  - 优化命令行,添加命令行扫描调度任务
  - 拆分命令行应用到 AppConsole, 优化依赖
+ - 增加 db:update, route:cache 命令
+ - 增强路由注释解析功能
 
 **注意: 调用类请不要执行打印, 因为类中注入了Container, 整体容器如果进行打印的话,数据量会好大,配置稍微低一些的机器可能会比较慢**

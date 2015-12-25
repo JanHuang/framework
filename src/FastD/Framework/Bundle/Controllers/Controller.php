@@ -202,7 +202,7 @@ class Controller extends ContainerAware implements ControllerInterface
      * @param       $data
      * @param int   $status
      * @param array $headers
-     * @return JsonResponse|Response|XmlResponse
+     * @return Response
      */
     public function response($data, $status = Response::HTTP_OK, array $headers = [])
     {
