@@ -15,6 +15,7 @@ namespace FastD\Framework\Bundle\Controllers;
 
 use FastD\Framework\Container\ContainerAware;
 use FastD\Database\Drivers\DriverInterface;
+use FastD\Framework\Kernel\AppKernel;
 use FastD\Template\Template;
 use FastD\Storage\StorageManager;
 use FastD\Http\RedirectResponse;
@@ -34,7 +35,7 @@ use FastD\Http\Session\SessionHandler;
 class Controller extends ContainerAware implements ControllerInterface
 {
     const SERVER_NAME = 'FastD';
-    const SERVER_VERSION = '2.0';
+    const SERVER_VERSION = AppKernel::VERSION;
 
     /**
      * @var DriverInterface
