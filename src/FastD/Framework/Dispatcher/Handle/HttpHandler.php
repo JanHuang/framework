@@ -52,7 +52,7 @@ class HttpHandler extends Dispatch
 
     public function dispatch(array $parameters = null)
     {
-        $route = $this->getContainer()->singleton('kernel.routing')->match($parameters[0]->getPathInfo());
+        $route = $this->getContainer()->singleton('kernel.routing')->handleRequest($parameters[0]);
 
         return $this->handleRoute($route);
     }

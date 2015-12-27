@@ -107,6 +107,10 @@ abstract class AppKernel extends Terminal
         return $this->container;
     }
 
+    /**
+     * @param Container $container
+     * @return $this
+     */
     public function setContainer(Container $container)
     {
         $this->container = $container;
@@ -209,7 +213,7 @@ abstract class AppKernel extends Terminal
         if ($this->isDebug()) {
             $this->container->singleton('kernel.dispatch')->dispatch('handle.annotation.route');
         } else {
-            @include $this->getRootPath() . '/route.cache';
+            include $this->getRootPath() . '/route.cache';
         }
 
         return $router;

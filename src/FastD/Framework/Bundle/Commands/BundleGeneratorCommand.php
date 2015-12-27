@@ -86,6 +86,7 @@ class BundleGeneratorCommand extends Command
                      'Resources/views',
                      'Resources/config',
                      'Resources/orm',
+                     'Testing'
                  ) as $dir) {
             $directory = implode(DIRECTORY_SEPARATOR, array(
                 $bundlePath,

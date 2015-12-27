@@ -110,7 +110,7 @@ class AnnotationHandle extends Dispatch
                             $route->setSchema($routeAnnotation['schemas']);
                         }
                         if (!empty($routeAnnotation['formats'])) {
-                            $route->setSchema($routeAnnotation['formats']);
+                            $route->setFormats($routeAnnotation['formats']);
                         }
                     }
                 };
