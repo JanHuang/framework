@@ -40,9 +40,12 @@ class AssetInstallCommand extends Command
 
     public function execute(Input $input, Output $output)
     {
-        $bundles = $this->getApplication()->getContainer()->singleton('kernel')->getBundles();
+        $kernel = $this->getApplication()->getKernel();
+        $kernel->boot();
+        $bundles = $kernel->getBundles();
 
-        $web = 'public/bundle';
+        $web = 'public/bundles';
+
 
         $targetRootDir = $this->getApplication()->getContainer()->singleton('kernel')->getRootPath() . '/../' . $web;
 
@@ -50,17 +53,19 @@ class AssetInstallCommand extends Command
 
         foreach ($bundles as $bundle) {
             $originDir = $bundle->getRootPath() . DIRECTORY_SEPARATOR . 'Resources/assets';
+
             if (!file_exists($originDir)) {
                 continue;
             }
-            $targetDir = $targetRootDir . DIRECTORY_SEPARATOR . strtolower($bundle->getShortname());
+
+            $targetDir = $targetRootDir . DIRECTORY_SEPARATOR . strtolower($bundle->getShortName());
 
             try {
                 $this->symlink($originDir, $targetDir);
                 $output->write('Installing assets for ');
-                $output->write($bundle->getFullName(), Output::STYLE_SUCCESS);
+                $output->write($bundle->getName(), Output::STYLE_SUCCESS);
                 $output->write(' into ');
-                $output->writeln($web . DIRECTORY_SEPARATOR . strtolower($bundle->getShortname()), Output::STYLE_SUCCESS);
+                $output->writeln($web . DIRECTORY_SEPARATOR . strtolower($bundle->getShortName()), Output::STYLE_SUCCESS);
             } catch (\Exception $e) {
                 throw $e;
             }

@@ -43,6 +43,8 @@ class UrlHandler extends Dispatch
     {
         list($name, $params, $format) = $parameters;
 
-        return $this->getContainer()->singleton('kernel.routing')->generateUrl($name, $params, $format);
+        $request = $this->getContainer()->singleton('kernel.request');
+
+        return $request->getScheme() . ':/' . $request->getRootPath(). $this->getContainer()->singleton('kernel.routing')->generateUrl($name, $params, $format);
     }
 }

@@ -84,6 +84,9 @@ class Bundle extends \ReflectionClass implements BundleInterface
         include $this->getRootPath() . '/Resources/config/config.php';
     }
 
+    /**
+     * @return array
+     */
     public function registerExtensions()
     {
         return [];
