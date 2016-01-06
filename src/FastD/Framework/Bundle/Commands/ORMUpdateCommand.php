@@ -71,9 +71,10 @@ class ORMUpdateCommand extends Command
                 $config = new YmlFileLoader($file->getPathname());
                 $builder->addTable($config->getParameters());
             }
-            $builder->updateTablesFromEntity();
+            $builder->updateTables();
             $builder->buildEntity($bundle->getNamespace(), $bundle->getRootPath());
-            $output->writeln('Generate into dir: ');
+            $output->write('Generate into dir: ');
+            $output->writeln($bundle->getName(), Output::STYLE_BG_SUCCESS);
             $output->writeln("\t" . $bundle->getNamespace() . '/Entity', Output::STYLE_SUCCESS);
             $output->writeln("\t" . $bundle->getNamespace() . '/Repository', Output::STYLE_SUCCESS);
             $output->writeln("\t" . $bundle->getNamespace() . '/Fields', Output::STYLE_SUCCESS);
