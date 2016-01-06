@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: janhuang
- * Date: 16/1/6
- * Time: 下午2:18
+ * Date: 15/12/18
+ * Time: 下午12:20
  * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
@@ -22,14 +22,14 @@ use FastD\Database\ORM\Generator\Mapping;
 use FastD\Finder\Finder;
 use FastD\Framework\Bundle\Controllers\Controller;
 
-class ORMUpdateCommand extends Command
+class ORMDumpCommand extends Command
 {
     /**
      * @return string
      */
     public function getName()
     {
-        return 'db:update';
+        return 'db:dump';
     }
 
     /**
@@ -71,12 +71,10 @@ class ORMUpdateCommand extends Command
                 $config = new YmlFileLoader($file->getPathname());
                 $builder->addTable($config->getParameters());
             }
-            $builder->updateTablesFromEntity();
-            $builder->buildEntity($bundle->getNamespace(), $bundle->getRootPath());
-            $output->writeln('Generate into dir: ');
-            $output->writeln("\t" . $bundle->getNamespace() . '/Entity', Output::STYLE_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Repository', Output::STYLE_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Fields', Output::STYLE_SUCCESS);
+
+            foreach ($builder->makeAllSql() as $sql) {
+                $output->writeln($sql);
+            }
         }
     }
 }

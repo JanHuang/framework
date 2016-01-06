@@ -22,7 +22,7 @@
         }
     },
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.0",
         "fastd/http": "2.0.x-dev",
         "fastd/template": "2.0.x-dev",
         "fastd/routing": "2.0.x-dev",
