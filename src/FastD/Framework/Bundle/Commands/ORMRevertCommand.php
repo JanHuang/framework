@@ -67,12 +67,12 @@ class ORMRevertCommand extends Command
             $builder = new Mapping($driver);
             $path = $bundle->getRootPath() . '/Resources/orm';
             $files = $finder->in($path)->depth(0)->files();
-            $builder->buildEntity($bundle->getNamespace(), $bundle->getRootPath());
+            $builder->buildEntity($bundle->getNamespace() . '\\Orm', $bundle->getRootPath() . '/Orm');
             $output->write('Generate into dir: ');
             $output->writeln($bundle->getName(), Output::STYLE_BG_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Entity', Output::STYLE_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Repository', Output::STYLE_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Fields', Output::STYLE_SUCCESS);
+            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Entity', Output::STYLE_SUCCESS);
+            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Repository', Output::STYLE_SUCCESS);
+            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Fields', Output::STYLE_SUCCESS);
         }
     }
 }
