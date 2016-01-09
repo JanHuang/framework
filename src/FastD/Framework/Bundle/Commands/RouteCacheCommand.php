@@ -40,8 +40,20 @@ class RouteCacheCommand extends Command
             $methods = '[\'' . implode('\', \'', $route->getMethods()) . '\']';
             $name = '' == $route->getName() ? '' : "'name' => '{$route->getName()}'";
             $path = "['{$route->getPath()}', {$name}]";
-            $default = array() === $route->getDefaults() ? '[]' : '[]';
-            $requirements = array() === $route->getRequirements() ? '[]' : '[]';
+            $default = array() === $route->getDefaults() ? '[]' : (function () use ($route) {
+                $arr = [];
+                foreach ($route->getDefaults() as $name => $value) {
+                    $arr[] = "'{$name}' => '$value'";
+                }
+                return '[' . implode(',', $arr). ']';
+            })();
+            $requirements = array() === $route->getRequirements() ? '[]' : (function () use ($route) {
+                $arr = [];
+                foreach ($route->getRequirements() as $name => $value) {
+                    $arr[] = "'{$name}' => '$value'";
+                }
+                return '[' . implode(',', $arr). ']';
+            })();
             $routeCaching = "Routes::match({$methods}, {$path}, '{$route->getCallback()}', {$default}, {$requirements})";
             if (null != $route->getHost()) {
                 $routeCaching .= '->setHost([\'' . implode('\',\'', $route->getHost() ?? []) .'\'])';
