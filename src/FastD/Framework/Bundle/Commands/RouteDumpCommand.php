@@ -92,14 +92,12 @@ class RouteDumpCommand extends Command
         $allRoutes = [];
 
         $bundles = $this->getApplication()->getKernel()->getBundles();
-        foreach ($router as $name => $route) {
-            $callback = $route->getCallback();
-            foreach ($bundles as $bundle) {
-                if (0 === strpos($callback, $bundle->getNamespace())) {
+        foreach ($bundles as $bundle) {
+            foreach ($router as $name => $route) {
+                $callback = $route->getCallback();
+                $namespace = substr($callback, 0, strpos($callback, '\\'));
+                if ($bundle->getNamespace() == $namespace) {
                     $allRoutes[$bundle->getName()][] = $route;
-                    break;
-                } else {
-                    $allRoutes['others'][] = $route;
                 }
             }
         }
@@ -114,7 +112,7 @@ class RouteDumpCommand extends Command
         if (null === $bundleName) {
             foreach ($allRoutes as $name => $routes) {
                 $output->writeln('Bundle: ' . $name, Output::STYLE_SUCCESS);
-                foreach ($router as $route) {
+                foreach ($routes as $route) {
                     $this->formatOutput($route, $output, $style);
                 }
             }
