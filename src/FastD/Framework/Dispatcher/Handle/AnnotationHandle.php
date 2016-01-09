@@ -41,13 +41,14 @@ class AnnotationHandle extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        $finder = new Finder();
+
 
         $bundles = $this->getContainer()->singleton('kernel')->getBundles();
         foreach ($bundles as $bundle) {
             $baseNamespace = $bundle->getNamespace() . '\\Controllers\\';
             $path = $bundle->getRootPath() . '/Controllers';
-            $files = $finder->in($path)->files();
+            $finder = new Finder();
+            $files = $finder->name('*.php')->in($path)->files();
             foreach ($files as $file) {
                 $className = $baseNamespace . pathinfo($file->getFileName(), PATHINFO_FILENAME);
                 $extractor = AnnotationExtractor::getExtractor($className);
