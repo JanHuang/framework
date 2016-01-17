@@ -34,7 +34,6 @@ use FastD\Http\Session\SessionHandler;
  */
 class Controller extends ContainerAware implements ControllerInterface
 {
-    const SERVER_NAME = 'FastD';
     const SERVER_VERSION = AppKernel::VERSION;
 
     /**
@@ -253,5 +252,16 @@ class Controller extends ContainerAware implements ControllerInterface
     public function responseJson(array $data, $status = Response::HTTP_OK, array $headers = [])
     {
         return new JsonResponse($data, $status, $headers);
+    }
+
+    /**
+     * @param int    $statusCode
+     * @param string $content
+     * @param array  $headers
+     * @throws \Exception
+     */
+    public function throwException($statusCode = Response::HTTP_FORBIDDEN, $content = "Forbidden", array $headers = [])
+    {
+        throw new \Exception($content);
     }
 }
