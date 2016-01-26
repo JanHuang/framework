@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+set_time_limit(0);
+
+foreach ([
+             __DIR__ . '/../../../autoload.php',
+             __DIR__ . '/../vendor/autoload.php',
+         ] as $file) {
+    if (file_exists($file)) {
+        include $file;
+        break;
+    }
+}
+
+$env = new \FastD\Console\Environment\BaseEnvironment();
+
+$argvInput = new \FastD\Console\ArgvInput();
+
+$console = new \FastD\Console\Console($env);
+
+$console->run($argvInput);
