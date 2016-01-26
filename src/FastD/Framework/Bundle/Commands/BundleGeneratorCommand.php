@@ -60,7 +60,7 @@ class BundleGeneratorCommand extends Command
             exit;
         }
 
-        $bundle = str_replace(':', DIRECTORY_SEPARATOR, $bundle);
+        $bundle = str_replace(':', DIRECTORY_SEPARATOR, $bundle) . 'Bundle';
 
         $source = $this->getApplication()->getKernel()->getRootPath() . '/../src';
 
@@ -120,7 +120,7 @@ class BundleGeneratorCommand extends Command
             $fullName
         );
 
-        $bootstrapFile = $bundlePath . DIRECTORY_SEPARATOR . $fullName . 'Bundle.php';
+        $bootstrapFile = $bundlePath . DIRECTORY_SEPARATOR . $fullName . '.php';
 
         if (!file_exists($bootstrapFile)) {
             file_put_contents($bootstrapFile, $bootstrap);
@@ -171,7 +171,7 @@ namespace %s;
 
 use FastD\Framework\Bundle\Bundle;
 
-class %sBundle extends Bundle
+class %s extends Bundle
 {
 
 }
