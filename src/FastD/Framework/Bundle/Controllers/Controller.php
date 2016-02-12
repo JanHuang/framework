@@ -166,10 +166,10 @@ class Controller extends ContainerAware implements ControllerInterface
      *
      * @param            $view
      * @param array      $parameters
-     * @param bool|false $flog
+     * @param bool|false $flag
      * @return Response|string
      */
-    public function render($view, array $parameters = array(), $flog = false)
+    public function render($view, array $parameters = array(), $flag = false)
     {
         if (null === $this->template) {
             $this->template = $this->get('kernel.dispatch')->dispatch('handle.tpl');
@@ -177,11 +177,7 @@ class Controller extends ContainerAware implements ControllerInterface
 
         $content = $this->template->render($view, $parameters);
 
-        if ($flog) {
-            return $content;
-        }
-
-        return $this->responseHtml($content);
+        return $flag ? $content : $this->responseHtml($content);
     }
 
     /**
