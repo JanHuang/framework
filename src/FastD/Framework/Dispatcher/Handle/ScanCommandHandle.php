@@ -49,7 +49,7 @@ class ScanCommandHandle extends Dispatch
                 continue;
             }
             $finder = new Finder();
-            foreach ($finder->in($dir)->files() as $file) {
+            foreach ($finder->in($dir)->name('*Command.php')->files() as $file) {
                 $class = $bundle->getNamespace() . '\\Commands\\' . pathinfo($file, PATHINFO_FILENAME);
                 $command = new $class();
                 if ($command instanceof Command) {
