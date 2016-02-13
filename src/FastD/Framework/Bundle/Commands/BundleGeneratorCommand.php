@@ -142,7 +142,7 @@ class BundleGeneratorCommand extends Command
         return <<<CONTROLLER
 <?php
 
-namespace %s\Events;
+namespace %s\Controllers;
 
 use FastD\Framework\Bundle\Controllers\Controller;
 
@@ -156,7 +156,7 @@ class Index extends Controller
      */
     public function indexAction()
     {
-        return 'hello world';
+        return \$this->response('hello world');
     }
 }
 CONTROLLER;
