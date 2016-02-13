@@ -37,14 +37,18 @@ class ScanCommandHandle extends Dispatch
     {
         list($application) = $parameters;
 
-        $finder = new Finder();
+        $application->getKernel()->boot();
+
+
 
         $bundles = array_merge($application->getKernel()->getBundles(), [new Bundle()]);
+
         foreach ($bundles as $bundle) {
             $dir = $bundle->getRootPath() . '/Commands';
             if (!is_dir($dir)) {
                 continue;
             }
+            $finder = new Finder();
             foreach ($finder->in($dir)->files() as $file) {
                 $class = $bundle->getNamespace() . '\\Commands\\' . pathinfo($file, PATHINFO_FILENAME);
                 $command = new $class();

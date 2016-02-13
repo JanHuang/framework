@@ -1,22 +1,32 @@
 #!/usr/bin/env php
 <?php
+/**
+ * Created by PhpStorm.
+ * User: janhuang
+ * Date: 15/3/19
+ * Time: 下午8:03
+ * Github: https://www.github.com/janhuang
+ * Coding: https://www.coding.net/janhuang
+ * SegmentFault: http://segmentfault.com/u/janhuang
+ * Blog: http://segmentfault.com/blog/janhuang
+ * Gmail: bboyjanhuang@gmail.com
+ */
 
 set_time_limit(0);
+date_default_timezone_set('PRC');
 
-foreach ([
-             __DIR__ . '/../../../autoload.php',
-             __DIR__ . '/../vendor/autoload.php',
-         ] as $file) {
-    if (file_exists($file)) {
-        include $file;
-        break;
-    }
-}
+$loader = include __DIR__ . '/../vendor/autoload.php';
+$loader->addPsr4('', [__DIR__ . '/../app/src/Bundles'], true);
+include __DIR__ . '/../app/Application.php';
 
-$env = new \FastD\Console\Environment\BaseEnvironment();
+use FastD\Console\ArgvInput;
+use FastD\Framework\Kernel\AppConsole;
 
-$argvInput = new \FastD\Console\ArgvInput();
+$argvInput = new ArgvInput();
 
-$console = new \FastD\Console\Console($env);
+$env = $argvInput->has(['--env', '-e']) ? $argvInput->get(['--env', '-e']) : 'dev';
+
+$console = new AppConsole(new Application($env));
 
 $console->run($argvInput);
+
