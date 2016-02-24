@@ -96,7 +96,7 @@ class RouteDumpCommand extends Command
             foreach ($router as $name => $route) {
                 $callback = $route->getCallback();
                 $namespace = substr($callback, 0, strpos($callback, '\\'));
-                if ($bundle->getNamespace() == $namespace) {
+                if (0 === strpos($bundle->getNamespace(), $namespace)) {
                     $allRoutes[$bundle->getName()][] = $route;
                 }
             }

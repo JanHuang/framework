@@ -47,6 +47,9 @@ class AnnotationHandle extends Dispatch
         foreach ($bundles as $bundle) {
             $baseNamespace = $bundle->getNamespace() . '\\Controllers\\';
             $path = $bundle->getRootPath() . '/Controllers';
+            if (!is_dir($path)) {
+                continue;
+            }
             $finder = new Finder();
             $files = $finder->name('*.php')->in($path)->files();
             foreach ($files as $file) {
