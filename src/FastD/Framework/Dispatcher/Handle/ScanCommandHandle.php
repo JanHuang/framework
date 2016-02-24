@@ -39,8 +39,6 @@ class ScanCommandHandle extends Dispatch
 
         $application->getKernel()->boot();
 
-
-
         $bundles = array_merge($application->getKernel()->getBundles(), [new Bundle()]);
 
         foreach ($bundles as $bundle) {
