@@ -34,8 +34,8 @@
         "fastd/template": "2.0.x-dev",
         "fastd/database": "2.0.x-dev",
         "fastd/container": "2.0.x-dev",
-        "fastd/annotation": "2.0.x-dev",
-        "fastd/generator": "1.0.x-dev"
+        "fastd/generator": "1.0.x-dev",
+        "fastd/annotation": "2.0.x-dev"
     },
     "require-dev": {
         "phpunit/phpunit": "5.0"
