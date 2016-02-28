@@ -54,22 +54,20 @@ class OrmRevertCommand extends Command
             $connection = 'read';
         }
 
-        $kernel = $this->getApplication()->getKernel();
-
-        $kernel->boot();
-
         $controller = new Controller();
-        $controller->setContainer($kernel->getContainer());
+        $controller->setContainer($this->getApplication()->getContainer());
 
         $driver = $controller->getDriver($connection);
 
-        $finder = new Finder();
+        $bundles = $this->getApplication()->getKernel()->getBundles();
 
-        foreach ($kernel->getBundles() as $bundle) {
+        foreach ($bundles as $bundle) {
             $builder = new AutoBuilding($driver);
             $path = $bundle->getRootPath() . '/Resources/orm';
-            $files = $finder->in($path)->depth(0)->files();
-            $builder->buildEntity($bundle->getNamespace() . '\\Orm', $bundle->getRootPath() . '/Orm');
+
+            $builder->saveYmlTo($path, true);
+            $builder->saveTo($bundle->getRootPath() . '/Orm', $bundle->getNamespace() . '\\Orm', true);
+
             $output->write('Generate into dir: ');
             $output->writeln($bundle->getName(), Output::STYLE_BG_SUCCESS);
             $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Entity', Output::STYLE_SUCCESS);

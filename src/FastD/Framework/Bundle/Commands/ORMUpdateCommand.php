@@ -71,7 +71,7 @@ class OrmUpdateCommand extends Command
         foreach ($bundles as $bundle) {
             $path = $bundle->getRootPath() . '/Resources/orm';
 
-            $builder = new AutoBuilding($driver, $path, false);
+            $builder = new AutoBuilding($driver, $path, true);
 
             $builder->ymlToTable($bundle->getRootPath() . '/Orm', $bundle->getNamespace() . '\\Orm', true, $type);
 
