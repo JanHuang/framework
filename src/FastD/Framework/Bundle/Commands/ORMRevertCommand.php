@@ -18,11 +18,12 @@ use FastD\Config\Loader\YmlFileLoader;
 use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
+use FastD\Database\Builder\AutoBuilding;
 use FastD\Database\ORM\Generator\Mapping;
 use FastD\Finder\Finder;
 use FastD\Framework\Bundle\Controllers\Controller;
 
-class ORMRevertCommand extends Command
+class OrmRevertCommand extends Command
 {
     /**
      * @return string
@@ -38,6 +39,7 @@ class ORMRevertCommand extends Command
     public function configure()
     {
         $this->setArgument('connection');
+        $this->setArgument('bundle');
     }
 
     /**
@@ -64,7 +66,7 @@ class ORMRevertCommand extends Command
         $finder = new Finder();
 
         foreach ($kernel->getBundles() as $bundle) {
-            $builder = new Mapping($driver);
+            $builder = new AutoBuilding($driver);
             $path = $bundle->getRootPath() . '/Resources/orm';
             $files = $finder->in($path)->depth(0)->files();
             $builder->buildEntity($bundle->getNamespace() . '\\Orm', $bundle->getRootPath() . '/Orm');

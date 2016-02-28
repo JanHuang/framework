@@ -18,11 +18,12 @@ use FastD\Config\Loader\YmlFileLoader;
 use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
-use FastD\Database\ORM\Generator\Mapping;
+use FastD\Database\Builder\AutoBuilding;
+use FastD\Database\Builder\Table;
 use FastD\Finder\Finder;
 use FastD\Framework\Bundle\Controllers\Controller;
 
-class ORMUpdateCommand extends Command
+class OrmUpdateCommand extends Command
 {
     /**
      * @return string
@@ -38,6 +39,7 @@ class ORMUpdateCommand extends Command
     public function configure()
     {
         $this->setArgument('connection');
+        $this->setOption('create', Input::ARG_NONE);
     }
 
     /**
@@ -52,32 +54,30 @@ class ORMUpdateCommand extends Command
             $connection = 'read';
         }
 
-        $kernel = $this->getApplication()->getKernel();
+        $type = Table::TABLE_CHANGE;
+        if ($input->has('create')) {
+            $type = Table::TABLE_CREATE;
+        }
 
-        $kernel->boot();
 
         $controller = new Controller();
-        $controller->setContainer($kernel->getContainer());
+
+        $controller->setContainer($this->getApplication()->getContainer());
 
         $driver = $controller->getDriver($connection);
 
-        $finder = new Finder();
+        $bundles = $this->getApplication()->getKernel()->getBundles();
 
-        foreach ($kernel->getBundles() as $bundle) {
-            $builder = new Mapping($driver);
+        foreach ($bundles as $bundle) {
             $path = $bundle->getRootPath() . '/Resources/orm';
-            $files = $finder->in($path)->depth(0)->files();
-            foreach ($files as $file) {
-                $config = new YmlFileLoader($file->getPathname());
-                $builder->addTable($config->getParameters());
-            }
-            $builder->updateTables();
-            $builder->buildEntity($bundle->getNamespace() . '\\Orm', $bundle->getRootPath() . '/Orm');
-            $output->write('Generate into dir: ');
-            $output->writeln($bundle->getName(), Output::STYLE_BG_SUCCESS);
+
+            $builder = new AutoBuilding($driver, $path, false);
+
+            $builder->ymlToTable($bundle->getRootPath() . '/Orm', $bundle->getNamespace() . '\\Orm', true, $type);
+
             $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Entity', Output::STYLE_SUCCESS);
             $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Repository', Output::STYLE_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Fields', Output::STYLE_SUCCESS);
+            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Field', Output::STYLE_SUCCESS);
         }
     }
 }

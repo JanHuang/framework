@@ -37,6 +37,8 @@ class AppConsole extends ApplicationAbstract
     {
         $this->application = $appKernel;
 
+        $this->application->boot();
+
         parent::__construct();
 
         $this->init();

@@ -22,7 +22,7 @@ use FastD\Database\ORM\Generator\Mapping;
 use FastD\Finder\Finder;
 use FastD\Framework\Bundle\Controllers\Controller;
 
-class ORMDumpCommand extends Command
+class OrmDumpCommand extends Command
 {
     /**
      * @return string
