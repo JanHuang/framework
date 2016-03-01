@@ -14,13 +14,10 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Config\Loader\YmlFileLoader;
 use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Database\Builder\AutoBuilding;
-use FastD\Database\ORM\Generator\Mapping;
-use FastD\Finder\Finder;
 use FastD\Framework\Bundle\Controllers\Controller;
 
 class OrmRevertCommand extends Command
