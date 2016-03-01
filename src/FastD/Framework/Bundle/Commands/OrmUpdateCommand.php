@@ -14,15 +14,19 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Config\Loader\YmlFileLoader;
 use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Database\Builder\AutoBuilding;
 use FastD\Database\Builder\Table;
-use FastD\Finder\Finder;
+use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Bundle\Controllers\Controller;
 
+/**
+ * Class OrmUpdateCommand
+ *
+ * @package FastD\Framework\Bundle\Commands
+ */
 class OrmUpdateCommand extends Command
 {
     /**
@@ -40,6 +44,8 @@ class OrmUpdateCommand extends Command
     {
         $this->setArgument('connection');
         $this->setOption('create', Input::ARG_NONE);
+        $this->setOption('bundle');
+        $this->setOption('debug', Input::ARG_NONE);
     }
 
     /**
@@ -59,6 +65,10 @@ class OrmUpdateCommand extends Command
             $type = Table::TABLE_CREATE;
         }
 
+        $debug = false;
+        if ($input->has('debug')) {
+            $debug = true;
+        }
 
         $controller = new Controller();
 
@@ -71,13 +81,34 @@ class OrmUpdateCommand extends Command
         foreach ($bundles as $bundle) {
             $path = $bundle->getRootPath() . '/Resources/orm';
 
-            $builder = new AutoBuilding($driver, $path, true);
+            if (!is_dir($path)) {
+                continue;
+            }
 
-            $builder->ymlToTable($bundle->getRootPath() . '/Orm', $bundle->getNamespace() . '\\Orm', true, $type);
-
-            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Entity', Output::STYLE_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Repository', Output::STYLE_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Field', Output::STYLE_SUCCESS);
+            $builder = new AutoBuilding($driver, $path, $debug);
+            if ($input->has('bundle')) {
+                if ($bundle->getShortName() == $input->get('bundle')) {
+                    $this->building($builder, $bundle, $type, $output);
+                    break;
+                }
+            } else {
+                $this->building($builder, $bundle, $type, $output);
+            }
         }
+    }
+
+    /**
+     * @param AutoBuilding $builder
+     * @param Bundle $bundle
+     * @param $type
+     * @param Output $output
+     */
+    protected function building(AutoBuilding $builder, Bundle $bundle, $type, Output $output)
+    {
+        $builder->ymlToTable($bundle->getRootPath() . '/Orm', $bundle->getNamespace() . '\\Orm', true, $type);
+
+        $output->write('Building from bundle: ');
+        $output->write("\t" . $bundle->getName(), Output::STYLE_SUCCESS);
+        $output->writeln("\t" . '["Resources/orm"]', Output::STYLE_SUCCESS);
     }
 }

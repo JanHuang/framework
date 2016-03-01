@@ -18,8 +18,14 @@ use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Database\Builder\AutoBuilding;
+use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Bundle\Controllers\Controller;
 
+/**
+ * Class OrmRevertCommand
+ *
+ * @package FastD\Framework\Bundle\Commands
+ */
 class OrmRevertCommand extends Command
 {
     /**
@@ -36,7 +42,7 @@ class OrmRevertCommand extends Command
     public function configure()
     {
         $this->setArgument('connection');
-        $this->setArgument('bundle');
+        $this->setOption('bundle');
     }
 
     /**
@@ -60,16 +66,31 @@ class OrmRevertCommand extends Command
 
         foreach ($bundles as $bundle) {
             $builder = new AutoBuilding($driver);
-            $path = $bundle->getRootPath() . '/Resources/orm';
 
-            $builder->saveYmlTo($path, true);
-            $builder->saveTo($bundle->getRootPath() . '/Orm', $bundle->getNamespace() . '\\Orm', true);
-
-            $output->write('Generate into dir: ');
-            $output->writeln($bundle->getName(), Output::STYLE_BG_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Entity', Output::STYLE_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Repository', Output::STYLE_SUCCESS);
-            $output->writeln("\t" . $bundle->getNamespace() . '/Orm/Fields', Output::STYLE_SUCCESS);
+            if ($input->has('bundle')) {
+                if ($bundle->getShortName() == $input->get('bundle')) {
+                    $this->building($builder, $bundle, $output);
+                    break;
+                }
+            } else {
+                $this->building($builder, $bundle, $output);
+            }
         }
+    }
+
+    /**
+     * @param AutoBuilding $builder
+     * @param Bundle $bundle
+     * @param Output $output
+     */
+    protected function building(AutoBuilding $builder, Bundle $bundle, Output $output)
+    {
+        $path = $bundle->getRootPath() . '/Resources/orm';
+
+        $builder->saveYmlTo($path, true);
+        $builder->saveTo($bundle->getRootPath() . '/Orm', $bundle->getNamespace() . '\\Orm', true);
+
+        $output->write('Generate into bundle: ');
+        $output->writeln($bundle->getName() . '\\Orm', Output::STYLE_SUCCESS);
     }
 }
