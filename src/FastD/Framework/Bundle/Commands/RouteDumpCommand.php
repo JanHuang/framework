@@ -63,7 +63,7 @@ class RouteDumpCommand extends Command
 
         $name = $input->get('route');
         $bundle = $input->get('bundle');
-        $style = $input->has('list');
+        $style = $input->has('detail');
 
         if (false !== strpos($bundle, ':')) {
             $bundle = str_replace(':', '\\', $bundle);
@@ -72,7 +72,7 @@ class RouteDumpCommand extends Command
         $this->getApplication()->getKernel()->boot();
 
         if (null === $name) {
-            $this->showRouteCollections($router, $output, $bundle, $style ? self::STYLE_LIST : self::STYLE_DETAIL);
+            $this->showRouteCollections($router, $output, $bundle, $style ? self::STYLE_DETAIL: self::STYLE_LIST);
         } else {
             $route = $router->getRoute($name);
             $this->formatOutput($route, $output, self::STYLE_DETAIL);
