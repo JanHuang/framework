@@ -44,7 +44,7 @@ class RouteDumpCommand extends Command
     {
         $this
             ->setOption('bundle')
-            ->setOption('list', Input::ARG_NONE)
+            ->setOption('detail', Input::ARG_NONE)
             ->setArgument('route')
             ->setDescription('Thank for you use routing dump tool.')
         ;
