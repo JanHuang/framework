@@ -41,8 +41,11 @@ class OrmRevertCommand extends Command
      */
     public function configure()
     {
-        $this->setArgument('connection');
-        $this->setOption('bundle');
+        $this
+            ->setArgument('connection')
+            ->setOption('bundle')
+            ->setOption('debug', Input::ARG_NONE)
+        ;
     }
 
     /**

@@ -42,10 +42,12 @@ class OrmUpdateCommand extends Command
      */
     public function configure()
     {
-        $this->setArgument('connection');
-        $this->setOption('create', Input::ARG_NONE);
-        $this->setOption('bundle');
-        $this->setOption('debug', Input::ARG_NONE);
+        $this
+            ->setArgument('connection')
+            ->setOption('create', Input::ARG_NONE)
+            ->setOption('bundle')
+            ->setOption('debug', Input::ARG_NONE)
+        ;
     }
 
     /**
