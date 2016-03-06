@@ -18,12 +18,28 @@ use FastD\Container\Container;
 use FastD\Http\Request;
 use FastD\Http\Response;
 
+/**
+ * Class TestClient
+ *
+ * @package FastD\Framework\Tests
+ */
 class TestClient
 {
+    /**
+     * @var Container
+     */
     protected $container;
 
+    /**
+     * @var Request
+     */
     protected $request;
 
+    /**
+     * TestClient constructor.
+     * @param Container $container
+     * @param Request|null $request
+     */
     public function __construct(Container $container, Request $request = null)
     {
         $this->container = $container;
