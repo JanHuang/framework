@@ -54,6 +54,9 @@ class AnnotationHandle extends Dispatch
             $files = $finder->name('*.php')->in($path)->files();
             foreach ($files as $file) {
                 $className = $baseNamespace . pathinfo($file->getFileName(), PATHINFO_FILENAME);
+                if (!class_exists($className)) {
+                    continue;
+                }
                 $extractor = AnnotationExtractor::getExtractor($className);
                 $methods = [];
                 foreach ($extractor->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
