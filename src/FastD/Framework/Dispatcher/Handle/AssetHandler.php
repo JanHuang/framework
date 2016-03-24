@@ -44,7 +44,9 @@ class AssetHandler extends Dispatch
         if (null === $this->baseUrl) {
             $request = $this->getContainer()->singleton('kernel.request');
 
-            $this->baseUrl = $request->getHost() . $request->getRootPath();
+            $url = $request->getBaseUrl();
+
+            $this->baseUrl = $request->getHost() . ('' == pathinfo($url, PATHINFO_EXTENSION) ? $url : pathinfo($url, PATHINFO_DIRNAME)) ;
         }
 
         return '//' . $this->baseUrl . '/bundles/' . $name . (null === $version ? '' : '?v=' . $version);
