@@ -21,6 +21,8 @@ use FastD\Console\IO\OutputInterface;
 
 class RouteCacheCommand extends Command
 {
+    const CACHE_NAME = 'routes.cache';
+
     public function getName()
     {
         return 'route:cache';
@@ -31,15 +33,14 @@ class RouteCacheCommand extends Command
     public function execute(Input $input, Output $output)
     {
         $kernel = $this->getApplication()->getKernel();
-        $kernel->boot();
+
         $routing = $kernel->getContainer()->singleton('kernel.routing');
-        $caching = $kernel->getRootPath() . '/route.cache';
+        $caching = $kernel->getRootPath() . DIRECTORY_SEPARATOR . RouteCacheCommand::CACHE_NAME;
         // Init caching file.
         file_put_contents($caching, '<?php' . PHP_EOL);
+
         foreach ($routing as $route) {
-            $methods = '[\'' . implode('\', \'', $route->getMethods()) . '\']';
-            $name = '' == $route->getName() ? '' : "'name' => '{$route->getName()}'";
-            $path = "['{$route->getPath()}', {$name}]";
+
             $default = array() === $route->getDefaults() ? '[]' : (function () use ($route) {
                 $arr = [];
                 foreach ($route->getDefaults() as $name => $value) {
@@ -47,6 +48,7 @@ class RouteCacheCommand extends Command
                 }
                 return '[' . implode(',', $arr). ']';
             })();
+
             $requirements = array() === $route->getRequirements() ? '[]' : (function () use ($route) {
                 $arr = [];
                 foreach ($route->getRequirements() as $name => $value) {
@@ -54,11 +56,13 @@ class RouteCacheCommand extends Command
                 }
                 return '[' . implode(',', $arr). ']';
             })();
-            $routeCaching = "Routes::match({$methods}, {$path}, '{$route->getCallback()}', {$default}, {$requirements})";
+
+            $line = "Routes::" . strtolower($route->getMethod()) . "'({$route->getName()}', '{$route->getPath()}', '{$route->getCallback()}', {$default}, {$requirements})";
+
             if (null != $route->getHost()) {
                 $routeCaching .= '->setHost([\'' . implode('\',\'', $route->getHost() ?? []) .'\'])';
             }
-            if (null != $route->getSchema() && $route->getSchema() != ['http']) {
+            if (null != $route->getScheme() && $route->getScheme() != ['http']) {
                 $routeCaching .= '->setSchema([\'' . implode('\',\'', $route->getSchema() ?? []) .'\'])';
             }
             if (null != $route->getFormats()) {
@@ -66,7 +70,7 @@ class RouteCacheCommand extends Command
             }
 
             // Routes::match();
-            file_put_contents($caching, $routeCaching . ';' . PHP_EOL, FILE_APPEND);
+            file_put_contents($caching, $line . ';' . PHP_EOL, FILE_APPEND);
         }
         $output->write('Caching to ' . $caching . '......');
         $output->writeln('    [OK]', OutputInterface::STYLE_SUCCESS);

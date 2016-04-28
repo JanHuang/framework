@@ -37,6 +37,10 @@ abstract class AppKernel extends Terminal
      */
     const VERSION = '2.0.0';
 
+    const ENV_PROD = 'prod';
+    const ENV_TEST = 'test';
+    const ENV_DEV = 'dev';
+
     /**
      * @var string
      */
@@ -75,7 +79,7 @@ abstract class AppKernel extends Terminal
     {
         $this->environment = $env;
 
-        $this->debug = in_array($env, ['dev', 'test']) ? true : false;
+        $this->debug = in_array($env, [AppKernel::ENV_DEV, AppKernel::ENV_TEST]) ? true : false;
     }
 
     /**

@@ -69,8 +69,6 @@ class RouteDumpCommand extends Command
             $bundle = str_replace(':', '\\', $bundle);
         }
 
-        $this->getApplication()->getKernel()->boot();
-
         if (null === $name) {
             $this->showRouteCollections($router, $output, $bundle, $style ? self::STYLE_DETAIL: self::STYLE_LIST);
         } else {
@@ -105,7 +103,7 @@ class RouteDumpCommand extends Command
         if ($style === self::STYLE_LIST) {
             $output->write('Name' . str_repeat(' ', 25 - strlen('name')));
             $output->write('Method' . str_repeat(' ', 15 - strlen('Method')));
-            $output->write('Schema' . str_repeat(' ', 15 - strlen('Schema')));
+            $output->write('Scheme' . str_repeat(' ', 15 - strlen('Schema')));
             $output->writeln('Path');
         }
 
@@ -145,7 +143,7 @@ class RouteDumpCommand extends Command
                 $output->write('"' . $route->getName() . '"', Output::STYLE_SUCCESS);
                 $output->writeln(']');
                 $output->writeln("Path:\t\t" . str_replace('//', '/', $route->getPath()));
-                $output->writeln("Method:\t\t" . implode(', ', $route->getMethods()));
+                $output->writeln("Method:\t\t" . $route->getMethod());
                 $output->writeln("Format:\t\t" . implode(', ', $route->getFormats()));
                 $output->writeln("Callback:\t" . (is_callable($route->getCallback()) ? 'Closure' : $route->getCallback()));
                 $output->writeln("Defaults:\t" . implode(', ', $route->getDefaults()));
@@ -156,8 +154,8 @@ class RouteDumpCommand extends Command
             case self::STYLE_LIST:
             default:
                 $name = $route->getName();
-                $method = implode(',', $route->getMethods());
-                $schema = implode(',', $route->getSchema());
+                $method = $route->getMethod();
+                $schema = $route->getScheme() ?? 'http';
                 $path = $route->getPath();
                 $output->write(' ' . $name . str_repeat(' ', 25 - strlen($name)));
                 $output->write($method . str_repeat(' ', 15 - strlen($method)));
