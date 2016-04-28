@@ -32,11 +32,16 @@ class ShutdownHandler extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        list($isDebug) = $parameters;
+        $request = $this->getContainer()->singleton('kernel.request');
 
-        if (!$isDebug) {
-            $logger = $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.log', [LogHandler::LOG_ACCESS]);
-            $logger->addInfo('/', []);
-        }
+        $parameters['ip'] = $request->getClientIp();
+        $parameters['query'] = $request->query->all();
+        $parameters['request'] = $request->request->all();
+        $parameters['ua'] = $request->getUserAgent();
+        unset($request);
+
+        $logger = $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.log', [LogHandler::LOG_ACCESS]);
+
+        $logger->addInfo($request->getPathInfo(), $parameters);
     }
 }

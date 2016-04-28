@@ -156,11 +156,7 @@ class Controller extends ContainerAware implements ControllerInterface
      */
     public function render($view, array $parameters = array(), $flag = false)
     {
-        if (null === $this->template) {
-            $this->template = $this->get('kernel.dispatch')->dispatch('handle.tpl');
-        }
-
-        $content = $this->template->render($view, $parameters);
+        $content = $this->get('kernel.dispatch')->dispatch('handle.tpl')->render($view, $parameters);
 
         return $flag ? $content : $this->responseHtml($content);
     }
@@ -190,8 +186,6 @@ class Controller extends ContainerAware implements ControllerInterface
         switch ($this->get('kernel.request')->getFormat()) {
             case 'json':
                 return $this->responseJson($data, $status, $headers);
-            case 'xml':
-                return $this->responseXml($data, $status, $headers);
             case 'php':
             case 'jsp':
             case 'asp':
@@ -200,17 +194,6 @@ class Controller extends ContainerAware implements ControllerInterface
             default:
                 return $this->responseHtml($data, $status, $headers);
         }
-    }
-
-    /**
-     * @param array $data
-     * @param int   $status
-     * @param array $headers
-     * @return XmlResponse
-     */
-    public function responseXml(array $data, $status = Response::HTTP_OK, array $headers = [])
-    {
-        return new XmlResponse($data, $status, $headers);
     }
 
     /**
