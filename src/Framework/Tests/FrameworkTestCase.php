@@ -14,7 +14,8 @@
 
 namespace FastD\Framework\Tests;
 
-use FastD\Finder\Finder;
+use FastD\Framework\Kernel\AppKernel;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class FrameworkTestCase
@@ -31,7 +32,7 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param string $env
      */
-    public static function kernelBootstrap($env = 'dev')
+    public static function kernelBootstrap($env = AppKernel::ENV_TEST)
     {
         static::$application = static::getApplication($env);
 
@@ -46,7 +47,8 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
         $dir = static::getPhpUnitXmlDir() . '/app';
 
         $finder = new Finder();
-        $finder->name('Application.php')->depth(0)->in($dir);
+
+        $finder->name('application.php')->depth(0)->in($dir);
         $results = iterator_to_array($finder);
 
         if (!count($results)) {

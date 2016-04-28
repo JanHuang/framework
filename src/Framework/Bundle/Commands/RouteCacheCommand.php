@@ -28,14 +28,31 @@ class RouteCacheCommand extends Command
         return 'route:cache';
     }
 
-    public function configure(){}
+    public function configure()
+    {
+        $this->setArgument('action');
+    }
 
     public function execute(Input $input, Output $output)
     {
         $kernel = $this->getApplication()->getKernel();
 
-        $routing = $kernel->getContainer()->singleton('kernel.routing');
         $caching = $kernel->getRootPath() . DIRECTORY_SEPARATOR . RouteCacheCommand::CACHE_NAME;
+
+        if ($input->has('action') && 'remove' == $input->get('action')) {
+            if (file_exists($caching)) {
+                unlink($caching);
+            }
+
+            $output->write('Clear caching file: ');
+            $output->write($caching, OutputInterface::STYLE_WARNING);
+            $output->writeln('    [OK]', OutputInterface::STYLE_SUCCESS);
+
+            return 0;
+        }
+
+        $routing = $kernel->getContainer()->singleton('kernel.routing');
+
         // Init caching file.
         file_put_contents($caching, '<?php' . PHP_EOL);
 
@@ -57,16 +74,13 @@ class RouteCacheCommand extends Command
                 return '[' . implode(',', $arr). ']';
             })();
 
-            $line = "Routes::" . strtolower($route->getMethod()) . "'({$route->getName()}', '{$route->getPath()}', '{$route->getCallback()}', {$default}, {$requirements})";
+            $line = "Routes::" . strtolower($route->getMethod()) . "('{$route->getName()}', '{$route->getPath()}', '{$route->getCallback()}', {$default}, {$requirements})";
 
-            if (null != $route->getHost()) {
-                $routeCaching .= '->setHost([\'' . implode('\',\'', $route->getHost() ?? []) .'\'])';
-            }
             if (null != $route->getScheme() && $route->getScheme() != ['http']) {
-                $routeCaching .= '->setSchema([\'' . implode('\',\'', $route->getSchema() ?? []) .'\'])';
+                $line .= '->setScheme(\'' . $route->getScheme() . '\')';
             }
             if (null != $route->getFormats()) {
-                $routeCaching .= '->setFormats([\'' . implode('\',\'', $route->getFormats() ?? []) . '\'])';
+                $line .= '->setFormats([\'' . implode('\',\'', $route->getFormats() ?? []) . '\'])';
             }
 
             // Routes::match();

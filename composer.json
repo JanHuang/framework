@@ -4,11 +4,7 @@
     "license": "MIT",
     "description": "The fastd framework library.",
     "minimum-stability": "stable",
-    "keywords": [
-        "FastD",
-        "FastD Kernel",
-        "FastD Framework Kernel"
-    ],
+    "keywords": ["FastD Framework Kernel"],
     "authors": [
         {
             "name": "janhuang",

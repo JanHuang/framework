@@ -48,7 +48,7 @@ class ErrorHandler extends Dispatch
     {
         list($isDebug) = $parameters;
 
-        Debug::enable($isDebug, $isDebug ? null : $this->getLogger());
+        Debug::enable($isDebug, $this->getLogger());
 
         unset($isDebug);
     }

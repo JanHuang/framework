@@ -35,7 +35,7 @@ class AssetInstallCommand extends Command
 
     public function configure()
     {
-
+        $this->setArgument('bundle');
     }
 
     public function execute(Input $input, Output $output)
@@ -45,7 +45,6 @@ class AssetInstallCommand extends Command
         $bundles = $kernel->getBundles();
 
         $web = 'public/bundles';
-
 
         $targetRootDir = $this->getApplication()->getContainer()->singleton('kernel')->getRootPath() . '/../' . $web;
 

@@ -137,12 +137,11 @@ abstract class AppKernel extends Terminal
     public function boot()
     {
         if (!$this->booted) {
-            $this->initializeContainer();
 
+            $this->initializeContainer();
             $this->initializeBundles();
 
             $config = $this->initializeConfigure();
-
             $routing = $this->initializeRouting();
 
             foreach ($this->bundles as $bundle) {
