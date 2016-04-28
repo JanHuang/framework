@@ -171,9 +171,8 @@ abstract class AppKernel extends Terminal
     public function initializeContainer()
     {
         $this->container = new Container([
-            'kernel.database' => Fdb::class,
-            'kernel.config' => Config::class,
-            'kernel.logger' => Logger::class,
+            'kernel.database'   => Fdb::class,
+            'kernel.config'     => Config::class,
         ]);
 
         $this->registerService($this->container);

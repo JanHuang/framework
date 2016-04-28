@@ -33,6 +33,9 @@ class AssetInstallCommand extends Command
         return 'asset:install';
     }
 
+    /**
+     * php bin/console asset:install WelcomeBundle
+     */
     public function configure()
     {
         $this->setArgument('bundle');

@@ -13,6 +13,7 @@
 
 namespace FastD\Framework\Bundle\Controllers;
 
+use FastD\Debug\Exceptions\Http\HttpException;
 use FastD\Framework\Container\ContainerAware;
 use FastD\Database\DriverInterface;
 use FastD\Framework\Kernel\AppKernel;
@@ -224,8 +225,8 @@ class Controller extends ContainerAware implements ControllerInterface
      * @param array  $headers
      * @throws \Exception
      */
-    public function throwException($statusCode = Response::HTTP_FORBIDDEN, $content = "Forbidden", array $headers = [])
+    public function throwException($content = "Forbidden", $statusCode = Response::HTTP_FORBIDDEN, array $headers = [])
     {
-        throw new \Exception($content);
+        throw new HttpException($content, $statusCode, $headers);
     }
 }
