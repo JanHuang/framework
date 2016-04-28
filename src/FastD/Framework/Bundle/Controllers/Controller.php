@@ -14,17 +14,14 @@
 namespace FastD\Framework\Bundle\Controllers;
 
 use FastD\Framework\Container\ContainerAware;
-use FastD\Database\Drivers\DriverInterface;
+use FastD\Database\DriverInterface;
 use FastD\Framework\Kernel\AppKernel;
-use FastD\Template\Template;
 use FastD\Storage\StorageManager;
 use FastD\Http\RedirectResponse;
 use FastD\Http\Response;
 use FastD\Http\JsonResponse;
-use FastD\Http\XmlResponse;
-use FastD\Http\Session\Storage\RedisStorage;
 use FastD\Http\Session\Session;
-use FastD\Http\Session\SessionHandler;
+use FastD\Http\Session\Storage\SessionStorageInterface;
 
 
 /**
@@ -52,11 +49,6 @@ class Controller extends ContainerAware implements ControllerInterface
     protected $session;
 
     /**
-     * @var Template
-     */
-    protected $template;
-
-    /**
      * Get custom defined helper obj.
      *
      * @param string $name
@@ -70,23 +62,16 @@ class Controller extends ContainerAware implements ControllerInterface
     }
 
     /**
+     * @param SessionStorageInterface|null $sessionStorageInterface
      * @return Session
      */
-    public function getSession()
+    public function getSession(SessionStorageInterface $sessionStorageInterface = null)
     {
         if ($this->session instanceof Session) {
             return $this->session;
         }
 
-        $config = $this->getParameters('session');
-
-        $storage = new RedisStorage($config['host'], $config['port'], isset($config['auth']) ? $config['auth'] : null);
-
-        $handler = new SessionHandler($storage);
-
-        $this->session = $this->get('kernel.request')->getSessionHandle($handler);
-
-        unset($storage, $handler);
+        $this->session = $this->container->singleton('kernel.request')->getSessionHandle($sessionStorageInterface);
 
         return $this->session;
     }

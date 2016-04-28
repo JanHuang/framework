@@ -69,7 +69,7 @@ class Bundle extends \ReflectionClass implements BundleInterface
      */
     public function registerRouting(Router $router, $env)
     {
-        include $this->getRootPath() . '/Resources/config/routes.php';
+        @include $this->getRootPath() . '/Resources/config/routes.php';
     }
 
     /**
@@ -81,7 +81,7 @@ class Bundle extends \ReflectionClass implements BundleInterface
      */
     public function registerConfiguration(Config $config, $env)
     {
-        include $this->getRootPath() . '/Resources/config/config.php';
+        @include $this->getRootPath() . '/Resources/config/config.php';
     }
 
     /**

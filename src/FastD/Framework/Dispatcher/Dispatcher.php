@@ -20,7 +20,7 @@ use FastD\Framework\Dispatcher\Handle\AnnotationHandle;
 use FastD\Framework\Dispatcher\Handle\AssetHandler;
 use FastD\Framework\Dispatcher\Handle\ErrorHandler;
 use FastD\Framework\Dispatcher\Handle\ForwardHandler;
-use FastD\Framework\Dispatcher\Handle\HttpHandler;
+use FastD\Framework\Dispatcher\Handle\RequestHandler;
 use FastD\Framework\Dispatcher\Handle\LogHandler;
 use FastD\Framework\Dispatcher\Handle\ScanCommandHandle;
 use FastD\Framework\Dispatcher\Handle\ShutdownHandler;
@@ -48,7 +48,7 @@ class Dispatcher extends ContainerAware
     public function __construct(Container $container)
     {
         $this->setContainer($container);
-        $this->setDispatch(new HttpHandler());
+        $this->setDispatch(new RequestHandler());
         $this->setDispatch(new TplHandler());
         $this->setDispatch(new AssetHandler());
         $this->setDispatch(new UrlHandler());

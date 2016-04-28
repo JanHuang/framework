@@ -17,6 +17,11 @@ namespace FastD\Framework\Dispatcher\Handle;
 use FastD\Framework\Dispatcher\Dispatch;
 use FastD\Debug\Debug;
 
+/**
+ * Class ErrorHandler
+ *
+ * @package FastD\Framework\Dispatcher\Handle
+ */
 class ErrorHandler extends Dispatch
 {
     /**
@@ -28,6 +33,14 @@ class ErrorHandler extends Dispatch
     }
 
     /**
+     * @return mixed
+     */
+    protected function getLogger()
+    {
+        return $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.log', [LogHandler::LOG_ERROR]);
+    }
+
+    /**
      * @param array|null $parameters
      * @return mixed
      */
@@ -35,13 +48,8 @@ class ErrorHandler extends Dispatch
     {
         list($isDebug) = $parameters;
 
-        $logger = null;
-        if (!$isDebug) {
-            $logger = $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.log', [LogHandler::LOG_ERROR]);
-        }
+        Debug::enable($isDebug, $isDebug ? null : $this->getLogger());
 
-        Debug::enable($isDebug, $logger);
-
-        unset($isDebug, $logger);
+        unset($isDebug);
     }
 }

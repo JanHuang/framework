@@ -16,7 +16,7 @@ namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Console\Command\Command;
 use FastD\Framework\Dispatcher\Dispatch;
-use FastD\Finder\Finder;
+use Symfony\Component\Finder\Finder;
 use FastD\Framework\Bundle\Bundle;
 
 class ScanCommandHandle extends Dispatch
@@ -37,8 +37,6 @@ class ScanCommandHandle extends Dispatch
     {
         list($application) = $parameters;
 
-        $application->getKernel()->boot();
-
         $bundles = array_merge($application->getKernel()->getBundles(), [new Bundle()]);
 
         foreach ($bundles as $bundle) {
@@ -46,7 +44,9 @@ class ScanCommandHandle extends Dispatch
             if (!is_dir($dir)) {
                 continue;
             }
+
             $finder = new Finder();
+
             foreach ($finder->in($dir)->name('*Command.php')->files() as $file) {
                 $class = $bundle->getNamespace() . '\\Commands\\' . pathinfo($file, PATHINFO_FILENAME);
                 $command = new $class();

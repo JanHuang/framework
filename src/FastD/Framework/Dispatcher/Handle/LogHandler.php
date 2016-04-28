@@ -15,7 +15,14 @@
 namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Dispatcher\Dispatch;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
+/**
+ * Class LogHandler
+ *
+ * @package FastD\Framework\Dispatcher\Handle
+ */
 class LogHandler extends Dispatch
 {
     const LOG_ACCESS = 1;
@@ -38,23 +45,31 @@ class LogHandler extends Dispatch
         return $this->getLogger($parameters[0]);
     }
 
+    /**
+     * @param $type
+     * @return string
+     */
     public function getLogger($type)
     {
-        $logger = $this->getContainer()->singleton('kernel.logger');
-
         $log = $this->getContainer()->singleton('kernel')->getRootPath() . '/storage/logs/' . date('Ymd');
 
         switch ($type) {
             case self::LOG_ACCESS:
+                $name = 'access';
                 $log .= '/access.log';
                 break;
             case self::LOG_ERROR:
+                $name = 'error';
                 $log .= '/error.log';
                 break;
             default:
+                $name = 'log';
                 $log .= '/log.log';
         }
 
-        return $logger->createLogger($log);
+        $logger = new Logger($name);
+        $stream = new StreamHandler($log);
+
+        return $logger->pushHandler($stream);
     }
 }

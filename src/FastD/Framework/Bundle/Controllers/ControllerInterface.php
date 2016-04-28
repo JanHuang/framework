@@ -15,7 +15,7 @@
 namespace FastD\Framework\Bundle\Controllers;
 
 
-use FastD\Database\Drivers\DriverInterface;
+use FastD\Database\DriverInterface;
 use FastD\Storage\StorageInterface;
 use FastD\Http\RedirectResponse;
 use FastD\Http\Response;
@@ -73,6 +73,8 @@ interface ControllerInterface
     /**
      * @param       $name
      * @param array $parameters
+     * @param int   $statusCode
+     * @param array $header
      * @return RedirectResponse
      */
     public function redirect($name, array $parameters = [], $statusCode = 302, array $header = []);

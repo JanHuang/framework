@@ -65,9 +65,6 @@ class AppConsole extends ApplicationAbstract
      */
     public function init()
     {
-        // Initialize kernel container.
-        $this->application->initializeContainer();
-
         $this->application->getContainer()->singleton('kernel.dispatch')->dispatch('handle.scan.commands', [$this]);
     }
 }

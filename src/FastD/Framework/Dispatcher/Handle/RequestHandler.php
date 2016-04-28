@@ -22,17 +22,25 @@ use FastD\Routing\Route;
  * Framework kernel boot http handle.
  * Handle every time user request.
  *
- * Class HttpHandler
+ * Class RequestHandler
  *
  * @package FastD\Framework\Dispatcher\Handle
  */
-class HttpHandler extends Dispatch
+class RequestHandler extends Dispatch
 {
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'handle.http';
     }
 
+    /**
+     * @param Route $route
+     * @return mixed
+     * @throws \Exception
+     */
     public function handleRoute(Route $route)
     {
         $callback = $route->getCallback();
@@ -50,9 +58,13 @@ class HttpHandler extends Dispatch
         return call_user_func_array([$service, $action], $route->getParameters());
     }
 
+    /**
+     * @param array|null $parameters
+     * @return mixed
+     */
     public function dispatch(array $parameters = null)
     {
-        $route = $this->getContainer()->singleton('kernel.routing')->handleRequest($parameters[0]);
+        $route = $this->getContainer()->singleton('kernel.routing')->dispatch($parameters[0]->getMethod(), $parameters[0]->getPathInfo());
 
         return $this->handleRoute($route);
     }

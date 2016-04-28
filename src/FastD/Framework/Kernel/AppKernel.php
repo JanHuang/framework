@@ -4,7 +4,7 @@
  * User: janhuang
  * Date: 15/3/11
  * Time: 下午3:57
- * Github: https://www.github.com/janhuang 
+ * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
  * Blog: http://segmentfault.com/blog/janhuang
@@ -15,11 +15,13 @@ namespace FastD\Framework\Kernel;
 
 use FastD\Config\Config;
 use FastD\Container\Container;
+use FastD\Database\Fdb;
+use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Dispatcher\Dispatcher;
 use FastD\Http\Request;
 use FastD\Http\Response;
-use FastD\Framework\Bundle\Bundle;
 use FastD\Routing\Router;
+use Monolog\Logger;
 
 /**
  * Class AppKernel
@@ -58,6 +60,11 @@ abstract class AppKernel extends Terminal
      * @var Bundle[]
      */
     protected $bundles = array();
+
+    /**
+     * @var bool
+     */
+    protected $booted = false;
 
     /**
      * Constructor. Initialize framework environment.
@@ -125,17 +132,21 @@ abstract class AppKernel extends Terminal
      */
     public function boot()
     {
-        $this->initializeBundles();
+        if (!$this->booted) {
+            $this->initializeContainer();
 
-        $this->initializeContainer();
+            $this->initializeBundles();
 
-        $config = $this->initializeConfigure();
+            $config = $this->initializeConfigure();
 
-        $routing = $this->initializeRouting();
+            $routing = $this->initializeRouting();
 
-        foreach ($this->bundles as $bundle) {
-            $bundle->registerConfiguration($config, $this->environment);
-            $bundle->registerRouting($routing, $this->environment);
+            foreach ($this->bundles as $bundle) {
+                $bundle->registerConfiguration($config, $this->environment);
+                $bundle->registerRouting($routing, $this->environment);
+            }
+
+            $this->booted = true;
         }
     }
 
@@ -156,23 +167,19 @@ abstract class AppKernel extends Terminal
      */
     public function initializeContainer()
     {
-        if (null === $this->container) {
-            $this->container = new Container([
-                'kernel.template'       => 'FastD\\Template\\Template',
-                'kernel.logger'         => 'FastD\\Logger\\Logger',
-                'kernel.database'       => 'FastD\\Database\\Fdb',
-                'kernel.config'         => 'FastD\\Config\\Config',
-                'kernel.storage'        => 'FastD\\Storage\\StorageManager',
-            ]);
+        $this->container = new Container([
+            'kernel.database' => Fdb::class,
+            'kernel.config' => Config::class,
+            'kernel.logger' => Logger::class,
+        ]);
 
-            $this->registerService($this->container);
+        $this->registerService($this->container);
 
-            $this->container->set('kernel.container', $this->container);
-            $this->container->set('kernel.dispatch', new Dispatcher($this->container));
-            $this->container->set('kernel', $this);
+        $this->container->set('kernel.container', $this->container);
+        $this->container->set('kernel.dispatch', new Dispatcher($this->container));
+        $this->container->set('kernel', $this);
 
-            $this->container->singleton('kernel.dispatch')->dispatch('handle.error', [$this->isDebug()]);
-        }
+        $this->container->singleton('kernel.dispatch')->dispatch('handle.error', [$this->isDebug()]);
     }
 
     /**
@@ -186,9 +193,9 @@ abstract class AppKernel extends Terminal
 
         $config->setVariable([
             'root.path' => $this->getRootPath(),
-            'env'       => $this->getEnvironment(),
-            'debug'     => $this->isDebug(),
-            'version'   => AppKernel::VERSION,
+            'env' => $this->getEnvironment(),
+            'debug' => $this->isDebug(),
+            'version' => AppKernel::VERSION,
         ]);
 
         $this->registerConfigurationVariable($config);
@@ -213,7 +220,7 @@ abstract class AppKernel extends Terminal
         if ($this->isDebug()) {
             $this->container->singleton('kernel.dispatch')->dispatch('handle.annotation.route');
         } else {
-            include $this->getRootPath() . '/route.cache';
+            include $this->getRootPath() . '/routes.cache';
         }
 
         return $router;

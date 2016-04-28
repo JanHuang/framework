@@ -14,9 +14,11 @@
 
 namespace FastD\Framework\Dispatcher\Handle;
 
-use FastD\Annotation\AnnotationExtractor;
-use FastD\Finder\Finder;
+use FastD\Annotation\Annotation;
+use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Dispatcher\Dispatch;
+use Symfony\Component\Finder\Finder;
+
 
 /**
  * 注释处理调度任务
@@ -27,6 +29,8 @@ use FastD\Framework\Dispatcher\Dispatch;
  */
 class AnnotationHandle extends Dispatch
 {
+    protected $routes = [];
+
     /**
      * @return string
      */
@@ -41,97 +45,86 @@ class AnnotationHandle extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-
-
         $bundles = $this->getContainer()->singleton('kernel')->getBundles();
+
         foreach ($bundles as $bundle) {
-            $baseNamespace = $bundle->getNamespace() . '\\Controllers\\';
-            $path = $bundle->getRootPath() . '/Controllers';
-            if (!is_dir($path)) {
+            $this->routes = array_merge($this->routes, $this->scanRoutes($bundle));
+        }
+
+        foreach ($this->routes as $prefix => $routes) {
+            $closure = function () use ($routes) {
+                foreach ($routes as $route) {
+                    call_user_func_array("\\Routes::{$route['method']}", $route['parameters']);
+                }
+            };
+
+            \Routes::group($prefix, $closure);
+        }
+    }
+
+    /**
+     * @param Bundle $bundle
+     * @return array
+     */
+    protected function scanRoutes(Bundle $bundle)
+    {
+        $path = $bundle->getRootPath() . '/Controllers';
+
+        if (!is_dir($path)) {
+            return [];
+        }
+
+        $baseNamespace = $bundle->getNamespace() . '\\Controllers\\';
+        $finder = new Finder();
+        $files = $finder->name('*.php')->in($path)->files();
+
+        $routes = [];
+
+        foreach ($files as $file) {
+            $className = $baseNamespace . pathinfo($file->getFileName(), PATHINFO_FILENAME);
+            if (!class_exists($className)) {
                 continue;
             }
-            $finder = new Finder();
-            $files = $finder->name('*.php')->in($path)->files();
-            foreach ($files as $file) {
-                $className = $baseNamespace . pathinfo($file->getFileName(), PATHINFO_FILENAME);
-                if (!class_exists($className)) {
+
+            $annotation = new Annotation($className, null, 'Action');
+
+            foreach ($annotation->getMethods() as $method) {
+                if (false === ($route = $method->getParameters('Route'))) {
                     continue;
                 }
-                $extractor = AnnotationExtractor::getExtractor($className);
-                $methods = [];
-                foreach ($extractor->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-                    if (false === strpos($method->getName(), 'Action')) {
-                        continue;
-                    }
-                    $methods[] = $method->getName();
+
+                if (!isset($route['name'])) {
+                    $route['name'] = $route[0];
                 }
 
-                $routesAnnotation = [];
-                foreach ($methods as $method) {
-                    $annotation = $extractor->getMethodAnnotation($method);
-                    $routeAnnotation = $extractor->getParameters($annotation, 'Route');
+                $parameters = [
+                    $route['name'],
+                    $route[0],
+                    $method->getParent()->getName() . '@' . $method->getName(),
+                    isset($route['defaults']) ? $route['defaults'] : [],
+                    isset($route['requirements']) ? $route['requirements'] : [],
+                ];
 
-                    if (empty($routeAnnotation)) {
-                        continue;
-                    }
+                $parent = $method->getParent()->getParameters('Route');
 
-                    $routeMethods = $extractor->getParameters($annotation, 'Methods');
-                    $routeRoles = $extractor->getParameters($annotation, 'Roles');
-                    $routeSchemas = $extractor->getParameters($annotation, 'Schemas');
-                    $routeHosts = $extractor->getParameters($annotation, 'Hosts');
-                    $routeFormats = $extractor->getParameters($annotation, 'Formats');
-                    $routeAnnotation['class'] = $className;
-                    $routeAnnotation['action'] = $method;
-                    $routeAnnotation['method'] = empty($routeMethods) ? ['ANY'] : json_decode($routeMethods[0], true);
-                    $routeAnnotation['roles'] = isset($routeRoles[0]) ? json_decode($routeRoles[0], true) : [];
-                    $routeAnnotation['hosts'] = isset($routeHosts[0]) ? json_decode($routeHosts[0], true) : [];
-                    $routeAnnotation['schemas'] = isset($routeSchemas[0]) ? json_decode($routeSchemas[0], true) : [];
-                    $routeAnnotation['formats'] = isset($routeFormats[0]) ? json_decode($routeFormats[0], true) : [];
-                    $routesAnnotation[] = $routeAnnotation;
-                }
+                $method = false === $method->getParameters('Method') ? 'get' : $method->getParameters('Method')[0];
 
-                $routes = function () use ($routesAnnotation) {
-                    foreach ($routesAnnotation as $routeAnnotation) {
-                        $args = [];
-                        $args[] = $routeAnnotation['method'];
-                        if (isset($routeAnnotation[0])) {
-                            if (!isset($routeAnnotation['name'])) {
-                                $args[] = $routeAnnotation[0];
-                            } else {
-                                $args[] = [
-                                    $routeAnnotation[0],
-                                    'name' => $routeAnnotation['name']
-                                ];
-                            }
-                        }
-
-                        $args[] = $routeAnnotation['class'] . '@' . $routeAnnotation['action'];
-                        $args[] = isset($routeAnnotation['defaults']) ? $routeAnnotation['defaults'] : [];
-                        $args[] = isset($routeAnnotation['requirements']) ? $routeAnnotation['requirements'] : [];
-                        $route = call_user_func_array("\\Routes::match", $args);
-
-                        if (!empty($routeAnnotation['hosts'])) {
-                            $route->setHost($routeAnnotation['hosts']);
-                        }
-                        if (!empty($routeAnnotation['schemas'])) {
-                            $route->setSchema($routeAnnotation['schemas']);
-                        }
-                        if (!empty($routeAnnotation['formats'])) {
-                            $route->setFormats($routeAnnotation['formats']);
-                        }
-                    }
-                };
-
-                $with = $extractor->getParameters($extractor->getClassAnnotation(), 'Route');
-
-                if (!empty($with)) {
-                    \Routes::with($with[0], $routes);
+                if (!empty($parent) && isset($parent[0])) {
+                    $routes[$parent[0]][] = [
+                        'method' => strtolower($method),
+                        'parameters' => $parameters
+                    ];
                 } else {
-                    $routes();
+                    $routes['/'][] = [
+                        'method' => $method,
+                        'parameters' => $parameters
+                    ];
                 }
 
-                unset($extractor);
+                unset($route, $method, $parameters, $parent);
             }
         }
+
+        return $routes;
     }
 }

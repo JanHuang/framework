@@ -19,7 +19,7 @@ namespace FastD\Framework\Dispatcher\Handle;
  *
  * @package FastD\Framework\Dispatcher\Handle
  */
-class ForwardHandler extends HttpHandler
+class ForwardHandler extends RequestHandler
 {
     /**
      * @return string
