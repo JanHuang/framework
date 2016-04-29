@@ -13,6 +13,7 @@
 namespace FastD\Framework\Bundle;
 
 use FastD\Config\Config;
+use FastD\Framework\Container\ContainerAware;
 use FastD\Routing\Router;
 
 /**
@@ -20,12 +21,22 @@ use FastD\Routing\Router;
  *
  * @package FastD\Framework\Bundle
  */
-class Bundle extends \ReflectionClass implements BundleInterface
+class Bundle extends ContainerAware implements BundleInterface
 {
     /**
      * @var string
      */
     protected $rootPath;
+
+    /**
+     * @var string
+     */
+    protected $namespace;
+
+    /**
+     * @var string
+     */
+    protected $name;
 
     /**
      * Constructs a ReflectionClass
@@ -35,7 +46,15 @@ class Bundle extends \ReflectionClass implements BundleInterface
      */
     public function __construct()
     {
-        parent::__construct($this);
+        $reflection = new \ReflectionClass($this);
+
+        $this->rootPath = dirname($reflection->getFileName());
+
+        $this->namespace = $reflection->getNamespaceName();
+
+        $this->name = $reflection->getName();
+
+        unset($reflection);
     }
 
     /**
@@ -43,11 +62,15 @@ class Bundle extends \ReflectionClass implements BundleInterface
      */
     public function getRootPath()
     {
-        if (null === $this->rootPath) {
-            $this->rootPath = dirname($this->getFileName());
-        }
-
         return $this->rootPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -57,7 +80,7 @@ class Bundle extends \ReflectionClass implements BundleInterface
      */
     public function getNamespace()
     {
-        return $this->getNamespaceName();
+        return $this->namespace;
     }
 
     /**

@@ -141,6 +141,10 @@ abstract class AppKernel extends Terminal
             $this->initializeContainer();
             $this->initializeBundles();
 
+            foreach ($this->bundles as $name => $bundle) {
+                $this->bundles[$name]->setContainer($this->container);
+            }
+
             $config = $this->initializeConfigure();
             $routing = $this->initializeRouting();
 

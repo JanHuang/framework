@@ -157,7 +157,7 @@ class RouteDumpCommand extends Command
                 $method = $route->getMethod();
                 $schema = $route->getScheme() ?? 'http';
                 $path = $route->getPath();
-                $output->write(' ' . $name . str_repeat(' ', 25 - strlen($name)));
+                $output->write($name . str_repeat(' ', 25 - strlen($name)));
                 $output->write($method . str_repeat(' ', 15 - strlen($method)));
                 $output->write($schema . str_repeat(' ', 15 - strlen($schema)));
                 $output->writeln($path);

@@ -27,8 +27,8 @@
         "fastd/storage": "2.0.x-dev",
         "fastd/database": "2.0.x-dev",
         "fastd/container": "2.0.x-dev",
-        "fastd/generator": "~1.0",
         "fastd/annotation": "2.0.x-dev",
+        "fastd/generator": "~1.0",
         "symfony/finder": "~3.0",
         "twig/twig": "~1.2"
     },
