@@ -26,6 +26,9 @@ use FastD\Framework\Extensions\Preset;
  */
 class TplHandler extends Dispatch
 {
+    /**
+     * @var \Twig_Environment
+     */
     protected $tpl;
 
     /**

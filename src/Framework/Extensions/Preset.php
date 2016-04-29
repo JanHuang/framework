@@ -17,6 +17,11 @@ namespace FastD\Framework\Extensions;
 use Twig_SimpleFilter;
 use Twig_SimpleFunction;
 
+/**
+ * Class Preset
+ *
+ * @package FastD\Framework\Extensions
+ */
 class Preset extends TplExtension
 {
     /**

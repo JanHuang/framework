@@ -17,6 +17,11 @@ namespace FastD\Framework\Dispatcher\Handle;
 use FastD\Framework\Dispatcher\Dispatch;
 use FastD\Framework\Tests\TestClient;
 
+/**
+ * Class TestingHandle
+ *
+ * @package FastD\Framework\Dispatcher\Handle
+ */
 class TestingHandle extends Dispatch
 {
     /**
