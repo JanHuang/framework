@@ -163,20 +163,6 @@ class Controller extends ContainerAware implements ControllerInterface
     }
 
     /**
-     * Redirect url.
-     *
-     * @param       $url
-     * @param array $parameters
-     * @param int   $statusCode
-     * @param array $headers
-     * @return RedirectResponse
-     */
-    public function redirect($url, array $parameters = [], $statusCode = 302, array $headers = [])
-    {
-        return new RedirectResponse($url, $statusCode, $headers);
-    }
-
-    /**
      * @param       $data
      * @param int   $status
      * @param array $headers
@@ -195,6 +181,20 @@ class Controller extends ContainerAware implements ControllerInterface
             default:
                 return $this->responseHtml($data, $status, $headers);
         }
+    }
+
+    /**
+     * Redirect url.
+     *
+     * @param       $url
+     * @param array $parameters
+     * @param int   $statusCode
+     * @param array $headers
+     * @return RedirectResponse
+     */
+    public function redirect($url, array $parameters = [], $statusCode = 302, array $headers = [])
+    {
+        return new RedirectResponse($url, $statusCode, $headers);
     }
 
     /**

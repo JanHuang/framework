@@ -48,15 +48,18 @@ class TplHandler extends Dispatch
 
         $appKernel = $this->getContainer()->singleton('kernel');
 
-        $extensions = [new Preset()];
+        $preset = new Preset();
+
+        $extensions = [];
         $paths = [
             $appKernel->getRootPath() . '/views',
             $appKernel->getRootPath() . '/../src'
         ];
+
         $bundles = $appKernel->getBundles();
         foreach ($bundles as $bundle) {
             $paths[] = $bundle->getRootPath() . '/Resources/views';
-            $extensions = array_merge($extensions, $bundle->registerExtensions());
+            $extensions[$bundle->getName()] = array_merge([$preset], $bundle->registerExtensions());
         }
 
         $options = [];
@@ -67,10 +70,15 @@ class TplHandler extends Dispatch
             ];
         }
 
-        $this->tpl = $this->container->singleton('kernel.template', [$paths, $options]);
+        $this->tpl = new \Twig_Environment(new \Twig_Loader_Filesystem($paths), $options);
+
+        $this->getContainer()->set('kernel.template', $this->tpl);
+
         foreach ($extensions as $extension) {
-            $extension->setContainer($this->getContainer());
-            $this->tpl->addExtension($extension);
+            foreach ($extension as $value) {
+                $value->setContainer($this->getContainer());
+                $this->tpl->addExtension($value);
+            }
         }
 
         return $this->tpl;
