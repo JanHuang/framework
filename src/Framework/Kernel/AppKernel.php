@@ -148,9 +148,11 @@ abstract class AppKernel extends Terminal
             $config = $this->initializeConfigure();
             $routing = $this->initializeRouting();
 
-            foreach ($this->bundles as $bundle) {
-                $bundle->registerConfiguration($config, $this->environment);
-                $bundle->registerRouting($routing, $this->environment);
+            if ($this->isDebug()) {
+                foreach ($this->bundles as $bundle) {
+                    $bundle->registerConfiguration($config, $this->environment);
+                    $bundle->registerRouting($routing, $this->environment);
+                }
             }
 
             $this->booted = true;
@@ -195,7 +197,7 @@ abstract class AppKernel extends Terminal
      */
     public function initializeConfigure()
     {
-        $config = $this->container->get('kernel.config')->singleton();
+        $config = $this->container->singleton('kernel.config');
 
         $config->setVariable([
             'root.path' => $this->getRootPath(),

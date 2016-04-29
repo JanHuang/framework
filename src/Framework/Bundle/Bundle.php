@@ -114,4 +114,12 @@ class Bundle extends ContainerAware implements BundleInterface
     {
         return [];
     }
+
+    /**
+     * @return array
+     */
+    public function registerServices()
+    {
+        return [];
+    }
 }

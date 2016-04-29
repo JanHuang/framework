@@ -19,15 +19,29 @@ use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Console\IO\OutputInterface;
 
+/**
+ * Class RouteCacheCommand
+ *
+ * @package FastD\Framework\Bundle\Commands
+ */
 class RouteCacheCommand extends Command
 {
+    /**
+     *
+     */
     const CACHE_NAME = 'routes.cache';
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'route:cache';
     }
 
+    /**
+     *
+     */
     public function configure()
     {
         $this->setArgument('action');
