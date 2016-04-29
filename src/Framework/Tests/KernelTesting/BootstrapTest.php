@@ -16,8 +16,16 @@ namespace FastD\Framework\Tests\KernelTesting;
 
 use FastD\Framework\Tests\WebTestCase;
 
+/**
+ * Class BootstrapTest
+ *
+ * @package FastD\Framework\Tests\KernelTesting
+ */
 class BootstrapTest extends WebTestCase
 {
+    /**
+     * @expectedException \Welcome\Exceptions\JsonException
+     */
     public function testKernelBoot()
     {
         $client = static::createClient();

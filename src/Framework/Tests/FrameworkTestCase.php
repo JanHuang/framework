@@ -32,7 +32,7 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param string $env
      */
-    public static function kernelBootstrap($env = AppKernel::ENV_TEST)
+    public static function kernelBootstrap($env = AppKernel::ENV_DEV)
     {
         static::$application = static::getApplication($env);
 
@@ -40,6 +40,7 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $env
      * @return \Application
      */
     protected static function getApplication($env)
@@ -61,6 +62,8 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
         if (!class_exists($class)) {
             include $file->getPath() . DIRECTORY_SEPARATOR . $class . '.php';
         }
+
+        unset($finder);
 
         return new \Application($env);
     }
