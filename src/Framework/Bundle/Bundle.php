@@ -92,7 +92,7 @@ class Bundle extends ContainerAware implements BundleInterface
      */
     public function registerRouting(Router $router, $env)
     {
-        @include $this->getRootPath() . '/Resources/config/routes.php';
+        include $this->getRootPath() . '/Resources/config/routes.php';
     }
 
     /**
@@ -104,7 +104,7 @@ class Bundle extends ContainerAware implements BundleInterface
      */
     public function registerConfiguration(Config $config, $env)
     {
-        @include $this->getRootPath() . '/Resources/config/config.php';
+        $config->load($this->getRootPath() . '/Resources/config/config.php');
     }
 
     /**

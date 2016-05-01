@@ -44,7 +44,7 @@ class AssetInstallCommand extends Command
     public function execute(Input $input, Output $output)
     {
         $kernel = $this->getApplication()->getKernel();
-        $kernel->boot();
+
         $bundles = $kernel->getBundles();
 
         $web = 'public/bundles';
