@@ -15,3 +15,7 @@
 $loader = include __DIR__ . '/vendor/autoload.php';
 
 $loader->addPsr4("", [__DIR__ . '/app/src/Bundles']);
+
+if (!class_exists('\\Application')) {
+    include __DIR__ . '/app/application.php';
+}

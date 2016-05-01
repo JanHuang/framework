@@ -3,6 +3,5 @@
 *orig
 composer.lock
 /app
-/bin
 /src/Demo
 /public
