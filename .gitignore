@@ -5,3 +5,4 @@ composer.lock
 /app
 /src/Demo
 /public
+/bin

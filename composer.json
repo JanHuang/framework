@@ -41,6 +41,6 @@
         }
     },
     "bin": [
-        "bin/console"
+        "src/Framework/bin/console"
     ]
 }
