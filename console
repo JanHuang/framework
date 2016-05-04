@@ -15,7 +15,13 @@
 set_time_limit(0);
 date_default_timezone_set('PRC');
 
-foreach ([__DIR__ . '/../autoload.php', __DIR__ . '/../vendor/autoload.php'] as $value) {
+foreach ([
+             './autoload.php',
+             './vendor/autoload.php',
+             './../vendor/autoload.php',
+             __DIR__ . '/../autoload.php',
+             __DIR__ . '/../vendor/autoload.php'
+         ] as $value) {
     if (file_exists($value)) {
         include $value;
         break;
