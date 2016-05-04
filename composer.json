@@ -16,6 +16,14 @@
             "FastD\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "": "app/src/Bundles"
+        },
+        "files": [
+            "app/application.php"
+        ]
+    },
     "require": {
         "php": ">=7.0",
         "fastd/http": "2.0.x-dev",

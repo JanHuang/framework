@@ -16,24 +16,33 @@ set_time_limit(0);
 date_default_timezone_set('PRC');
 
 foreach ([
-             __DIR__ . '/autoload.php',
-             __DIR__ . '/../autoload.php',
              __DIR__ . '/../../autoload.php',
              __DIR__ . '/../vendor/autoload.php',
              __DIR__ . '/vendor/autoload.php'
          ] as $value) {
     if (file_exists($value)) {
-        include $value;
+        define('FASTD_COMPOSER_INSTALL', $value);
         break;
     }
 }
 
+if (!defined('FASTD_COMPOSER_INSTALL')) {
+    fwrite(STDERR,
+        'You need to set up the project dependencies using the following commands:' . PHP_EOL .
+        'wget http://getcomposer.org/composer.phar' . PHP_EOL .
+        'php composer.phar install' . PHP_EOL
+    );
+}
+
+include FASTD_COMPOSER_INSTALL;
+
 use FastD\Console\ArgvInput;
 use FastD\Framework\Kernel\AppConsole;
+use FastD\Framework\Kernel\AppKernel;
 
 $argvInput = new ArgvInput();
 
-$env = $argvInput->has(['--env', '-e']) ? $argvInput->get(['--env', '-e']) : 'dev';
+$env = $argvInput->has(['--env', '-e']) ? $argvInput->get(['--env', '-e']) : AppKernel::ENV_DEV;
 
 $console = new AppConsole(new Application($env));
 
