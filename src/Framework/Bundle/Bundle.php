@@ -4,7 +4,7 @@
  * User: janhuang
  * Date: 15/1/26
  * Time: 下午11:16
- * Github: https://www.github.com/janhuang 
+ * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * sf: http://segmentfault.com/u/janhuang
  * Blog: http://segmentfault.com/blog/janhuang
@@ -39,6 +39,11 @@ class Bundle extends ContainerAware implements BundleInterface
     protected $name;
 
     /**
+     * @var
+     */
+    protected $shortName;
+
+    /**
      * Constructs a ReflectionClass
      *
      * @link  http://php.net/manual/en/reflectionclass.construct.php
@@ -53,6 +58,8 @@ class Bundle extends ContainerAware implements BundleInterface
         $this->namespace = $reflection->getNamespaceName();
 
         $this->name = $reflection->getName();
+
+        $this->shortName = $reflection->getShortName();
 
         unset($reflection);
     }
@@ -84,6 +91,14 @@ class Bundle extends ContainerAware implements BundleInterface
     }
 
     /**
+     * @return mixed
+     */
+    public function getShortName()
+    {
+        return $this->shortName;
+    }
+
+    /**
      * Register bundle routing list.
      *
      * @param Router $router
@@ -107,11 +122,7 @@ class Bundle extends ContainerAware implements BundleInterface
         $config->load($this->getRootPath() . '/Resources/config/config.php');
     }
 
-    /**
-     * @return array
-     */
     public function registerExtensions()
     {
-        return [];
     }
 }
