@@ -34,7 +34,7 @@ class OrmUpdateCommand extends Command
      */
     public function getName()
     {
-        return 'db:update';
+        return 'orm:update';
     }
 
     /**

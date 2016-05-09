@@ -33,7 +33,7 @@ class OrmRevertCommand extends Command
      */
     public function getName()
     {
-        return 'db:revert';
+        return 'orm:revert';
     }
 
     /**
