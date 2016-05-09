@@ -78,7 +78,7 @@ class BundleGeneratorCommand extends Command
 
         foreach (array(
                      'Controllers',
-                     'Repository',
+                     'Orm',
                      'Extensions',
                      'Exceptions',
                      'Commands',
