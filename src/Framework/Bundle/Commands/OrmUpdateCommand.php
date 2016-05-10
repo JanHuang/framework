@@ -27,7 +27,7 @@ use FastD\Framework\Bundle\Controllers\Controller;
  *
  * @package FastD\Framework\Bundle\Commands
  */
-class OrmUpdateCommand extends Command
+class OrmUpdateCommand extends CommandAware
 {
     /**
      * @return string

@@ -14,6 +14,7 @@
 
 namespace FastD\Framework\Dispatcher;
 
+use FastD\Container\Aware;
 use FastD\Container\Container;
 
 /**
@@ -23,11 +24,8 @@ use FastD\Container\Container;
  */
 abstract class Dispatch implements DispatchInterface
 {
-    /**
-     * @var Container
-     */
-    protected $container;
-
+    use Aware;
+    
     /**
      * Dispatch constructor.
      *
@@ -38,25 +36,6 @@ abstract class Dispatch implements DispatchInterface
         if (null !== $container) {
             $this->setContainer($container);
         }
-    }
-
-    /**
-     * @param Container $container
-     * @return DispatchInterface
-     */
-    public function setContainer(Container $container)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * @return Container
-     */
-    public function getContainer()
-    {
-        return $this->container;
     }
 
     /**

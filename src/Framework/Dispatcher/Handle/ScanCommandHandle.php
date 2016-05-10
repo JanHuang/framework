@@ -52,6 +52,7 @@ class ScanCommandHandle extends Dispatch
                 $command = new $class();
                 if ($command instanceof Command) {
                     $command->setApplication($application);
+                    $command->setContainer($this->getContainer());
                     $application->setCommand($command);
                 }
             }

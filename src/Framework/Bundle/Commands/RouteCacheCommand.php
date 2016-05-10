@@ -24,7 +24,7 @@ use FastD\Console\IO\OutputInterface;
  *
  * @package FastD\Framework\Bundle\Commands
  */
-class RouteCacheCommand extends Command
+class RouteCacheCommand extends CommandAware
 {
     /**
      *

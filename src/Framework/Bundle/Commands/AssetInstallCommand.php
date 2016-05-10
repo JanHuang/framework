@@ -14,16 +14,16 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
+use FastD\Container\ContainerAware;
 
 /**
  * Class AssetInstall
  *
  * @package FastD\Framework\Commands
  */
-class AssetInstallCommand extends Command
+class AssetInstallCommand extends ContainerAware
 {
     /**
      * @return string

@@ -13,7 +13,6 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 
@@ -22,7 +21,7 @@ use FastD\Console\IO\Output;
  *
  * @package FastD\Framework\Commands
  */
-class BundleGeneratorCommand extends Command
+class BundleGeneratorCommand extends CommandAware
 {
     /**
      * @return string

@@ -14,11 +14,10 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 
-class ConfigCacheCommand extends Command
+class ConfigCacheCommand extends CommandAware
 {
     const CACHE_NAME = 'config.cache';
 
