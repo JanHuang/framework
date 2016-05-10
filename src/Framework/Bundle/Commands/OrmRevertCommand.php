@@ -14,7 +14,6 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command\Command;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
 use FastD\Database\Builder\AutoBuilding;
@@ -26,7 +25,7 @@ use FastD\Framework\Bundle\Controllers\Controller;
  *
  * @package FastD\Framework\Bundle\Commands
  */
-class OrmRevertCommand extends Command
+class OrmRevertCommand extends CommandAware
 {
     /**
      * @return string
@@ -61,7 +60,7 @@ class OrmRevertCommand extends Command
         }
 
         $controller = new Controller();
-        $controller->setContainer($this->getApplication()->getContainer());
+        $controller->setContainer($this->getContainer());
 
         $driver = $controller->getDriver($connection);
 

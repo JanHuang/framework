@@ -15,7 +15,7 @@
 namespace FastD\Framework\Dispatcher;
 
 use FastD\Container\Container;
-use FastD\Framework\Container\ContainerAware;
+use FastD\Container\ContainerAware;
 use FastD\Framework\Dispatcher\Handle\AnnotationHandle;
 use FastD\Framework\Dispatcher\Handle\AssetHandler;
 use FastD\Framework\Dispatcher\Handle\ErrorHandler;

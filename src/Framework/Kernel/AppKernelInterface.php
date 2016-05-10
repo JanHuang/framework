@@ -17,14 +17,13 @@ namespace FastD\Framework\Kernel;
 use FastD\Config\Config;
 use FastD\Container\Container;
 use FastD\Framework\Bundle\Bundle;
-use FastD\Framework\Container\ContainerAwareInterface;
 
 /**
  * Interface AppKernelInterface
  *
  * @package FastD\Framework\Kernel
  */
-interface AppKernelInterface extends ContainerAwareInterface
+interface AppKernelInterface
 {
     /**
      * @return Bundle[]

@@ -14,14 +14,12 @@
 
 namespace FastD\Framework\Dispatcher;
 
-use FastD\Framework\Container\ContainerAwareInterface;
-
 /**
  * Interface DispatchInterface
  *
  * @package FastD\Framework\Dispatcher
  */
-interface DispatchInterface extends ContainerAwareInterface
+interface DispatchInterface
 {
     /**
      * @return string

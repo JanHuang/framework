@@ -13,8 +13,8 @@
 namespace FastD\Framework\Bundle;
 
 use FastD\Config\Config;
-use FastD\Framework\Container\ContainerAware;
 use FastD\Routing\Router;
+use FastD\Container\ContainerAware;
 
 /**
  * Class Bundle

@@ -13,10 +13,11 @@
 
 namespace FastD\Framework\Bundle\Controllers;
 
+use FastD\Container\ContainerAware;
 use FastD\Debug\Exceptions\Http\HttpException;
-use FastD\Framework\Container\ContainerAware;
 use FastD\Database\DriverInterface;
 use FastD\Framework\Kernel\AppKernel;
+use FastD\Storage\StorageInterface;
 use FastD\Storage\StorageManager;
 use FastD\Http\RedirectResponse;
 use FastD\Http\Response;
@@ -63,16 +64,16 @@ class Controller extends ContainerAware implements ControllerInterface
     }
 
     /**
-     * @param SessionStorageInterface|null $sessionStorageInterface
+     * @param StorageInterface|null $storageInterface
      * @return Session
      */
-    public function getSession(SessionStorageInterface $sessionStorageInterface = null)
+    public function getSession(StorageInterface $storageInterface)
     {
         if ($this->session instanceof Session) {
             return $this->session;
         }
 
-        $this->session = $this->container->singleton('kernel.request')->getSessionHandle($sessionStorageInterface);
+        $this->session = $this->container->singleton('kernel.request')->getSessionHandle();
 
         return $this->session;
     }
