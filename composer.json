@@ -29,7 +29,7 @@
         "fastd/http": "2.0.x-dev",
         "fastd/debug": "2.0.x-dev",
         "fastd/storage": "2.0.x-dev",
-        "fastd/database": "2.0.x-dev",
+        "fastd/database": "~2.0@beta",
         "fastd/config": "~2.0@beta",
         "fastd/console": "~2.0@beta",
         "fastd/routing": "~2.0@beta",

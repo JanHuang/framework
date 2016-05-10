@@ -87,10 +87,10 @@ class OrmRevertCommand extends CommandAware
      */
     protected function building(AutoBuilding $builder, Bundle $bundle, Output $output)
     {
-        $path = $bundle->getRootPath() . '/Resources/orm';
+        $path = $bundle->getRootPath() . '/Orm';
 
         $builder->saveYmlTo($path, true);
-        $builder->saveTo($bundle->getRootPath() . '/Orm', $bundle->getNamespace() . '\\Orm', true);
+        $builder->saveTo($path, $bundle->getNamespace() . '\\Orm', true);
 
         $output->write('Generate into bundle: ');
         $output->writeln($bundle->getName() . '\\Orm', Output::STYLE_SUCCESS);

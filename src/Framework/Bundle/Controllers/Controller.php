@@ -25,11 +25,10 @@ use FastD\Http\JsonResponse;
 use FastD\Http\Session\Session;
 use FastD\Http\Session\Storage\SessionStorageInterface;
 
-
 /**
- * Class Event
+ * Class Controller
  *
- * @package FastD\Framework\Bundle\Events\Http
+ * @package FastD\Framework\Bundle\Controllers
  */
 class Controller extends ContainerAware implements ControllerInterface
 {

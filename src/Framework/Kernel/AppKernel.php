@@ -18,10 +18,11 @@ use FastD\Container\Container;
 use FastD\Database\Fdb;
 use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Dispatcher\Dispatcher;
+use FastD\Framework\Dispatcher\Handle\LogHandler;
 use FastD\Http\Request;
 use FastD\Http\Response;
 use FastD\Routing\Router;
-use Monolog\Logger;
+use FastD\Debug\Debug;
 
 /**
  * Class AppKernel
@@ -80,6 +81,8 @@ abstract class AppKernel extends Terminal
         $this->environment = $env;
 
         $this->debug = in_array($env, [AppKernel::ENV_DEV, AppKernel::ENV_TEST]) ? true : false;
+
+        Debug::enable($this->isDebug());
     }
 
     /**
@@ -141,10 +144,6 @@ abstract class AppKernel extends Terminal
             $this->initializeContainer();
             $this->initializeBundles();
 
-            foreach ($this->bundles as $name => $bundle) {
-                $this->bundles[$name]->setContainer($this->container);
-            }
-
             $config = $this->initializeConfigure();
             $routing = $this->initializeRouting();
 
@@ -167,6 +166,10 @@ abstract class AppKernel extends Terminal
     public function initializeBundles()
     {
         $this->bundles = $this->registerBundles();
+
+        foreach ($this->bundles as $name => $bundle) {
+            $this->bundles[$name]->setContainer($this->getContainer());
+        }
     }
 
     /**
@@ -187,7 +190,7 @@ abstract class AppKernel extends Terminal
         $this->container->set('kernel.dispatch', new Dispatcher($this->container));
         $this->container->set('kernel', $this);
 
-        $this->container->singleton('kernel.dispatch')->dispatch('handle.error', [$this->isDebug()]);
+        $this->container->singleton('kernel.dispatch')->dispatch('handle.error');
     }
 
     /**
@@ -201,9 +204,9 @@ abstract class AppKernel extends Terminal
 
         $config->setVariable([
             'root.path' => $this->getRootPath(),
-            'env' => $this->getEnvironment(),
-            'debug' => $this->isDebug(),
-            'version' => AppKernel::VERSION,
+            'env'       => $this->getEnvironment(),
+            'debug'     => $this->isDebug(),
+            'version'   => AppKernel::VERSION,
         ]);
 
         $this->registerConfigurationVariable($config);

@@ -16,6 +16,8 @@ namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Dispatcher\Dispatch;
 use FastD\Debug\Debug;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 /**
  * Class ErrorHandler
@@ -24,6 +26,11 @@ use FastD\Debug\Debug;
  */
 class ErrorHandler extends Dispatch
 {
+    const LOG_ACCESS = 1;
+    const LOG_ERROR = 2;
+
+    const LOG_PATH = '/storage/logs';
+
     /**
      * @return string
      */
@@ -33,23 +40,25 @@ class ErrorHandler extends Dispatch
     }
 
     /**
-     * @return mixed
-     */
-    protected function getLogger()
-    {
-        return $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.log', [LogHandler::LOG_ERROR]);
-    }
-
-    /**
      * @param array|null $parameters
      * @return mixed
      */
     public function dispatch(array $parameters = null)
     {
-        list($isDebug) = $parameters;
+        Debug::enable(false, $this->getLogger(self::LOG_ERROR));
+    }
 
-        Debug::enable($isDebug, $this->getLogger());
+    /**
+     * @param $type
+     * @return Logger
+     */
+    public function getLogger($type)
+    {
+        $log = $this->getContainer()->singleton('kernel')->getRootPath() . self::LOG_PATH . DIRECTORY_SEPARATOR . date('Ymd') . DIRECTORY_SEPARATOR . 'error.log';
 
-        unset($isDebug);
+        $logger = new Logger('error');
+        $stream = new StreamHandler($log);
+
+        return $logger->pushHandler($stream);
     }
 }

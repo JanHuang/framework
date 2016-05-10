@@ -45,5 +45,6 @@ class VersionCommand extends CommandAware
     {
         $output->writeln(sprintf('Running (%s) with PHP %s on %s / %s', date('Y-m-d H:i:s'), PHP_VERSION, PHP_OS, php_uname('r')));
         $output->writeln(sprintf('FastD Kernel version %s', $output->format(AppKernel::VERSION, Output::STYLE_INFO)));
+        $output->writeln(sprintf('Environment %s', $output->format($this->getContainer()->get('kernel')->getEnvironment(), Output::STYLE_INFO)));
     }
 }
