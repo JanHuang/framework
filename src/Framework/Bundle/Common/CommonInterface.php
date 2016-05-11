@@ -46,8 +46,7 @@ interface CommonInterface
 
     /**
      * @param            $connection
-     * @param array|null $options
      * @return StorageInterface
      */
-    public function getStorage($connection, array $options = []);
+    public function getStorage($connection);
 }

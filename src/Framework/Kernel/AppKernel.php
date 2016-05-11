@@ -23,6 +23,7 @@ use FastD\Http\Request;
 use FastD\Http\Response;
 use FastD\Routing\Router;
 use FastD\Debug\Debug;
+use FastD\Storage\Storage;
 
 /**
  * Class AppKernel
@@ -184,6 +185,7 @@ abstract class AppKernel extends Terminal
             'kernel.database'   => Fdb::class,
             'kernel.config'     => Config::class,
             'kernel.routing'    => '\\Routes::getRouter',
+            'kernel.storage'    => Storage::class
         ]);
 
         $this->registerService($this->container);

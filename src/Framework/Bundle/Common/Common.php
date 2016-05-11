@@ -16,8 +16,15 @@ namespace FastD\Framework\Bundle\Common;
 
 use FastD\Container\Aware;
 use FastD\Database\DriverInterface;
-use FastD\Storage\StorageManager;
+use FastD\Storage\CacheInterface;
+use FastD\Storage\StorageInterface;
+use FastD\Storage\Storage;
 
+/**
+ * Class Common
+ *
+ * @package FastD\Framework\Bundle\Common
+ */
 trait Common
 {
     use Aware;
@@ -28,7 +35,7 @@ trait Common
     protected $driver;
 
     /**
-     * @var StorageManager
+     * @var Storage
      */
     protected $storage;
 
@@ -60,10 +67,9 @@ trait Common
 
     /**
      * @param       $connection
-     * @param array $options
-     * @return \FastD\Storage\StorageInterface
+     * @return StorageInterface|CacheInterface
      */
-    public function getStorage($connection, array $options = [])
+    public function getStorage($connection)
     {
         if (null === $this->storage) {
             $this->storage = $this->get('kernel.storage', [$this->getParameters('storage')]);

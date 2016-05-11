@@ -15,11 +15,10 @@
 namespace FastD\Framework\Bundle\Commands;
 
 use FastD\Console\Command\Command;
-use FastD\Container\Aware;
 use FastD\Framework\Bundle\Common\Common;
 use FastD\Framework\Bundle\Common\CommonInterface;
 
 abstract class CommandAware extends Command implements CommonInterface
 {
-    use Aware, Common;
+    use Common;
 }
