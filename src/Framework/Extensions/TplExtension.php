@@ -14,7 +14,7 @@
 
 namespace FastD\Framework\Extensions;
 
-use FastD\Framework\Container\ContainerAware;
+use FastD\Container\Aware;
 use Twig_Environment;
 use Twig_TokenParserInterface;
 use Twig_NodeVisitorInterface;
@@ -25,8 +25,10 @@ use Twig_SimpleTest;
  *
  * @package FastD\Framework\Extensions
  */
-abstract class TplExtension extends ContainerAware implements \Twig_ExtensionInterface, \Twig_Extension_InitRuntimeInterface, \Twig_Extension_GlobalsInterface
+abstract class TplExtension implements \Twig_ExtensionInterface, \Twig_Extension_InitRuntimeInterface, \Twig_Extension_GlobalsInterface
 {
+    use Aware;
+
     /**
      * Initializes the runtime environment.
      *
