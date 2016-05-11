@@ -43,7 +43,7 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
      * @param string $env
      * @return \Application
      */
-    protected static function getApplication($env)
+    protected static function getApplication($env = AppKernel::ENV_DEV)
     {
         $dir = static::getPhpUnitXmlDir() . '/app';
 
@@ -117,5 +117,25 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
         }
 
         return $dir;
+    }
+
+    /**
+     * Shuts the kernel down if it was used in the test.
+     */
+    protected static function ensureKernelShutdown()
+    {
+        if (null !== static::$application) {
+            $container = static::$application->getContainer();
+            static::$application->shutdown(static::$application);
+            $container->reset();
+            static::$application->setContainer($container);
+        }
+    }
+    /**
+     * Clean up Kernel usage in this test.
+     */
+    protected function tearDown()
+    {
+        static::ensureKernelShutdown();
     }
 }

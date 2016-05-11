@@ -26,12 +26,19 @@ class BootstrapTest extends WebTestCase
     /**
      * @expectedException \Welcome\Exceptions\JsonException
      */
-    public function testKernelBoot()
+    public function testRootRoute()
     {
         $client = static::createClient();
 
-        $response = $client->testResponse('GET', '/');
+        $client->testResponse('GET', '/');
+    }
 
-        $this->assertEquals('hello fastd', $response->getContent());
+    public function testNameRoute()
+    {
+        $client = static::createClient();
+
+        $response = $client->testResponse('GET', '/name');
+
+        $this->assertEquals('aaa', $response->getContent());
     }
 }

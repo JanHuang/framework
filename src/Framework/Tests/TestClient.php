@@ -57,19 +57,24 @@ class TestClient
      */
     public function testResponse($method, $path, array $parameters = [])
     {
-        $this->request->server->set('REQUEST_METHOD', $method);
-        $this->request->server->set('PATH_INFO', $path);
+        $this->request->server->set('REQUEST_METHOD', strtoupper($method));
+        $this->setPathInfo($path);
 
-        return $this->container->singleton('kernel.dispatch')->dispatch('handle.http', [$this->request]);
+        return $this->container->singleton('kernel.dispatch')->dispatch('handle.http', array_merge([$this->request], $parameters));
     }
 
-    public function testService($name, array $parameters = null)
+    protected function setPathInfo($pathinfo)
     {
+        $server = $this->request->server;
 
-    }
+        $reflection = new \ReflectionClass($server);
 
-    public function testRepository($name, array $parameters = null)
-    {
+        $prototype = $reflection->getProperty('pathInfo');
+        $prototype->setAccessible(true);
+        $prototype->setValue($server, $pathinfo);
 
+        unset($reflection);
+
+        $this->request->server = $server;
     }
 }
