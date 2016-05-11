@@ -14,47 +14,17 @@
 
 namespace FastD\Framework\Bundle\Controllers;
 
-
-use FastD\Database\DriverInterface;
-use FastD\Storage\StorageInterface;
 use FastD\Http\RedirectResponse;
 use FastD\Http\Response;
+use FastD\Framework\Bundle\Common\CommonInterface;
 
 /**
  * Interface EventInterface
  *
  * @package FastD\Framework\Bundle\Events
  */
-interface ControllerInterface
+interface ControllerInterface extends CommonInterface
 {
-    /**
-     * @param            $name
-     * @param array      $parameters
-     * @param bool       $flag
-     * @return mixed
-     */
-    public function get($name, array $parameters = [], $flag = false);
-
-    /**
-     * @param $name
-     * @return mixed
-     */
-    public function getParameters($name);
-
-    /**
-     * @param            $connection
-     * @param array|null $options
-     * @return DriverInterface
-     */
-    public function getDriver($connection, array $options = []);
-
-    /**
-     * @param            $connection
-     * @param array|null $options
-     * @return StorageInterface
-     */
-    public function getStorage($connection, array $options = []);
-
     /**
      * @param       $name
      * @param array $parameters

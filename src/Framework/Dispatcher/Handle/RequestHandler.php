@@ -47,6 +47,9 @@ class RequestHandler extends Dispatch
 
         list($controller, $action) = explode('@', $callback);
         $controller = str_replace(':', '\\', $controller);
+        $bundle = trim(substr($controller, 0, strpos($controller, 'Controller')), '\\');
+        $this->getContainer()->singleton('kernel')->setActiveBundle($bundle); unset($bundle);
+
         $service = $this->container->set('request_callback', $controller)->get('request_callback');
         if ($service->singleton() instanceof ControllerInterface) {
             $service->singleton()->setContainer($this->container);

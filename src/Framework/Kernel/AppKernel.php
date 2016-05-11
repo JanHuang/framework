@@ -14,11 +14,11 @@
 namespace FastD\Framework\Kernel;
 
 use FastD\Config\Config;
+use FastD\Container\Aware;
 use FastD\Container\Container;
 use FastD\Database\Fdb;
 use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Dispatcher\Dispatcher;
-use FastD\Framework\Dispatcher\Handle\LogHandler;
 use FastD\Http\Request;
 use FastD\Http\Response;
 use FastD\Routing\Router;
@@ -31,6 +31,8 @@ use FastD\Debug\Debug;
  */
 abstract class AppKernel extends Terminal
 {
+    use Aware;
+
     /**
      * The FastD application version.
      *
@@ -57,11 +59,6 @@ abstract class AppKernel extends Terminal
     protected $debug;
 
     /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
      * @var Bundle[]
      */
     protected $bundles = array();
@@ -70,6 +67,11 @@ abstract class AppKernel extends Terminal
      * @var bool
      */
     protected $booted = false;
+
+    /**
+     * @var null|string
+     */
+    protected $active_bundle = null;
 
     /**
      * Constructor. Initialize framework environment.
@@ -114,20 +116,20 @@ abstract class AppKernel extends Terminal
     }
 
     /**
-     * @return Container
+     * @return null|string
      */
-    public function getContainer()
+    public function getActiveBundle()
     {
-        return $this->container;
+        return $this->bundles[$this->active_bundle];
     }
 
     /**
-     * @param Container $container
+     * @param null|string $active_bundle
      * @return $this
      */
-    public function setContainer(Container $container)
+    public function setActiveBundle($active_bundle)
     {
-        $this->container = $container;
+        $this->active_bundle = $active_bundle;
 
         return $this;
     }
@@ -157,20 +159,18 @@ abstract class AppKernel extends Terminal
      */
     public function initializeBundles()
     {
-        $this->bundles = $this->registerBundles();
-
         $config = $this->getContainer()->singleton('kernel.config');
         $routing = $this->getContainer()->singleton('kernel.routing');
 
-        foreach ($this->bundles as $name => $bundle) {
-            $this->bundles[$name]->setContainer($this->getContainer());
+        foreach ($this->registerBundles() as $bundle) {
+            $this->bundles[$bundle->getNamespace()] = $bundle->setContainer($this->getContainer());
             if ($this->isDebug()) {
                 $bundle->registerRouting($routing, $this->getEnvironment());
                 $bundle->registerConfiguration($config, $this->getEnvironment());
             }
         }
 
-        unset($config, $routing);
+        unset($bundles, $config, $routing);
     }
 
     /**

@@ -13,54 +13,31 @@
 
 namespace FastD\Framework\Bundle\Controllers;
 
-use FastD\Container\ContainerAware;
 use FastD\Debug\Exceptions\Http\HttpException;
-use FastD\Database\DriverInterface;
+use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Kernel\AppKernel;
 use FastD\Storage\StorageInterface;
-use FastD\Storage\StorageManager;
 use FastD\Http\RedirectResponse;
 use FastD\Http\Response;
 use FastD\Http\JsonResponse;
 use FastD\Http\Session\Session;
-use FastD\Http\Session\Storage\SessionStorageInterface;
+use FastD\Framework\Bundle\Common\Common;
 
 /**
  * Class Controller
  *
  * @package FastD\Framework\Bundle\Controllers
  */
-class Controller extends ContainerAware implements ControllerInterface
+class Controller implements ControllerInterface
 {
+    use Common;
+
     const SERVER_VERSION = AppKernel::VERSION;
-
-    /**
-     * @var DriverInterface
-     */
-    protected $driver;
-
-    /**
-     * @var StorageManager
-     */
-    protected $storage;
 
     /**
      * @var Session
      */
     protected $session;
-
-    /**
-     * Get custom defined helper obj.
-     *
-     * @param string $name
-     * @param array $parameters
-     * @param bool  $flag
-     * @return mixed
-     */
-    public function get($name, array $parameters = [], $flag = false)
-    {
-        return $flag ? $this->container->instance($name, $parameters) : $this->container->singleton($name, $parameters);
-    }
 
     /**
      * @param StorageInterface|null $storageInterface
@@ -78,42 +55,13 @@ class Controller extends ContainerAware implements ControllerInterface
     }
 
     /**
-     * @param null  $connection
-     * @param array $options
-     * @return DriverInterface
-     */
-    public function getDriver($connection = null, array $options = [])
-    {
-        if (null === $this->driver) {
-            $this->driver = $this->get('kernel.database', [$this->getParameters('database')]);
-        }
-
-        return $this->driver->getDriver($connection);
-    }
-
-    /**
-     * @param       $connection
-     * @param array $options
-     * @return \FastD\Storage\StorageInterface
-     */
-    public function getStorage($connection, array $options = [])
-    {
-        if (null === $this->storage) {
-            $this->storage = $this->get('kernel.storage', [$this->getParameters('storage')]);
-        }
-
-        return $this->storage->getConnection($connection);
-    }
-
-    /**
-     * Get custom config parameters.
+     * Get Active Bundle.
      *
-     * @param string $name
-     * @return mixed
+     * @return Bundle
      */
-    public function getParameters($name = null)
+    public function getActiveBundle()
     {
-        return $this->get('kernel.config')->get($name);
+        return $this->getContainer()->singleton('kernel')->getActiveBundle();
     }
 
     /**
