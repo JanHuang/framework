@@ -143,16 +143,8 @@ abstract class AppKernel extends Terminal
 
             $this->initializeContainer();
             $this->initializeBundles();
-
-            $config = $this->initializeConfigure();
-            $routing = $this->initializeRouting();
-
-            if ($this->isDebug()) {
-                foreach ($this->bundles as $bundle) {
-                    $bundle->registerConfiguration($config, $this->environment);
-                    $bundle->registerRouting($routing, $this->environment);
-                }
-            }
+            $this->initializeRouting();
+            $this->initializeConfigure();
 
             $this->booted = true;
         }
@@ -167,9 +159,18 @@ abstract class AppKernel extends Terminal
     {
         $this->bundles = $this->registerBundles();
 
+        $config = $this->getContainer()->singleton('kernel.config');
+        $routing = $this->getContainer()->singleton('kernel.routing');
+
         foreach ($this->bundles as $name => $bundle) {
             $this->bundles[$name]->setContainer($this->getContainer());
+            if ($this->isDebug()) {
+                $bundle->registerRouting($routing, $this->getEnvironment());
+                $bundle->registerConfiguration($config, $this->getEnvironment());
+            }
         }
+
+        unset($config, $routing);
     }
 
     /**
@@ -182,6 +183,7 @@ abstract class AppKernel extends Terminal
         $this->container = new Container([
             'kernel.database'   => Fdb::class,
             'kernel.config'     => Config::class,
+            'kernel.routing'    => '\\Routes::getRouter',
         ]);
 
         $this->registerService($this->container);
@@ -210,7 +212,11 @@ abstract class AppKernel extends Terminal
         ]);
 
         $this->registerConfigurationVariable($config);
-        $this->registerConfiguration($config);
+        if ($this->isDebug()) {
+            $this->registerConfiguration($config);
+        } else {
+            $config->load($this->getRootPath() . '/config.cache');
+        }
 
         return $config;
     }
@@ -224,17 +230,11 @@ abstract class AppKernel extends Terminal
      */
     public function initializeRouting()
     {
-        $router = \Routes::getRouter();
-
-        $this->container->set('kernel.routing', $router);
-
         if ($this->isDebug()) {
             $this->container->singleton('kernel.dispatch')->dispatch('handle.annotation.route');
         } else {
             include $this->getRootPath() . '/routes.cache';
         }
-
-        return $router;
     }
 
     /**

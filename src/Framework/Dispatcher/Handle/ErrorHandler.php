@@ -45,7 +45,7 @@ class ErrorHandler extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        Debug::enable(false, $this->getLogger(self::LOG_ERROR));
+        Debug::enable(false)->setLogger($this->getLogger(self::LOG_ERROR));
     }
 
     /**
