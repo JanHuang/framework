@@ -15,6 +15,7 @@
 namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Console\Command\Command;
+use FastD\Framework\Bundle\Commands\CommandAware;
 use FastD\Framework\Dispatcher\Dispatch;
 use Symfony\Component\Finder\Finder;
 use FastD\Framework\Bundle\Bundle;
@@ -50,7 +51,7 @@ class ScanCommandHandle extends Dispatch
             foreach ($finder->in($dir)->name('*Command.php')->files() as $file) {
                 $class = $bundle->getNamespace() . '\\Commands\\' . pathinfo($file, PATHINFO_FILENAME);
                 $command = new $class();
-                if ($command instanceof Command) {
+                if ($command instanceof CommandAware) {
                     $command->setApplication($application);
                     $command->setContainer($this->getContainer());
                     $application->setCommand($command);
