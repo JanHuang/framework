@@ -16,13 +16,13 @@ namespace FastD\Framework\Bundle\Controllers;
 use FastD\Debug\Exceptions\Http\HttpException;
 use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Kernel\AppKernel;
-use FastD\Http\Session\SessionHandler;
 use FastD\Http\Session\Storage\SessionRedis;
 use FastD\Http\RedirectResponse;
 use FastD\Http\Response;
 use FastD\Http\JsonResponse;
 use FastD\Http\Session\Session;
 use FastD\Framework\Bundle\Common\Common;
+use FastD\Http\Session\Storage\SessionStorageInterface;
 
 /**
  * Class Controller
@@ -59,16 +59,16 @@ class Controller implements ControllerInterface
     }
 
     /**
-     * @param SessionHandler|null $sessionHandler
+     * @param SessionStorageInterface|null $sessionStorageInterface
      * @return Session
      */
-    public function getSession(SessionHandler $sessionHandler = null)
+    public function getSession(SessionStorageInterface $sessionStorageInterface = null)
     {
         if ($this->session instanceof Session) {
             return $this->session;
         }
 
-        $this->session = $this->container->singleton('kernel.request')->getSessionHandle($sessionHandler);
+        $this->session = $this->container->singleton('kernel.request')->getSessionHandle($sessionStorageInterface);
 
         return $this->session;
     }
