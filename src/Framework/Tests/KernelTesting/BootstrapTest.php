@@ -23,22 +23,5 @@ use FastD\Framework\Tests\WebTestCase;
  */
 class BootstrapTest extends WebTestCase
 {
-    /**
-     * @expectedException \Welcome\Exceptions\JsonException
-     */
-    public function testRootRoute()
-    {
-        $client = static::createClient();
 
-        $client->testResponse('GET', '/');
-    }
-
-    public function testNameRoute()
-    {
-        $client = static::createClient();
-
-        $response = $client->testResponse('GET', '/name');
-
-        $this->assertEquals('aaa', $response->getContent());
-    }
 }
