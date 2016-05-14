@@ -114,6 +114,11 @@ class Controller implements ControllerInterface
         return $this->get('kernel.dispatch')->dispatch('handle.forward', [$name, $parameters]);
     }
 
+    public function done($callback)
+    {
+
+    }
+
     /**
      * Render template to html or return content.
      *
