@@ -50,7 +50,11 @@ class ConfigCacheCommand extends CommandAware
 
         $config = new Config();
 
-        $config->load($kernel->getRootPath() . '/config/config_prod.php');
+        $prod = $kernel->getRootPath() . '/config/config_prod.php';
+
+        if (file_exists($prod)) {
+            $config->load($prod);
+        }
 
         foreach ($kernel->getBundles() as $bundle) {
             $bundle->registerConfiguration($config, AppKernel::ENV_PROD);
