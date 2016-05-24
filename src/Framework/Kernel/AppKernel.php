@@ -214,11 +214,13 @@ abstract class AppKernel extends Terminal
         ]);
 
         $this->registerConfigurationVariable($config);
-        if ($this->isDebug()) {
-            $this->registerConfiguration($config);
-        } else {
+
+        if (!$this->isDebug() && file_exists($this->getRootPath() . '/config.cache')) {
             $config->load($this->getRootPath() . '/config.cache');
+            return $config;
         }
+
+        $this->registerConfiguration($config);
 
         return $config;
     }
@@ -232,11 +234,11 @@ abstract class AppKernel extends Terminal
      */
     public function initializeRouting()
     {
-        if ($this->isDebug()) {
-            $this->container->singleton('kernel.dispatch')->dispatch('handle.annotation.route');
-        } else {
-            include $this->getRootPath() . '/routes.cache';
+        if (!$this->isDebug() && file_exists($this->getRootPath() . '/routes.cache')) {
+            return include $this->getRootPath() . '/routes.cache';
         }
+
+        return $this->container->singleton('kernel.dispatch')->dispatch('handle.annotation.route');
     }
 
     /**
