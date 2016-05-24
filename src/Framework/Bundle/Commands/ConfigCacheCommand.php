@@ -14,8 +14,10 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
+use FastD\Config\Config;
 use FastD\Console\IO\Input;
 use FastD\Console\IO\Output;
+use FastD\Framework\Kernel\AppKernel;
 
 class ConfigCacheCommand extends CommandAware
 {
@@ -46,9 +48,13 @@ class ConfigCacheCommand extends CommandAware
     {
         $kernel = $this->getApplication()->getKernel();
 
-        $container = $kernel->getContainer();
+        $config = new Config();
 
-        $config = $container->singleton('kernel.config');
+        $config->load($kernel->getRootPath() . '/config/config_prod.php');
+
+        foreach ($kernel->getBundles() as $bundle) {
+            $bundle->registerConfiguration($config, AppKernel::ENV_PROD);
+        }
 
         $caching = $kernel->getRootPath() . DIRECTORY_SEPARATOR . ConfigCacheCommand::CACHE_NAME;
 
