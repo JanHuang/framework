@@ -122,7 +122,11 @@ class Bundle extends ContainerAware implements BundleInterface
         $config->load($this->getRootPath() . '/Resources/config/config.php');
     }
 
+    /**
+     * @return array
+     */
     public function registerExtensions()
     {
+        return [];
     }
 }
