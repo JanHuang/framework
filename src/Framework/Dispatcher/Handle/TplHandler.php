@@ -51,20 +51,20 @@ class TplHandler extends Dispatch
 
         $appKernel = $this->getContainer()->singleton('kernel');
 
-        $preset = new Preset();
-
         $extensions = [];
         $paths = [
             $appKernel->getRootPath() . '/views',
             $appKernel->getRootPath() . '/../src'
         ];
 
+        $extensions['system'] = [new Preset()];
+
         $bundles = $appKernel->getBundles();
         foreach ($bundles as $bundle) {
             $paths[] = $bundle->getRootPath() . '/Resources/views';
-            $extensions[$bundle->getName()] = array_merge([$preset], $bundle->registerExtensions());
+            $extensions[$bundle->getName()] = $bundle->registerExtensions();
         }
-
+        
         $options = [];
         if (!($isDebug = $appKernel->isDebug())) {
             $options = [
