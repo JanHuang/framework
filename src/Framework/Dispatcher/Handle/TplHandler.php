@@ -61,7 +61,10 @@ class TplHandler extends Dispatch
 
         $bundles = $appKernel->getBundles();
         foreach ($bundles as $bundle) {
-            $paths[] = $bundle->getRootPath() . '/Resources/views';
+            if (file_exists(($path = $bundle->getRootPath() . '/Resources/views'))) {
+                $paths[] = $path;
+            }
+
             $extensions[$bundle->getName()] = $bundle->registerExtensions();
         }
         
