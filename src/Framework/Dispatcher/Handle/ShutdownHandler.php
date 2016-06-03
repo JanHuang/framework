@@ -59,7 +59,7 @@ class ShutdownHandler extends Dispatch
     {
         $log = $this->getContainer()->singleton('kernel')->getRootPath() . self::LOG_PATH . DIRECTORY_SEPARATOR . date('Ymd') . DIRECTORY_SEPARATOR . 'access.log';
 
-        $logger = new Logger('error');
+        $logger = new Logger('access');
         $stream = new StreamHandler($log);
 
         return $logger->pushHandler($stream);
