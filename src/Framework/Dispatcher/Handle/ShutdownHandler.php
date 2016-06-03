@@ -15,9 +15,13 @@
 namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Dispatcher\Dispatch;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class ShutdownHandler extends Dispatch
 {
+    const LOG_PATH = '/storage/logs';
+
     /**
      * @return string
      */
@@ -40,10 +44,24 @@ class ShutdownHandler extends Dispatch
             $parameters['request'] = $request->request->all();
             $parameters['ua'] = $request->getUserAgent();
 
-            $logger = $this->getContainer()->singleton('kernel.dispatch')->dispatch('handle.log', [LogHandler::LOG_ACCESS]);
+            $logger = $this->getLogger();
 
             $logger->addInfo($request->getPathInfo(), $parameters);
+
             unset($request);
         }
+    }
+
+    /**
+     * @return Logger
+     */
+    public function getLogger()
+    {
+        $log = $this->getContainer()->singleton('kernel')->getRootPath() . self::LOG_PATH . DIRECTORY_SEPARATOR . date('Ymd') . DIRECTORY_SEPARATOR . 'access.log';
+
+        $logger = new Logger('error');
+        $stream = new StreamHandler($log);
+
+        return $logger->pushHandler($stream);
     }
 }
