@@ -71,8 +71,8 @@ class TplHandler extends Dispatch
         $options = [];
         if (!($isDebug = $appKernel->isDebug())) {
             $options = [
-                'cache' => $appKernel->getRootPath() . '/storage/templates',
-                'debug' => $isDebug,
+//                'cache' => $appKernel->getRootPath() . '/storage/templates',
+//                'debug' => $isDebug,
             ];
         }
 
