@@ -16,6 +16,8 @@ namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Dispatcher\Dispatch;
 use FastD\Framework\Extensions\Preset;
+use Twig_Environment;
+use Twig_Loader_Filesystem;
 
 /**
  * Framework template generator.
@@ -67,16 +69,16 @@ class TplHandler extends Dispatch
 
             $extensions[$bundle->getName()] = $bundle->registerExtensions();
         }
-        
-        $options = [];
+
+        $options = ['debug' => true];
         if (!($isDebug = $appKernel->isDebug())) {
             $options = [
-//                'cache' => $appKernel->getRootPath() . '/storage/templates',
-//                'debug' => $isDebug,
+                'cache' => $appKernel->getRootPath() . '/storage/templates',
+                'debug' => $isDebug,
             ];
         }
 
-        $this->tpl = new \Twig_Environment(new \Twig_Loader_Filesystem($paths), $options);
+        $this->tpl = new Twig_Environment(new Twig_Loader_Filesystem($paths), $options);
 
         $this->getContainer()->set('kernel.template', $this->tpl);
 
