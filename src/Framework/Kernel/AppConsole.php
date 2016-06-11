@@ -14,14 +14,14 @@
 
 namespace FastD\Framework\Kernel;
 
-use FastD\Console\Environment\ApplicationAbstract;
+use FastD\Console\Console;
 
 /**
  * Class AppConsole
  *
  * @package FastD\Framework\Kernel
  */
-class AppConsole extends ApplicationAbstract
+class AppConsole extends Console
 {
     /**
      * @var AppKernel

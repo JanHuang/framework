@@ -114,11 +114,6 @@ class Controller implements ControllerInterface
         return $this->get('kernel.dispatch')->dispatch('handle.forward', [$name, $parameters]);
     }
 
-    public function done($callback)
-    {
-
-    }
-
     /**
      * Render template to html or return content.
      *
@@ -129,7 +124,10 @@ class Controller implements ControllerInterface
      */
     public function render($view, array $parameters = array(), $flag = false)
     {
+        $prev = set_error_handler(function () {});
+        restore_error_handler();
         $content = $this->get('kernel.dispatch')->dispatch('handle.tpl')->render($view, $parameters);
+        set_error_handler($prev[0]);
 
         return $flag ? $content : $this->responseHtml($content);
     }
@@ -192,13 +190,11 @@ class Controller implements ControllerInterface
     }
 
     /**
-     * @param int    $statusCode
-     * @param string $content
-     * @param array  $headers
-     * @throws \Exception
+     * @param $data
+     * @return mixed
      */
-    public function throwException($content = "Forbidden", $statusCode = Response::HTTP_FORBIDDEN, array $headers = [])
+    public function dump($data)
     {
-        throw new HttpException($content, $statusCode, $headers);
+        return $this->get('kernel.debug')->dump($data);
     }
 }

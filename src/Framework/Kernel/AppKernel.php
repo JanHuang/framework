@@ -13,17 +13,17 @@
 
 namespace FastD\Framework\Kernel;
 
-use FastD\Config\Config;
-use FastD\Container\Aware;
-use FastD\Container\Container;
-use FastD\Database\Fdb;
-use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Dispatcher\Dispatcher;
-use FastD\Http\Request;
-use FastD\Http\Response;
-use FastD\Routing\Router;
-use FastD\Debug\Debug;
+use FastD\Framework\Bundle\Bundle;
+use FastD\Container\Container;
+use FastD\Container\Aware;
 use FastD\Storage\Storage;
+use FastD\Routing\Router;
+use FastD\Http\Response;
+use FastD\Config\Config;
+use FastD\Database\Fdb;
+use FastD\Http\Request;
+use FastD\Debug\Debug;
 
 /**
  * Class AppKernel
@@ -84,8 +84,6 @@ abstract class AppKernel extends Terminal
         $this->environment = $env;
 
         $this->debug = in_array($env, [AppKernel::ENV_DEV, AppKernel::ENV_TEST]) ? true : false;
-
-        Debug::enable($this->isDebug());
     }
 
     /**
@@ -154,27 +152,6 @@ abstract class AppKernel extends Terminal
     }
 
     /**
-     * Initialize application register bundles.
-     *
-     * @return void
-     */
-    public function initializeBundles()
-    {
-        $config = $this->getContainer()->singleton('kernel.config');
-        $routing = $this->getContainer()->singleton('kernel.routing');
-
-        foreach ($this->registerBundles() as $bundle) {
-            $this->bundles[$bundle->getNamespace()] = $bundle->setContainer($this->getContainer());
-            if ($this->isDebug()) {
-                $bundle->registerRouting($routing, $this->getEnvironment());
-                $bundle->registerConfiguration($config, $this->getEnvironment());
-            }
-        }
-
-        unset($bundles, $config, $routing);
-    }
-
-    /**
      * Initialize application container.
      *
      * @return void
@@ -185,7 +162,8 @@ abstract class AppKernel extends Terminal
             'kernel.database'   => Fdb::class,
             'kernel.config'     => Config::class,
             'kernel.routing'    => '\\Routes::getRouter',
-            'kernel.storage'    => Storage::class
+            'kernel.storage'    => Storage::class,
+            'kernel.debug'      => Debug::enable($this->isDebug()),
         ]);
 
         $this->registerService($this->container);
@@ -198,9 +176,30 @@ abstract class AppKernel extends Terminal
     }
 
     /**
+     * Initialize application register bundles.
+     *
+     * @return void
+     */
+    public function initializeBundles()
+    {
+        $config = $this->getContainer()->singleton('kernel.config');
+        $routing = $this->getContainer()->singleton('kernel.routing');
+
+        $this->bundles = $this->registerBundles();
+
+        foreach ($this->bundles as $bundle) {
+            $this->bundles[$bundle->getNamespace()] = $bundle->setContainer($this->getContainer());
+            $bundle->registerRouting($routing, $this->getEnvironment());
+            $bundle->registerConfiguration($config, $this->getEnvironment());
+        }
+
+        unset($config, $routing);
+    }
+
+    /**
      * Initialize application configuration.
      *
-     * @return Config
+     * @return void
      */
     public function initializeConfigure()
     {
@@ -217,13 +216,10 @@ abstract class AppKernel extends Terminal
 
         if ($this->isDebug()) {
             $this->registerConfiguration($config);
-
-            return $config;
+            $this->getContainer()->singleton('kernel.debug')->getBar()->addConfig($config->all());
+        } else {
+            $config->load($this->getRootPath() . '/config.cache');
         }
-
-        $config->load($this->getRootPath() . '/config.cache');
-
-        return $config;
     }
 
     /**
@@ -237,9 +233,9 @@ abstract class AppKernel extends Terminal
     {
         if ($this->isDebug()) {
             return $this->container->singleton('kernel.dispatch')->dispatch('handle.annotation.route');
+        } else {
+            return include $this->getRootPath() . '/routes.cache';
         }
-
-        return include $this->getRootPath() . '/routes.cache';
     }
 
     /**

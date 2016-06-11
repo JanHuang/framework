@@ -16,6 +16,7 @@ namespace FastD\Framework\Bundle\Common;
 
 use FastD\Container\Aware;
 use FastD\Database\DriverInterface;
+use FastD\Database\Fdb;
 use FastD\Storage\CacheInterface;
 use FastD\Storage\StorageInterface;
 use FastD\Storage\Storage;
@@ -30,9 +31,9 @@ trait Common
     use Aware;
 
     /**
-     * @var DriverInterface
+     * @var Fdb
      */
-    protected $driver;
+    protected $fdb;
 
     /**
      * @var Storage
@@ -58,11 +59,14 @@ trait Common
      */
     public function getDriver($connection = null)
     {
-        if (null === $this->driver) {
-            $this->driver = $this->get('kernel.database', [$this->getParameters('database')]);
+        if (null === $this->fdb) {
+            $this->fdb = $this->get('kernel.database', [$this->getParameters('database')]);
+            if ($this->get('kernel')->isDebug()) {
+                $this->get('kernel.debug')->getBar()->addFdb($this->fdb);
+            }
         }
 
-        return $this->driver->getDriver($connection);
+        return $this->fdb->getDriver($connection);
     }
 
     /**
