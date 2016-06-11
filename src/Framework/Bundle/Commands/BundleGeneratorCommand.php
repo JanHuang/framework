@@ -179,7 +179,7 @@ BUNDLE;
     /**
      * @return string
      */
-    public function getHelp()
+    public function getDescription()
     {
         return '生成 Bundle 骨架';
     }

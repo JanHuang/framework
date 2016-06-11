@@ -15,9 +15,14 @@
 namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Dispatcher\Dispatch;
-use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
+/**
+ * Class ShutdownHandler
+ *
+ * @package FastD\Framework\Dispatcher\Handle
+ */
 class ShutdownHandler extends Dispatch
 {
     const LOG_PATH = '/storage/logs';

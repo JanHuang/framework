@@ -87,7 +87,7 @@ class RouteCacheCommand extends CommandAware
     /**
      * @return string
      */
-    public function getHelp()
+    public function getDescription()
     {
         return '生成路由缓存列表';
     }

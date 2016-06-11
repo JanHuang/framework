@@ -73,7 +73,7 @@ class OrmCreateCommand extends CommandAware
         $driver = $controller->getDriver($connection);
 
         $bundles = $this->getContainer()->singleton('kernel')->getBundles();
-
+        
         foreach ($bundles as $bundle) {
             $path = $bundle->getRootPath() . '/Resources/orm';
 
@@ -91,6 +91,8 @@ class OrmCreateCommand extends CommandAware
                 $this->building($builder, $bundle, $type, $output);
             }
         }
+        
+        
     }
 
     /**
@@ -111,7 +113,7 @@ class OrmCreateCommand extends CommandAware
     /**
      * @return string
      */
-    public function getHelp()
+    public function getDescription()
     {
         return '创建数据库结构并建立数据表';
     }

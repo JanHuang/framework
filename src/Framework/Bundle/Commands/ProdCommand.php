@@ -49,7 +49,7 @@ class ProdCommand extends CommandAware
     /**
      * @return string
      */
-    public function getHelp()
+    public function getDescription()
     {
         return '生成生产环境缓存内容';
     }

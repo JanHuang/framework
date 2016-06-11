@@ -124,11 +124,8 @@ class Controller implements ControllerInterface
      */
     public function render($view, array $parameters = array(), $flag = false)
     {
-        $prev = set_error_handler(function () {});
-        restore_error_handler();
         $content = $this->get('kernel.dispatch')->dispatch('handle.tpl')->render($view, $parameters);
-        set_error_handler($prev[0]);
-
+        
         return $flag ? $content : $this->responseHtml($content);
     }
 

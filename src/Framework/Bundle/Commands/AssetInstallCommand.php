@@ -79,6 +79,10 @@ class AssetInstallCommand extends CommandAware
         }
     }
 
+    /**
+     * @param $originDir
+     * @param $targetDir
+     */
     public function symlink($originDir, $targetDir)
     {
         $this->mkdir(dirname($targetDir));
@@ -104,6 +108,10 @@ class AssetInstallCommand extends CommandAware
             }
         }
     }
+
+    /**
+     * @param $files
+     */
     public function remove($files)
     {
         $files = iterator_to_array($this->toIterator($files));
@@ -133,6 +141,11 @@ class AssetInstallCommand extends CommandAware
             }
         }
     }
+
+    /**
+     * @param $dirs
+     * @param int $mode
+     */
     public function mkdir($dirs, $mode = 0755)
     {
         foreach ($this->toIterator($dirs) as $dir) {
@@ -167,6 +180,12 @@ class AssetInstallCommand extends CommandAware
         return $files;
     }
 
+    /**
+     * @param $originDir
+     * @param $targetDir
+     * @param \Traversable|null $iterator
+     * @param array $options
+     */
     public function mirror($originDir, $targetDir, \Traversable $iterator = null, $options = array())
     {
         $targetDir = rtrim($targetDir, '/\\');
@@ -229,7 +248,7 @@ class AssetInstallCommand extends CommandAware
     /**
      * @return string
      */
-    public function getHelp()
+    public function getDescription()
     {
         return '生成资源目录 {Bundle}/Resources/assets 软连接到 public/bundles 目录, 可以通过 [<bundle>] 参数进行指定';
     }

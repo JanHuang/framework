@@ -51,8 +51,8 @@ class VersionCommand extends CommandAware
     /**
      * @return string
      */
-    public function getHelp()
+    public function getDescription()
     {
-        // TODO: Implement getHelp() method.
+        return '获取当前核心版本';
     }
 }

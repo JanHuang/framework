@@ -55,9 +55,14 @@ class TplHandler extends Dispatch
 
         $extensions = [];
         $paths = [
-            $appKernel->getRootPath() . '/views',
             $appKernel->getRootPath() . '/../src'
         ];
+
+        $appPath = $appKernel->getRootPath() . '/views';
+
+        if (file_exists($appPath)) {
+            $paths[] = $appPath;
+        }
 
         $extensions['system'] = [new Preset()];
 
@@ -88,6 +93,9 @@ class TplHandler extends Dispatch
                 $this->tpl->addExtension($value);
             }
         }
+
+        restore_error_handler();
+        restore_error_handler();
 
         return $this->tpl;
     }

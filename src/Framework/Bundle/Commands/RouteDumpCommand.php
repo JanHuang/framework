@@ -186,7 +186,7 @@ class RouteDumpCommand extends CommandAware
     /**
      * @return string
      */
-    public function getHelp()
+    public function getDescription()
     {
         return '获取所有路由列表, 获取通过 --bundle 选项指定';
     }

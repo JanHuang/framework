@@ -82,8 +82,8 @@ class OrmUpdateCommand extends CommandAware
             }
 
             $builder = new AutoBuilding($driver, $path, $debug);
-            if ($input->has('bundle')) {
-                if ($bundle->getShortName() == $input->get('bundle')) {
+            if ($input->hasOption('bundle')) {
+                if ($bundle->getShortName() == $input->getOption('bundle')) {
                     $this->building($builder, $bundle, $type, $output);
                     break;
                 }
@@ -111,7 +111,7 @@ class OrmUpdateCommand extends CommandAware
     /**
      * @return string
      */
-    public function getHelp()
+    public function getDescription()
     {
         return '更新数据库结构';
     }

@@ -70,7 +70,7 @@ class ConfigCacheCommand extends CommandAware
     /**
      * @return string
      */
-    public function getHelp()
+    public function getDescription()
     {
         return '生成全局配置缓存, 在生产环境下必须执行此命令';
     }

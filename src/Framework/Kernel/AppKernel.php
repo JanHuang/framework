@@ -186,7 +186,7 @@ abstract class AppKernel extends Terminal
         $routing = $this->getContainer()->singleton('kernel.routing');
 
         $this->bundles = $this->registerBundles();
-        
+
         foreach ($this->bundles as $bundle) {
             $bundle->setContainer($this->getContainer());
             $bundle->registerRouting($routing, $this->getEnvironment());

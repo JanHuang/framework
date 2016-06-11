@@ -25,14 +25,14 @@ use FastD\Framework\Bundle\Controllers\Controller;
  *
  * @package FastD\Framework\Bundle\Commands
  */
-class OrmRevertCommand extends CommandAware
+class OrmEntityCommand extends CommandAware
 {
     /**
      * @return string
      */
     public function getName()
     {
-        return 'orm:revert';
+        return 'orm:entity';
     }
 
     /**
@@ -43,7 +43,6 @@ class OrmRevertCommand extends CommandAware
         $this
             ->setArgument('connection')
             ->setOption('bundle')
-            ->setOption('debug', Input::ARG_NONE)
         ;
     }
 
@@ -54,7 +53,7 @@ class OrmRevertCommand extends CommandAware
      */
     public function execute(Input $input, Output $output)
     {
-        $connection = $input->get('connection');
+        $connection = $input->getArgument('connection');
         if (empty($connection)) {
             $connection = 'read';
         }
@@ -64,13 +63,13 @@ class OrmRevertCommand extends CommandAware
 
         $driver = $controller->getDriver($connection);
 
-        $bundles = $this->getApplication()->getKernel()->getBundles();
+        $bundles = $this->getContainer()->singleton('kernel')->getBundles();
 
         foreach ($bundles as $bundle) {
             $builder = new AutoBuilding($driver);
 
-            if ($input->has('bundle')) {
-                if ($bundle->getShortName() == $input->get('bundle')) {
+            if ($input->hasOption('bundle')) {
+                if ($bundle->getShortName() == $input->getOption('bundle')) {
                     $this->building($builder, $bundle, $output);
                     break;
                 }
@@ -93,13 +92,13 @@ class OrmRevertCommand extends CommandAware
         $builder->saveTo($path, $bundle->getNamespace() . '\\Orm', true);
 
         $output->write('Generate into bundle: ');
-        $output->writeln($bundle->getName() . '\\Orm', Output::STYLE_SUCCESS);
+        $output->writeln(sprintf('<success>%s\\Orm</success>', $bundle->getName()));
     }
 
     /**
      * @return string
      */
-    public function getHelp()
+    public function getDescription()
     {
         return '反射数据库结构到实体对象, 生成 ORM 目录';
     }
