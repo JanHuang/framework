@@ -15,7 +15,6 @@
 namespace FastD\Framework\Bundle\Commands;
 
 use FastD\Console\Input\Input;
-use FastD\Console\Input\InputOption;
 use FastD\Console\Output\Output;
 use FastD\Database\Builder\AutoBuilding;
 use FastD\Database\Builder\Table;
@@ -73,7 +72,7 @@ class OrmCreateCommand extends CommandAware
 
         $driver = $controller->getDriver($connection);
 
-        $bundles = $this->getContainer()->get('kernel')->getBundles();
+        $bundles = $this->getContainer()->singleton('kernel')->getBundles();
 
         foreach ($bundles as $bundle) {
             $path = $bundle->getRootPath() . '/Resources/orm';
@@ -105,8 +104,8 @@ class OrmCreateCommand extends CommandAware
         $builder->ymlToTable($bundle->getRootPath() . '/Orm', $bundle->getNamespace() . '\\Orm', true, $type);
 
         $output->write('Building from bundle: ');
-        $output->write("\t" . $bundle->getName(), Output::STYLE_SUCCESS);
-        $output->writeln("\t" . '["Resources/orm"]', Output::STYLE_SUCCESS);
+        $output->write("\t" . '<success>' . $bundle->getName() . '</success>');
+        $output->writeln("\t" . '<success>["Resources/orm"]</success>');
     }
 
     /**
