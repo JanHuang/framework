@@ -14,6 +14,7 @@
 namespace FastD\Framework\Bundle\Commands;
 
 use FastD\Console\Input\Input;
+use FastD\Console\Input\InputOption;
 use FastD\Console\Output\Output;
 use FastD\Routing\Route;
 use FastD\Routing\Router;
@@ -43,9 +44,8 @@ class RouteDumpCommand extends CommandAware
     {
         $this
             ->setOption('bundle')
-            ->setOption('detail', Input::ARG_NONE)
+            ->setOption('detail', null, InputOption::VALUE_NONE)
             ->setArgument('route')
-            ->setDescription('Thank for you use routing dump tool.')
         ;
     }
 
@@ -60,9 +60,9 @@ class RouteDumpCommand extends CommandAware
 
         $output->writeln('');
 
-        $name = $input->get('route');
-        $bundle = $input->get('bundle');
-        $style = $input->has('detail');
+        $name = $input->getArgument('route');
+        $bundle = $input->getOption('bundle');
+        $style = $input->getOption('detail');
 
         if (false !== strpos($bundle, ':')) {
             $bundle = str_replace(':', '\\', $bundle);
@@ -88,7 +88,7 @@ class RouteDumpCommand extends CommandAware
     {
         $allRoutes = [];
 
-        $bundles = $this->getApplication()->getKernel()->getBundles();
+        $bundles = $this->getContainer()->get('kernel')->getBundles();
         foreach ($bundles as $bundle) {
             foreach ($router as $name => $route) {
                 $callback = $route->getCallback();
@@ -108,7 +108,7 @@ class RouteDumpCommand extends CommandAware
 
         if (null === $bundleName) {
             foreach ($allRoutes as $name => $routes) {
-                $output->writeln('Bundle: ' . $name, Output::STYLE_SUCCESS);
+                $output->writeln('<success>Bundle: </success>' . $name);
                 foreach ($routes as $route) {
                     $this->formatOutput($route, $output, $style);
                 }
@@ -118,7 +118,7 @@ class RouteDumpCommand extends CommandAware
 
         foreach ($allRoutes as $name => $routes) {
             if ($name == $bundleName) {
-                $output->writeln('Bundle: ' . $name, Output::STYLE_SUCCESS);
+                $output->writeln('<success>Bundle: </success>' . $name);
                 foreach ($routes as $route) {
                     $this->formatOutput($route, $output, $style);
                 }
@@ -139,7 +139,7 @@ class RouteDumpCommand extends CommandAware
         switch ($type) {
             case self::STYLE_DETAIL:
                 $output->write('Route [');
-                $output->write('"' . $route->getName() . '"', Output::STYLE_SUCCESS);
+                $output->write('<success>"' . $route->getName() . '"</success>');
                 $output->writeln(']');
                 $output->writeln("Path:\t\t" . str_replace('//', '/', $route->getPath()));
                 $output->writeln("Method:\t\t" . $route->getMethod());
