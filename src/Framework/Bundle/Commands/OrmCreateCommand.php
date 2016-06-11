@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: janhuang
- * Date: 15/12/24
- * Time: 下午7:01
+ * Date: 16/1/6
+ * Time: 下午2:18
  * Github: https://www.github.com/janhuang
  * Coding: https://www.coding.net/janhuang
  * SegmentFault: http://segmentfault.com/u/janhuang
@@ -15,24 +15,26 @@
 namespace FastD\Framework\Bundle\Commands;
 
 use FastD\Console\Input\Input;
+use FastD\Console\Input\InputOption;
 use FastD\Console\Output\Output;
 use FastD\Database\Builder\AutoBuilding;
+use FastD\Database\Builder\Table;
 use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Bundle\Controllers\Controller;
 
 /**
- * Class OrmRevertCommand
+ * Class OrmUpdateCommand
  *
  * @package FastD\Framework\Bundle\Commands
  */
-class OrmRevertCommand extends CommandAware
+class OrmCreateCommand extends CommandAware
 {
     /**
      * @return string
      */
     public function getName()
     {
-        return 'orm:revert';
+        return 'orm:create';
     }
 
     /**
@@ -43,7 +45,6 @@ class OrmRevertCommand extends CommandAware
         $this
             ->setArgument('connection')
             ->setOption('bundle')
-            ->setOption('debug', Input::ARG_NONE)
         ;
     }
 
@@ -54,28 +55,41 @@ class OrmRevertCommand extends CommandAware
      */
     public function execute(Input $input, Output $output)
     {
-        $connection = $input->get('connection');
+        $connection = $input->getArgument('connection');
         if (empty($connection)) {
             $connection = 'read';
         }
 
+        $type = Table::TABLE_CREATE;
+
+        $debug = false;
+        if ($input->hasOption('debug')) {
+            $debug = true;
+        }
+
         $controller = new Controller();
+
         $controller->setContainer($this->getContainer());
 
         $driver = $controller->getDriver($connection);
 
-        $bundles = $this->getApplication()->getKernel()->getBundles();
+        $bundles = $this->getContainer()->get('kernel')->getBundles();
 
         foreach ($bundles as $bundle) {
-            $builder = new AutoBuilding($driver);
+            $path = $bundle->getRootPath() . '/Resources/orm';
 
-            if ($input->has('bundle')) {
-                if ($bundle->getShortName() == $input->get('bundle')) {
-                    $this->building($builder, $bundle, $output);
+            if (!is_dir($path)) {
+                continue;
+            }
+
+            $builder = new AutoBuilding($driver, $path, $debug);
+            if ($input->hasOption('bundle')) {
+                if ($bundle->getShortName() == $input->getOption('bundle')) {
+                    $this->building($builder, $bundle, $type, $output);
                     break;
                 }
             } else {
-                $this->building($builder, $bundle, $output);
+                $this->building($builder, $bundle, $type, $output);
             }
         }
     }
@@ -83,17 +97,16 @@ class OrmRevertCommand extends CommandAware
     /**
      * @param AutoBuilding $builder
      * @param Bundle $bundle
+     * @param $type
      * @param Output $output
      */
-    protected function building(AutoBuilding $builder, Bundle $bundle, Output $output)
+    protected function building(AutoBuilding $builder, Bundle $bundle, $type, Output $output)
     {
-        $path = $bundle->getRootPath() . '/Orm';
+        $builder->ymlToTable($bundle->getRootPath() . '/Orm', $bundle->getNamespace() . '\\Orm', true, $type);
 
-        $builder->saveYmlTo($path, true);
-        $builder->saveTo($path, $bundle->getNamespace() . '\\Orm', true);
-
-        $output->write('Generate into bundle: ');
-        $output->writeln($bundle->getName() . '\\Orm', Output::STYLE_SUCCESS);
+        $output->write('Building from bundle: ');
+        $output->write("\t" . $bundle->getName(), Output::STYLE_SUCCESS);
+        $output->writeln("\t" . '["Resources/orm"]', Output::STYLE_SUCCESS);
     }
 
     /**
@@ -101,6 +114,6 @@ class OrmRevertCommand extends CommandAware
      */
     public function getHelp()
     {
-        return '反射数据库结构到实体对象, 生成 ORM 目录';
+        return '创建数据库结构并建立数据表';
     }
 }

@@ -46,7 +46,7 @@ class ConfigCacheCommand extends CommandAware
      */
     public function execute(Input $input, Output $output)
     {
-        $kernel = $this->getApplication()->getKernel();
+        $kernel = $this->getContainer()->get('kernel');
 
         $config = new Config();
 
@@ -64,8 +64,7 @@ class ConfigCacheCommand extends CommandAware
 
         file_put_contents($caching, '<?php return ' . var_export($config->all(), true) . ';');
 
-        $output->write('Caching to ' . $caching . '......');
-        $output->writeln('    [OK]', Output::STYLE_SUCCESS);
+        $output->writeln('Caching to ' . $caching . '...... <success>[OK]</success>');
     }
 
     /**
@@ -73,6 +72,6 @@ class ConfigCacheCommand extends CommandAware
      */
     public function getHelp()
     {
-        // TODO: Implement getHelp() method.
+        return '生成全局配置缓存, 在生产环境下必须执行此命令';
     }
 }

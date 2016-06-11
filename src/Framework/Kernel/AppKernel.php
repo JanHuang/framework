@@ -62,7 +62,7 @@ abstract class AppKernel extends Terminal
     /**
      * @var Bundle[]
      */
-    protected $bundles = array();
+    protected $bundles = [];
 
     /**
      * @var bool
@@ -161,8 +161,8 @@ abstract class AppKernel extends Terminal
         $this->container = new Container([
             'kernel.database'   => Fdb::class,
             'kernel.config'     => Config::class,
-            'kernel.routing'    => '\\Routes::getRouter',
             'kernel.storage'    => Storage::class,
+            'kernel.routing'    => '\\Routes::getRouter',
             'kernel.debug'      => Debug::enable($this->isDebug()),
         ]);
 
@@ -186,9 +186,9 @@ abstract class AppKernel extends Terminal
         $routing = $this->getContainer()->singleton('kernel.routing');
 
         $this->bundles = $this->registerBundles();
-
+        
         foreach ($this->bundles as $bundle) {
-            $this->bundles[$bundle->getNamespace()] = $bundle->setContainer($this->getContainer());
+            $bundle->setContainer($this->getContainer());
             $bundle->registerRouting($routing, $this->getEnvironment());
             $bundle->registerConfiguration($config, $this->getEnvironment());
         }

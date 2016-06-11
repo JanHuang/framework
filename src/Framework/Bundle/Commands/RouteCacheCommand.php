@@ -24,9 +24,6 @@ use FastD\Console\Output\Output;
  */
 class RouteCacheCommand extends CommandAware
 {
-    /**
-     *
-     */
     const CACHE_NAME = 'routes.cache';
 
     /**
@@ -42,34 +39,21 @@ class RouteCacheCommand extends CommandAware
      */
     public function configure()
     {
-        $this->setArgument('action');
+
     }
 
     public function execute(Input $input, Output $output)
     {
-        $kernel = $this->getApplication()->getKernel();
+        $kernel = $this->getContainer()->get('kernel');
 
         $caching = $kernel->getRootPath() . DIRECTORY_SEPARATOR . RouteCacheCommand::CACHE_NAME;
 
-        if ($input->has('action') && 'remove' == $input->get('action')) {
-            if (file_exists($caching)) {
-                unlink($caching);
-            }
-
-            $output->write('Clear caching file: ');
-            $output->write($caching, OutputInterface::STYLE_WARNING);
-            $output->writeln('    [OK]', OutputInterface::STYLE_SUCCESS);
-
-            return 0;
-        }
-
-        $routing = $kernel->getContainer()->singleton('kernel.routing');
+        $routing = $this->getContainer()->singleton('kernel.routing');
 
         // Init caching file.
         file_put_contents($caching, '<?php' . PHP_EOL);
 
         foreach ($routing as $route) {
-
             $default = array() === $route->getDefaults() ? '[]' : (function () use ($route) {
                 $arr = [];
                 foreach ($route->getDefaults() as $name => $value) {
@@ -94,12 +78,9 @@ class RouteCacheCommand extends CommandAware
             if (null != $route->getFormats()) {
                 $line .= '->setFormats([\'' . implode('\',\'', $route->getFormats() ?? []) . '\'])';
             }
-
-            // Routes::match();
             file_put_contents($caching, $line . ';' . PHP_EOL, FILE_APPEND);
         }
-        $output->write('Caching to ' . $caching . '......');
-        $output->writeln('    [OK]', OutputInterface::STYLE_SUCCESS);
+        $output->writeln('Caching to ' . $caching . '......  <success>[OK]</success>');
         return 1;
     }
 
@@ -108,6 +89,6 @@ class RouteCacheCommand extends CommandAware
      */
     public function getHelp()
     {
-        // TODO: Implement getHelp() method.
+        return '生成路由缓存列表';
     }
 }

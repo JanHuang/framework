@@ -18,6 +18,7 @@ use FastD\Console\Input\InputOption;
 use FastD\Console\Output\Output;
 use FastD\Routing\Route;
 use FastD\Routing\Router;
+use Routes;
 
 /**
  * Class RouteDump
@@ -44,7 +45,7 @@ class RouteDumpCommand extends CommandAware
     {
         $this
             ->setOption('bundle')
-            ->setOption('detail', null, InputOption::VALUE_NONE)
+            ->setOption('show', InputOption::VALUE_OPTIONAL, '显示方法代码内容')
             ->setArgument('route')
         ;
     }
@@ -56,7 +57,7 @@ class RouteDumpCommand extends CommandAware
      */
     public function execute(Input $input, Output $output)
     {
-        $router = \Routes::getRouter();
+        $router = Routes::getRouter();
 
         $output->writeln('');
 
@@ -71,7 +72,23 @@ class RouteDumpCommand extends CommandAware
         if (null === $name) {
             $this->showRouteCollections($router, $output, $bundle, $style ? self::STYLE_DETAIL: self::STYLE_LIST);
         } else {
-            $route = $router->getRoute($name);
+            try {
+                $route = $router->getRoute($name);
+            } catch (\Exception $e) {
+                $method = 'GET';
+                $path = $name;
+                if (false !== ($index = strpos($name, ':'))) {
+                    $method = substr($name, 0, $index);
+                    $path = substr($name, $index + 1);
+                }
+
+                // Match all routes.
+                try {
+                    $route = $router->getRoute($path);
+                } catch (\Exception $e) {
+                    $route = $router->dispatch($method, $path);
+                }
+            }
             $this->formatOutput($route, $output, self::STYLE_DETAIL);
         }
 
@@ -81,14 +98,15 @@ class RouteDumpCommand extends CommandAware
     /**
      * @param Router $router
      * @param Output $output
-     * @param null   $bundleName
+     * @param null $bundleName
+     * @param int $style
      * @return int
      */
     public function showRouteCollections(Router $router, Output $output, $bundleName = null, $style = self::STYLE_DETAIL)
     {
         $allRoutes = [];
 
-        $bundles = $this->getContainer()->get('kernel')->getBundles();
+        $bundles = $this->getContainer()->singleton('kernel')->getBundles();
         foreach ($bundles as $bundle) {
             foreach ($router as $name => $route) {
                 $callback = $route->getCallback();
@@ -170,6 +188,6 @@ class RouteDumpCommand extends CommandAware
      */
     public function getHelp()
     {
-        // TODO: Implement getHelp() method.
+        return '获取所有路由列表, 获取通过 --bundle 选项指定';
     }
 }

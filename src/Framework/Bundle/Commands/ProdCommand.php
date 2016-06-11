@@ -42,8 +42,8 @@ class ProdCommand extends CommandAware
      */
     public function execute(Input $input, Output $output)
     {
-        $this->getApplication()->getCommand('config:cache')->execute($input, $output);
-        $this->getApplication()->getCommand('route:cache')->execute($input, $output);
+        $this->getCollections()->getCommand('config:cache')->execute($input, $output);
+        $this->getCollections()->getCommand('route:cache')->execute($input, $output);
     }
 
     /**
@@ -51,6 +51,6 @@ class ProdCommand extends CommandAware
      */
     public function getHelp()
     {
-        // TODO: Implement getHelp() method.
+        return '生成生产环境缓存内容';
     }
 }

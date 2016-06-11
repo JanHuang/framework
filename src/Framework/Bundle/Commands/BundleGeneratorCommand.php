@@ -37,7 +37,6 @@ class BundleGeneratorCommand extends CommandAware
     public function configure()
     {
         $this->setArgument('bundle');
-        $this->setDescription('Thank for you use bundle generator tool.');
     }
 
     /**
@@ -48,24 +47,24 @@ class BundleGeneratorCommand extends CommandAware
     public function execute(Input $input, Output $output)
     {
         try {
-            $bundle = $input->get('bundle');
+            $bundle = $input->getArgument('bundle');
         } catch(\Exception $e) {
-            $output->writeln('Bundle name is empty or null. Please you try again.');
+            $output->writeln('<failure>Bundle name is empty or null. Please you try again.</failure>');
             exit;
         }
 
         if (empty($bundle)) {
-            $output->writeln('Bundle name is empty or null. Please you try again.');
+            $output->writeln('<failure>Bundle name is empty or null. Please you try again.</failure>');
             exit;
         }
 
         $bundle = str_replace(':', DIRECTORY_SEPARATOR, $bundle) . 'Bundle';
 
-        $source = $this->getApplication()->getKernel()->getRootPath() . '/../src';
+        $source = $this->getContainer()->get('kernel')->getRootPath() . '/../src';
 
         $this->builderStructure($source, $bundle, str_replace(DIRECTORY_SEPARATOR, '', $bundle));
 
-        $output->writeln('Building in ' . $source);
+        $output->writeln('Building in ' . $source . '  <success>[OK]</success>');
     }
 
     public function builderStructure($path, $bundle, $fullName)
@@ -182,6 +181,6 @@ BUNDLE;
      */
     public function getHelp()
     {
-        // TODO: Implement getHelp() method.
+        return '生成 Bundle 骨架';
     }
 }

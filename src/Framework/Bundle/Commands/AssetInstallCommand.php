@@ -15,6 +15,7 @@
 namespace FastD\Framework\Bundle\Commands;
 
 use FastD\Console\Input\Input;
+use FastD\Console\Input\InputArgument;
 use FastD\Console\Output\Output;
 
 /**
@@ -37,24 +38,29 @@ class AssetInstallCommand extends CommandAware
      */
     public function configure()
     {
-        $this->setArgument('bundle');
+        $this->setArgument('bundle', InputArgument::OPTIONAL, 'bundle 包名(WelcomeBundle)');
     }
 
+    /**
+     * @param Input $input
+     * @param Output $output
+     * @throws \Exception
+     * @return void
+     */
     public function execute(Input $input, Output $output)
     {
-        $kernel = $this->getApplication()->getKernel();
+        $kernel = $this->getContainer()->get('kernel');
 
         $bundles = $kernel->getBundles();
-
+        
         $web = 'public/bundles';
 
-        $targetRootDir = $this->getApplication()->getContainer()->singleton('kernel')->getRootPath() . '/../' . $web;
+        $targetRootDir = $kernel->getRootPath() . '/../' . $web;
 
         $output->writeln('Trying to install assets as symbolic links.');
 
         foreach ($bundles as $bundle) {
             $originDir = $bundle->getRootPath() . DIRECTORY_SEPARATOR . 'Resources/assets';
-
             if (!file_exists($originDir)) {
                 continue;
             }
@@ -64,9 +70,9 @@ class AssetInstallCommand extends CommandAware
             try {
                 $this->symlink($originDir, $targetDir);
                 $output->write('Installing assets for ');
-                $output->write($bundle->getName(), Output::STYLE_SUCCESS);
+                $output->write(sprintf('<success>%s</success>', $bundle->getName()));
                 $output->write(' into ');
-                $output->writeln($web . DIRECTORY_SEPARATOR . strtolower($bundle->getShortName()), Output::STYLE_SUCCESS);
+                $output->writeln($web . DIRECTORY_SEPARATOR . sprintf('<success>%s</success>', strtolower($bundle->getShortName())));
             } catch (\Exception $e) {
                 throw $e;
             }
@@ -225,6 +231,6 @@ class AssetInstallCommand extends CommandAware
      */
     public function getHelp()
     {
-        // TODO: Implement getHelp() method.
+        return '生成资源目录 {Bundle}/Resources/assets 软连接到 public/bundles 目录, 可以通过 [<bundle>] 参数进行指定';
     }
 }

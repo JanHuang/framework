@@ -15,6 +15,7 @@
 namespace FastD\Framework\Bundle\Commands;
 
 use FastD\Console\Input\Input;
+use FastD\Console\Input\InputOption;
 use FastD\Console\Output\Output;
 use FastD\Database\Builder\AutoBuilding;
 use FastD\Database\Builder\Table;
@@ -43,9 +44,7 @@ class OrmUpdateCommand extends CommandAware
     {
         $this
             ->setArgument('connection')
-            ->setOption('create', Input::ARG_NONE)
             ->setOption('bundle')
-            ->setOption('debug', Input::ARG_NONE)
         ;
     }
 
@@ -56,7 +55,7 @@ class OrmUpdateCommand extends CommandAware
      */
     public function execute(Input $input, Output $output)
     {
-        $connection = $input->get('connection');
+        $connection = $input->getArgument('connection');
         if (empty($connection)) {
             $connection = 'read';
         }
@@ -73,11 +72,11 @@ class OrmUpdateCommand extends CommandAware
 
         $controller = new Controller();
 
-        $controller->setContainer($this->getApplication()->getContainer());
+        $controller->setContainer($this->getContainer());
 
         $driver = $controller->getDriver($connection);
 
-        $bundles = $this->getApplication()->getKernel()->getBundles();
+        $bundles = $this->getContainer()->get('kernel')->getBundles();
 
         foreach ($bundles as $bundle) {
             $path = $bundle->getRootPath() . '/Resources/orm';
@@ -118,6 +117,6 @@ class OrmUpdateCommand extends CommandAware
      */
     public function getHelp()
     {
-        // TODO: Implement getHelp() method.
+        return '更新数据库结构';
     }
 }
