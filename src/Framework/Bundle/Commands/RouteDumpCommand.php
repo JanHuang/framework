@@ -13,9 +13,8 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command\Command;
-use FastD\Console\IO\Input;
-use FastD\Console\IO\Output;
+use FastD\Console\Input\Input;
+use FastD\Console\Output\Output;
 use FastD\Routing\Route;
 use FastD\Routing\Router;
 
@@ -164,5 +163,13 @@ class RouteDumpCommand extends CommandAware
         }
 
         return;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelp()
+    {
+        // TODO: Implement getHelp() method.
     }
 }

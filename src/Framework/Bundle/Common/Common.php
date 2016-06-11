@@ -61,9 +61,9 @@ trait Common
     {
         if (null === $this->fdb) {
             $this->fdb = $this->get('kernel.database', [$this->getParameters('database')]);
-            if ($this->get('kernel')->isDebug()) {
-                $this->get('kernel.debug')->getBar()->addFdb($this->fdb);
-            }
+            $debug = $this->get('kernel.debug');
+            $debug->addFdb($debug->getBar(), $this->fdb);
+            unset($debug);
         }
 
         return $this->fdb->getDriver($connection);

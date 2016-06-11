@@ -14,9 +14,8 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command\Command;
-use FastD\Console\IO\Input;
-use FastD\Console\IO\Output;
+use FastD\Console\Input\Input;
+use FastD\Console\Output\Output;
 use FastD\Database\Builder\AutoBuilding;
 use FastD\Database\Builder\Table;
 use FastD\Framework\Bundle\Bundle;
@@ -112,5 +111,13 @@ class OrmUpdateCommand extends CommandAware
         $output->write('Building from bundle: ');
         $output->write("\t" . $bundle->getName(), Output::STYLE_SUCCESS);
         $output->writeln("\t" . '["Resources/orm"]', Output::STYLE_SUCCESS);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelp()
+    {
+        // TODO: Implement getHelp() method.
     }
 }

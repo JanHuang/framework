@@ -216,7 +216,9 @@ abstract class AppKernel extends Terminal
 
         if ($this->isDebug()) {
             $this->registerConfiguration($config);
-            $this->getContainer()->singleton('kernel.debug')->getBar()->addConfig($config->all());
+            $debug = $this->getContainer()->singleton('kernel.debug');
+            $debug->addConfig($debug->getBar(), $config);
+            unset($debug);
         } else {
             $config->load($this->getRootPath() . '/config.cache');
         }

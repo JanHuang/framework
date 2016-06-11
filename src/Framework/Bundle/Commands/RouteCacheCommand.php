@@ -14,10 +14,8 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command\Command;
-use FastD\Console\IO\Input;
-use FastD\Console\IO\Output;
-use FastD\Console\IO\OutputInterface;
+use FastD\Console\Input\Input;
+use FastD\Console\Output\Output;
 
 /**
  * Class RouteCacheCommand
@@ -103,5 +101,13 @@ class RouteCacheCommand extends CommandAware
         $output->write('Caching to ' . $caching . '......');
         $output->writeln('    [OK]', OutputInterface::STYLE_SUCCESS);
         return 1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelp()
+    {
+        // TODO: Implement getHelp() method.
     }
 }

@@ -18,6 +18,11 @@ use FastD\Console\Command\Command;
 use FastD\Framework\Bundle\Common\Common;
 use FastD\Framework\Bundle\Common\CommonInterface;
 
+/**
+ * Class CommandAware
+ *
+ * @package FastD\Framework\Bundle\Commands
+ */
 abstract class CommandAware extends Command implements CommonInterface
 {
     use Common;

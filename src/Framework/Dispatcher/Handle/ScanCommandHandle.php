@@ -52,9 +52,8 @@ class ScanCommandHandle extends Dispatch
                 $class = $bundle->getNamespace() . '\\Commands\\' . pathinfo($file, PATHINFO_FILENAME);
                 $command = new $class();
                 if ($command instanceof CommandAware) {
-                    $command->setApplication($application);
                     $command->setContainer($this->getContainer());
-                    $application->setCommand($command);
+                    $application->addCommand($command);
                 }
             }
         }

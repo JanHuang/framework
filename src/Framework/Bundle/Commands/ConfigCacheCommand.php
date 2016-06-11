@@ -15,8 +15,8 @@
 namespace FastD\Framework\Bundle\Commands;
 
 use FastD\Config\Config;
-use FastD\Console\IO\Input;
-use FastD\Console\IO\Output;
+use FastD\Console\Input\Input;
+use FastD\Console\Output\Output;
 use FastD\Framework\Kernel\AppKernel;
 
 class ConfigCacheCommand extends CommandAware
@@ -66,5 +66,13 @@ class ConfigCacheCommand extends CommandAware
 
         $output->write('Caching to ' . $caching . '......');
         $output->writeln('    [OK]', Output::STYLE_SUCCESS);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelp()
+    {
+        // TODO: Implement getHelp() method.
     }
 }

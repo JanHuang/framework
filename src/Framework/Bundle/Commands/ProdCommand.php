@@ -14,9 +14,8 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\Command\Command;
-use FastD\Console\IO\Input;
-use FastD\Console\IO\Output;
+use FastD\Console\Input\Input;
+use FastD\Console\Output\Output;
 
 class ProdCommand extends CommandAware
 {
@@ -45,5 +44,13 @@ class ProdCommand extends CommandAware
     {
         $this->getApplication()->getCommand('config:cache')->execute($input, $output);
         $this->getApplication()->getCommand('route:cache')->execute($input, $output);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelp()
+    {
+        // TODO: Implement getHelp() method.
     }
 }

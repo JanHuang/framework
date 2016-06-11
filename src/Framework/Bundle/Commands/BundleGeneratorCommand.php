@@ -13,8 +13,8 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\IO\Input;
-use FastD\Console\IO\Output;
+use FastD\Console\Input\Input;
+use FastD\Console\Output\Output;
 
 /**
  * Class Generator
@@ -175,5 +175,13 @@ class %s extends Bundle
 
 }
 BUNDLE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelp()
+    {
+        // TODO: Implement getHelp() method.
     }
 }

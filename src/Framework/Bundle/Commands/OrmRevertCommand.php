@@ -14,8 +14,8 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\IO\Input;
-use FastD\Console\IO\Output;
+use FastD\Console\Input\Input;
+use FastD\Console\Output\Output;
 use FastD\Database\Builder\AutoBuilding;
 use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Bundle\Controllers\Controller;
@@ -94,5 +94,13 @@ class OrmRevertCommand extends CommandAware
 
         $output->write('Generate into bundle: ');
         $output->writeln($bundle->getName() . '\\Orm', Output::STYLE_SUCCESS);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelp()
+    {
+        // TODO: Implement getHelp() method.
     }
 }

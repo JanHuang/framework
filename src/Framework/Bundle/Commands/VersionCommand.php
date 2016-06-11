@@ -14,8 +14,8 @@
 
 namespace FastD\Framework\Bundle\Commands;
 
-use FastD\Console\IO\Input;
-use FastD\Console\IO\Output;
+use FastD\Console\Input\Input;
+use FastD\Console\Output\Output;
 use FastD\Framework\Kernel\AppKernel;
 
 class VersionCommand extends CommandAware
@@ -44,7 +44,15 @@ class VersionCommand extends CommandAware
     public function execute(Input $input, Output $output)
     {
         $output->writeln(sprintf('Running (%s) with PHP %s on %s / %s', date('Y-m-d H:i:s'), PHP_VERSION, PHP_OS, php_uname('r')));
-        $output->writeln(sprintf('FastD Kernel version %s', $output->format(AppKernel::VERSION, Output::STYLE_INFO)));
-        $output->writeln(sprintf('Environment %s', $output->format($this->getContainer()->get('kernel')->getEnvironment(), Output::STYLE_INFO)));
+        $output->writeln(sprintf('FastD Kernel version <info>%s</info>', AppKernel::VERSION));
+        $output->writeln(sprintf('Environment <info>"%s"</info>', $this->getContainer()->get('kernel')->getEnvironment()));
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelp()
+    {
+        // TODO: Implement getHelp() method.
     }
 }
