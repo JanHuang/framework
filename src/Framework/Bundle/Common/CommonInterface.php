@@ -14,7 +14,7 @@
 
 namespace FastD\Framework\Bundle\Common;
 
-use FastD\Database\DriverInterface;
+use FastD\Database\Drivers\DriverInterface;
 use FastD\Storage\StorageInterface;
 
 /**

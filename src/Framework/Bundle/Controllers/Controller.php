@@ -13,7 +13,6 @@
 
 namespace FastD\Framework\Bundle\Controllers;
 
-use FastD\Debug\Exceptions\Http\HttpException;
 use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Kernel\AppKernel;
 use FastD\Http\Session\Storage\SessionRedis;

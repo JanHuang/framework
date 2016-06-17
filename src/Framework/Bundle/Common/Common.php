@@ -15,7 +15,7 @@
 namespace FastD\Framework\Bundle\Common;
 
 use FastD\Container\Aware;
-use FastD\Database\DriverInterface;
+use FastD\Database\Drivers\DriverInterface;
 use FastD\Database\Fdb;
 use FastD\Storage\CacheInterface;
 use FastD\Storage\StorageInterface;

@@ -40,7 +40,7 @@ class BundleGeneratorCommand extends CommandAware
     }
 
     /**
-     * @param Input  $input
+     * @param Input $input
      * @param Output $output
      * @return void
      */
@@ -48,7 +48,7 @@ class BundleGeneratorCommand extends CommandAware
     {
         try {
             $bundle = $input->getArgument('bundle');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $output->writeln('<failure>Bundle name is empty or null. Please you try again.</failure>');
             exit;
         }
@@ -60,7 +60,11 @@ class BundleGeneratorCommand extends CommandAware
 
         $bundle = str_replace(':', DIRECTORY_SEPARATOR, $bundle) . 'Bundle';
 
-        $source = $this->getContainer()->get('kernel')->getRootPath() . '/../src';
+        $bundle = implode(DIRECTORY_SEPARATOR, array_map(function ($v) {
+            return ucfirst($v);
+        }, explode(DIRECTORY_SEPARATOR, $bundle)));
+
+        $source = $this->getContainer()->singleton('kernel')->getRootPath() . '/../src';
 
         $this->builderStructure($source, $bundle, str_replace(DIRECTORY_SEPARATOR, '', $bundle));
 
@@ -74,18 +78,17 @@ class BundleGeneratorCommand extends CommandAware
             $bundle
         ));
 
-        foreach (array(
+        foreach ([
                      'Controllers',
-                     'Orm',
                      'Extensions',
                      'Exceptions',
                      'Commands',
                      'Services',
+                     'Fixtures',
                      'Resources/views',
                      'Resources/config',
-                     'Resources/orm',
                      'Testing'
-                 ) as $dir) {
+                 ] as $dir) {
             $directory = implode(DIRECTORY_SEPARATOR, array(
                 $bundlePath,
                 $dir

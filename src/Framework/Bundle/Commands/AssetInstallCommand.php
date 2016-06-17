@@ -49,7 +49,7 @@ class AssetInstallCommand extends CommandAware
      */
     public function execute(Input $input, Output $output)
     {
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->getContainer()->singleton('kernel');
 
         $bundles = $kernel->getBundles();
         

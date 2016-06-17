@@ -18,7 +18,7 @@ use FastD\Annotation\Annotation;
 use FastD\Framework\Bundle\Bundle;
 use FastD\Framework\Dispatcher\Dispatch;
 use Symfony\Component\Finder\Finder;
-
+use Routes;
 
 /**
  * 注释处理调度任务
@@ -58,7 +58,7 @@ class AnnotationHandle extends Dispatch
                 }
             };
 
-            \Routes::group($prefix, $closure);
+            Routes::group($prefix, $closure);
         }
     }
 

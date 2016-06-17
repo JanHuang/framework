@@ -97,6 +97,21 @@ abstract class AppKernel extends Terminal
     }
 
     /**
+     * @param $name
+     * @return Bundle|null
+     */
+    public function getBundle($name)
+    {
+        foreach ($this->getBundles() as $bundle) {
+            if (false !== strpos($bundle->getName(), $name)) {
+                return $bundle;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @return bool
      */
     public function isDebug()

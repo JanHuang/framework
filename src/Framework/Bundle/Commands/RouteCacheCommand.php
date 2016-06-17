@@ -44,7 +44,7 @@ class RouteCacheCommand extends CommandAware
 
     public function execute(Input $input, Output $output)
     {
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->getContainer()->singleton('kernel');
 
         $caching = $kernel->getRootPath() . DIRECTORY_SEPARATOR . RouteCacheCommand::CACHE_NAME;
 
@@ -81,7 +81,7 @@ class RouteCacheCommand extends CommandAware
             file_put_contents($caching, $line . ';' . PHP_EOL, FILE_APPEND);
         }
         $output->writeln('Caching to ' . $caching . '......  <success>[OK]</success>');
-        return 1;
+        return 0;
     }
 
     /**
