@@ -109,7 +109,7 @@ class BundleGeneratorCommand extends CommandAware
             strtolower(str_replace(DIRECTORY_SEPARATOR, '_', $bundle)) . '_index'
         );
 
-        $controllerFile = $bundlePath . DIRECTORY_SEPARATOR . 'Controllers/Index.php';
+        $controllerFile = $bundlePath . DIRECTORY_SEPARATOR . 'Controllers/IndexController.php';
 
         if (!file_exists($controllerFile)) {
             file_put_contents($controllerFile, $controller);
@@ -150,7 +150,7 @@ use FastD\Framework\Bundle\Controllers\Controller;
 /**
  * @Route("/%s")
  */
-class Index extends Controller
+class IndexController extends Controller
 {
     /**
      * @Route("/")

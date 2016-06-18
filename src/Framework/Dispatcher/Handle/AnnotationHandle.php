@@ -29,6 +29,8 @@ use Routes;
  */
 class AnnotationHandle extends Dispatch
 {
+    const FILTER = 'Action';
+
     protected $routes = [];
 
     /**
@@ -85,11 +87,12 @@ class AnnotationHandle extends Dispatch
             if (!class_exists($className)) {
                 continue;
             }
+            
+            $annotation = new Annotation($className, self::FILTER);
 
-            $annotation = new Annotation($className, null, 'Action');
+            foreach ($annotation as $annotator) {
 
-            foreach ($annotation->getMethods() as $method) {
-                if (false === ($route = $method->getParameters('Route'))) {
+                if (null === ($route = $annotator->getParameter('Route'))) {
                     continue;
                 }
 
@@ -99,15 +102,13 @@ class AnnotationHandle extends Dispatch
 
                 $parameters = [
                     $route['name'],
-                    $route[0],
-                    $method->getParent()->getName() . '@' . $method->getName(),
+                    str_replace('//', '/', $route[0]),
+                    $annotator->getClassName() . '@' . $annotator->getName(),
                     isset($route['defaults']) ? $route['defaults'] : [],
                     isset($route['requirements']) ? $route['requirements'] : [],
                 ];
 
-                $parent = $method->getParent()->getParameters('Route');
-
-                $method = false === $method->getParameters('Method') ? 'get' : $method->getParameters('Method')[0];
+                $method = null === $annotator->getParameter('Method') ? 'ANY' : $annotator->getParameter('Method')[0];
 
                 if (!empty($parent) && isset($parent[0])) {
                     $routes[$parent[0]][] = [

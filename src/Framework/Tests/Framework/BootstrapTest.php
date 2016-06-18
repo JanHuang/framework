@@ -12,7 +12,7 @@
  * WebSite: http://www.janhuang.me
  */
 
-namespace FastD\Framework\Tests\KernelTesting;
+namespace FastD\Framework\Tests\Framework;
 
 use FastD\Framework\Tests\WebTestCase;
 
@@ -23,5 +23,12 @@ use FastD\Framework\Tests\WebTestCase;
  */
 class BootstrapTest extends WebTestCase
 {
+    public function testKernel()
+    {
+        $app = new \Application('dev');
 
+        $app->boot();
+
+        print_r($app);
+    }
 }
