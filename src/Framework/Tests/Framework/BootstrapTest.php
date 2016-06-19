@@ -29,6 +29,8 @@ class BootstrapTest extends WebTestCase
 
         $app->boot();
 
-        print_r($app);
+        $this->assertEquals('dev', $app->getEnvironment());
+
+        
     }
 }

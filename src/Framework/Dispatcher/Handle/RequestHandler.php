@@ -67,7 +67,7 @@ class RequestHandler extends Dispatch
      */
     public function dispatch(array $parameters = null)
     {
-        $route = $this->getContainer()->singleton('kernel.routing')->dispatch($parameters[0]->getMethod(), $parameters[0]->getPathInfo());
+        $route = $this->getContainer()->singleton('kernel.routing')->match($parameters[0]->getMethod(), $parameters[0]->getPathInfo());
 
         return $this->handleRoute($route);
     }
