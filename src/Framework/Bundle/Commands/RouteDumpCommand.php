@@ -59,8 +59,6 @@ class RouteDumpCommand extends CommandAware
     {
         $router = Routes::getRouter();
 
-        $output->writeln('');
-
         $name = $input->getArgument('route');
         $bundle = $input->getOption('bundle');
         $style = $input->getOption('detail');
