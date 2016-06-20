@@ -17,6 +17,7 @@ namespace FastD\Framework\Bundle\Commands;
 use FastD\Console\Input\Input;
 use FastD\Console\Output\Output;
 use FastD\Database\Schema\SchemaParser;
+use FastD\Database\Schema\Structure\Rename;
 
 /**
  * Class OrmRevertCommand
@@ -25,6 +26,8 @@ use FastD\Database\Schema\SchemaParser;
  */
 class FdbReflexCommand extends CommandAware
 {
+    use Rename;
+
     /**
      * @return string
      */
@@ -64,18 +67,22 @@ class FdbReflexCommand extends CommandAware
 
         if (null !== $bundle) {
             $bundle = $this->getContainer()->singleton('kernel')->getBundle($bundle);
-            $path = $bundle->getRootPath() . '/ORM/' . ucfirst($driver->getDbName());
-            $namespace = $bundle->getNamespace() . '\\ORM\\' . ucfirst($driver->getDbName());
+            $path = $bundle->getRootPath() . '/ORM/' . ucfirst($this->rename($driver->getDbName()));
+            $namespace = $bundle->getNamespace() . '\\ORM\\' . ucfirst($this->rename($driver->getDbName()));
             $parser->getSchemaReflex()->reflex($path, $namespace);
+            $output->writeln('<notice>' . $bundle->getName() . '</notice>');
+            $output->writeln('  Reflex to ' . $path . '... <success>[OK]</success>');
             return 0;
         }
 
         $bundles = $this->getContainer()->singleton('kernel')->getBundles();
 
         foreach ($bundles as $bundle) {
-            $path = $bundle->getRootPath() . '/ORM/' . ucfirst($driver->getDbName());
-            $namespace = $bundle->getNamespace() . '\\ORM\\' . ucfirst($driver->getDbName());
+            $output->writeln('<notice>' . $bundle->getName() . '</notice>');
+            $path = $bundle->getRootPath() . '/ORM/' . ucfirst($this->rename($driver->getDbName()));
+            $namespace = $bundle->getNamespace() . '\\ORM\\' . ucfirst($this->rename($driver->getDbName()));
             $parser->getSchemaReflex()->reflex($path, $namespace);
+            $output->writeln('  Reflex to ' . $path . '... <success>[OK]</success>');
         }
 
         return 0;

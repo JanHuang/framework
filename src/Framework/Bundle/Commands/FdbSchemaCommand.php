@@ -54,6 +54,7 @@ class FdbSchemaCommand extends CommandAware
     public function execute(Input $input, Output $output)
     {
         $connection = $input->getArgument('connection');
+
         if (empty($connection)) {
             $connection = 'read';
         }
@@ -64,10 +65,11 @@ class FdbSchemaCommand extends CommandAware
 
         $fixtures = $this->scanFixtures($bundle);
 
-        foreach ($fixtures as $fixture) {
+        foreach ($fixtures as $name => $fixture) {
             $fixture = new $fixture;
             if ($fixture instanceof FixtureInterface) {
                 $loader->registerFixture($fixture);
+                $output->writeln(sprintf('Register "%s" schema. <success>[OK]</success>', $name));
             }
         }
 
@@ -100,9 +102,12 @@ class FdbSchemaCommand extends CommandAware
 
         foreach ($bundles as $bundle) {
             $path = $bundle->getRootPath() . '/Fixtures';
+            if (!file_exists($path)) {
+                continue;
+            }
             $files = $finder->in($path)->name('*Fixture.php')->files();
             foreach ($files as $file) {
-                $fixtures[] = $bundle->getNamespace() . '\\Fixtures\\' . pathinfo($file->getFilename(), PATHINFO_FILENAME);
+                $fixtures[$bundle->getName()] = $bundle->getNamespace() . '\\Fixtures\\' . pathinfo($file->getFilename(), PATHINFO_FILENAME);
             }
         }
 

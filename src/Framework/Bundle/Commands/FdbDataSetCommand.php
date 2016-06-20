@@ -31,7 +31,7 @@ class FdbDataSetCommand extends FdbSchemaCommand
      */
     public function getName()
     {
-        return 'fdb:filler';
+        return 'fdb:data:set';
     }
 
     /**
@@ -63,10 +63,11 @@ class FdbDataSetCommand extends FdbSchemaCommand
 
         $fixtures = $this->scanFixtures($bundle);
 
-        foreach ($fixtures as $fixture) {
+        foreach ($fixtures as $name => $fixture) {
             $fixture = new $fixture;
             if ($fixture instanceof FixtureInterface) {
                 $loader->registerFixture($fixture);
+                $output->writeln(sprintf('Register "%s" data set. <success>[OK]</success>', $name));
             }
         }
 
