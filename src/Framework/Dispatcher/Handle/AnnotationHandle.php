@@ -54,13 +54,9 @@ class AnnotationHandle extends Dispatch
         }
 
         foreach ($this->routes as $prefix => $routes) {
-            $closure = function () use ($routes) {
-                foreach ($routes as $route) {
-                    call_user_func_array("\\Routes::{$route['method']}", $route['parameters']);
-                }
-            };
-
-            Routes::group($prefix, $closure);
+            foreach ($routes as $route) {
+                call_user_func_array("\\Routes::{$route['method']}", $route['parameters']);
+            }
         }
     }
 
@@ -108,19 +104,12 @@ class AnnotationHandle extends Dispatch
                     isset($route['requirements']) ? $route['requirements'] : [],
                 ];
 
-                $method = null === $annotator->getParameter('Method') ? 'ANY' : $annotator->getParameter('Method')[0];
+                $method = null === $annotator->getParameter('Method') ? 'any' : strtolower($annotator->getParameter('Method')[0]);
 
-                if (!empty($parent) && isset($parent[0])) {
-                    $routes[$parent[0]][] = [
-                        'method' => strtolower($method),
-                        'parameters' => $parameters
-                    ];
-                } else {
-                    $routes['/'][] = [
-                        'method' => $method,
-                        'parameters' => $parameters
-                    ];
-                }
+                $routes[$bundle->getName()][] = [
+                    'method' => $method,
+                    'parameters' => $parameters
+                ];
 
                 unset($route, $method, $parameters, $parent);
             }
