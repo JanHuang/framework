@@ -45,6 +45,8 @@ interface AppKernelInterface
     /**
      * Register application plugins.
      *
+     * @deprecated Remove in 2.1
+     *
      * @param Container $container
      * @return void
      */
