@@ -6,3 +6,8 @@
 FastD 框架核心.
 
 Framework 不具备独立运行及部署功能，部署
+
+## Todo List
+
+1. 事件监听
+2. Swoole Server
