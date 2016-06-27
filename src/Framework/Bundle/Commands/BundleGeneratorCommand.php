@@ -49,12 +49,12 @@ class BundleGeneratorCommand extends CommandAware
         try {
             $bundle = $input->getArgument('bundle');
         } catch (\Exception $e) {
-            $output->writeln('<failure>Bundle name is empty or null. Please you try again.</failure>');
+            $output->writeln('<error>Bundle name is empty or null. Please you try again.</error>');
             exit;
         }
 
         if (empty($bundle)) {
-            $output->writeln('<failure>Bundle name is empty or null. Please you try again.</failure>');
+            $output->writeln('<error>Bundle name is empty or null. Please you try again.</error>');
             exit;
         }
 

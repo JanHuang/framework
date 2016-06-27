@@ -30,7 +30,7 @@
         "fastd/database": "~2.0.0@beta",
         "fastd/config": "~2.0.0",
         "fastd/storage": "~2.0.0@beta",
-        "fastd/console": "~2.0.0@beta",
+        "fastd/console": "~2.0.0",
         "fastd/routing": "~2.0.0",
         "fastd/annotation": "~1.0.0",
         "fastd/container": "~2.0.0",
