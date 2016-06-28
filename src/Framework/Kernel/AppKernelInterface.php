@@ -43,16 +43,6 @@ interface AppKernelInterface
     public function registerBundles();
 
     /**
-     * Register application plugins.
-     *
-     * @deprecated Remove in 2.1
-     *
-     * @param Container $container
-     * @return void
-     */
-    public function registerService(Container $container);
-
-    /**
      * Register application configuration
      *
      * @param Config $config

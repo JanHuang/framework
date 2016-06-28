@@ -181,8 +181,6 @@ abstract class AppKernel extends Terminal
             'kernel.debug'      => Debug::enable($this->isDebug()),
         ]);
 
-        $this->registerService($this->container);
-
         $this->container->set('kernel.container', $this->container);
         $this->container->set('kernel.dispatch', new Dispatcher($this->container));
         $this->container->set('kernel', $this);
@@ -250,9 +248,8 @@ abstract class AppKernel extends Terminal
     {
         if ($this->isDebug()) {
             return $this->container->singleton('kernel.dispatch')->dispatch('handle.annotation.route');
-        } else {
-            return include $this->getRootPath() . '/routes.cache';
         }
+        include $this->getRootPath() . '/routes.cache';
     }
 
     /**
