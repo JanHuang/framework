@@ -26,10 +26,10 @@
     },
     "require": {
         "php": ">=7.0",
-        "fastd/http": "~2.0.0@beta",
-        "fastd/database": "~2.0.0@beta",
+        "fastd/http": "~2.0.0",
+        "fastd/database": "~2.0.0",
         "fastd/config": "~2.0.0",
-        "fastd/storage": "~2.0.0@beta",
+        "fastd/storage": "~2.0.0",
         "fastd/console": "~2.0.0",
         "fastd/routing": "~2.0.0",
         "fastd/annotation": "~1.0.0",
