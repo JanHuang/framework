@@ -15,6 +15,7 @@
 set_time_limit(0);
 date_default_timezone_set('PRC');
 
+// autoload composer
 foreach ([
              __DIR__ . '/../../autoload.php',
              __DIR__ . '/../vendor/autoload.php',
@@ -22,6 +23,18 @@ foreach ([
          ] as $value) {
     if (file_exists($value)) {
         define('FASTD_COMPOSER_INSTALL', $value);
+        break;
+    }
+}
+
+// autoload application bootstrap file.
+// fixed composer autoload-dev empty files.
+foreach ([
+             __DIR__ . '/application.php',
+             __DIR__ . '/app/application.php',
+         ] as $value) {
+    if (file_exists($value)) {
+        include $value;
         break;
     }
 }
