@@ -132,9 +132,17 @@ class BundleGeneratorCommand extends CommandAware
             file_put_contents($routes, '<?php ' . PHP_EOL);
         }
 
-        $config = $bundlePath . DIRECTORY_SEPARATOR . 'Resources/config/config.php';
-        if (!file_exists($config)) {
-            file_put_contents($config, '<?php return [];' . PHP_EOL);
+        $configPath = $bundlePath . DIRECTORY_SEPARATOR . 'Resources/config';
+
+        foreach ([
+            '/config_dev.php',
+            '/config_test.php',
+            '/config_prod.php',
+                 ] as $value) {
+            $config = $configPath . $value;
+            if (!file_exists($config)) {
+                file_put_contents($config, '<?php return [];' . PHP_EOL);
+            }
         }
     }
 

@@ -119,7 +119,7 @@ class Bundle extends ContainerAware implements BundleInterface
      */
     public function registerConfiguration(Config $config, $env)
     {
-        $config->load($this->getRootPath() . '/Resources/config/config' . $env . '.php');
+        $config->load($this->getRootPath() . '/Resources/config/config_' . $env . '.php');
     }
 
     /**
