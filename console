@@ -27,18 +27,6 @@ foreach ([
     }
 }
 
-// autoload application bootstrap file.
-// fixed composer autoload-dev empty files.
-foreach ([
-             __DIR__ . '/application.php',
-             __DIR__ . '/app/application.php',
-         ] as $value) {
-    if (file_exists($value)) {
-        include $value;
-        break;
-    }
-}
-
 if (!defined('FASTD_COMPOSER_INSTALL')) {
     fwrite(STDERR,
         'You need to set up the project dependencies using the following commands:' . PHP_EOL .
@@ -48,6 +36,24 @@ if (!defined('FASTD_COMPOSER_INSTALL')) {
 }
 
 include FASTD_COMPOSER_INSTALL;
+
+// autoload application bootstrap file.
+// fixed composer autoload-dev empty files.
+foreach ([
+             __DIR__ . '/application.php',
+             __DIR__ . '/app/application.php',
+             __DIR__ . '/../application.php',
+             __DIR__ . '/../app/application.php',
+             __DIR__ . '/../../application.php',
+             __DIR__ . '/../../app/application.php',
+             __DIR__ . '/../../../application.php',
+             __DIR__ . '/../../../app/application.php',
+         ] as $value) {
+    if (file_exists($value)) {
+        include $value;
+        break;
+    }
+}
 
 use FastD\Console\Input\ArgvInput;
 use FastD\Framework\Kernel\AppConsole;
@@ -60,4 +66,3 @@ $env = $argvInput->hasOption(['env', 'e']) ? $argvInput->getOption(['env', 'e'])
 $console = new AppConsole(new Application($env));
 
 $console->run($argvInput);
-
