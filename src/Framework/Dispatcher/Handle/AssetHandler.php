@@ -49,6 +49,6 @@ class AssetHandler extends Dispatch
             $this->baseUrl = $request->getHost() . ('' == pathinfo($url, PATHINFO_EXTENSION) ? $url : pathinfo($url, PATHINFO_DIRNAME)) ;
         }
 
-        return '//' . $this->baseUrl . '/bundles/' . $name . (null === $version ? '' : '?v=' . $version);
+        return '//' . str_replace('//', '/', $this->baseUrl . '/bundles/' . $name . (null === $version ? '' : '?v=' . $version));
     }
 }
