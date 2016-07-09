@@ -15,3 +15,4 @@ Framework 不具备独立运行及部署功能，部署
 2. Swoole Server
 3. .env 环境配置文件
 4. Http 分布式 session
+5. 中间件
