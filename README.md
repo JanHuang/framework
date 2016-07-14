@@ -12,4 +12,4 @@ Framework 不具备独立运行及部署功能，部署
 ### v2.1
 
 1. 事件监听
-2. Swoole Server
+2. 内置 Swoole Server
