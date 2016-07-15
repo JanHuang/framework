@@ -58,8 +58,9 @@ if (!class_exists('Application')) {
 use FastD\Console\Input\ArgvInput;
 use FastD\Framework\Kernel\AppConsole;
 use FastD\Framework\Kernel\AppKernel;
+use FastD\Console\Input\InputDefinition;
 
-$argvInput = new ArgvInput();
+$argvInput = new ArgvInput(null, new InputDefinition);
 
 $env = $argvInput->hasOption(['env', 'e']) ? $argvInput->getOption(['env', 'e']) : AppKernel::ENV_DEV;
 

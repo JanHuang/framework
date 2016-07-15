@@ -26,6 +26,14 @@ use FastD\Framework\Bundle\Bundle;
 interface AppKernelInterface
 {
     /**
+     * Run framework into bootstrap file.
+     *
+     * @param $bootstrap
+     * @return mixed
+     */
+    public static function run($bootstrap);
+
+    /**
      * @return Bundle[]
      */
     public function getBundles();
@@ -36,47 +44,9 @@ interface AppKernelInterface
     public function getContainer();
 
     /**
-     * Register project bundle.
-     *
-     * @return Bundle
-     */
-    public function registerBundles();
-
-    /**
-     * Register application configuration
-     *
-     * @param Config $config
-     * @return void
-     */
-    public function registerConfiguration(Config $config);
-
-    /**
-     * Register application configuration dynamic variable.
-     *
-     * @param Config $config
-     * @return void
-     */
-    public function registerConfigurationVariable(Config $config);
-
-    /**
-     * Initialize Application Container.
+     * Bootstrap Application Container.
      *
      * @return void
      */
-    public function initializeContainer();
-
-    /**
-     * @return void
-     */
-    public function initializeBundles();
-
-    /**
-     * @return void
-     */
-    public function initializeConfigure();
-
-    /**
-     * @return void
-     */
-    public function initializeRouting();
+    public function bootstrap();
 }

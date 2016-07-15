@@ -21,8 +21,8 @@ namespace FastD\Framework\Kernel;
 interface TerminalInterface
 {
     /**
-     * @param AppKernel $appKernel
+     * @param AppKernelInterface $appKernel
      * @return void
      */
-    public function shutdown(AppKernel $appKernel);
+    public function shutdown(AppKernelInterface $appKernel);
 }

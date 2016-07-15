@@ -11,9 +11,9 @@
  * Gmail: bboyjanhuang@gmail.com
  */
 
-namespace FastD\Framework\Kernel;
+namespace FastD\Framework;
 
-use FastD\Framework\Dispatcher\Dispatcher;
+use FastD\Event\Event;
 use FastD\Framework\Bundle\Bundle;
 use FastD\Container\Container;
 use FastD\Container\Aware;
@@ -24,13 +24,15 @@ use FastD\Config\Config;
 use FastD\Database\Fdb;
 use FastD\Http\Request;
 use FastD\Debug\Debug;
+use FastD\Framework\Kernel\AppKernelInterface;
+use FastD\Framework\Kernel\Terminal;
 
 /**
  * Class AppKernel
  *
  * @package FastD\Framework\Kernel
  */
-abstract class AppKernel extends Terminal
+class App extends Terminal implements AppKernelInterface
 {
     use Aware;
 
@@ -39,11 +41,7 @@ abstract class AppKernel extends Terminal
      *
      * @const string
      */
-    const VERSION = '2.0.0';
-
-    const ENV_PROD = 'prod';
-    const ENV_TEST = 'test';
-    const ENV_DEV = 'dev';
+    const VERSION = '2.1.0';
 
     /**
      * @var string
@@ -70,20 +68,19 @@ abstract class AppKernel extends Terminal
     protected $booted = false;
 
     /**
-     * @var null|string
-     */
-    protected $active_bundle = null;
-
-    /**
-     * Constructor. Initialize framework environment.
+     * App constructor.
      *
-     * @param $env
+     * @param array $bootstrap
      */
-    public function __construct($env)
+    public function __construct(array $bootstrap)
     {
-        $this->environment = $env;
+        $this->rootPath = $bootstrap['root.path'];
 
-        $this->debug = in_array($env, [AppKernel::ENV_DEV, AppKernel::ENV_TEST]) ? true : false;
+        $this->environment = $bootstrap['env'] ?? 'prod';
+
+        $this->debug = in_array((string) $this->environment, ['dev', 'test']) ? true : false;
+
+        $this->bundles = $bootstrap['bundles'] ?? [];
     }
 
     /**
@@ -94,21 +91,6 @@ abstract class AppKernel extends Terminal
     public function getBundles()
     {
         return $this->bundles;
-    }
-
-    /**
-     * @param $name
-     * @return Bundle|null
-     */
-    public function getBundle($name)
-    {
-        foreach ($this->getBundles() as $bundle) {
-            if (false !== strpos($bundle->getName(), $name)) {
-                return $bundle;
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -130,30 +112,11 @@ abstract class AppKernel extends Terminal
     }
 
     /**
-     * @return null|string
-     */
-    public function getActiveBundle()
-    {
-        return $this->bundles[$this->active_bundle];
-    }
-
-    /**
-     * @param null|string $active_bundle
-     * @return $this
-     */
-    public function setActiveBundle($active_bundle)
-    {
-        $this->active_bundle = $active_bundle;
-
-        return $this;
-    }
-
-    /**
-     * Bootstrap application. Loading cache,bundles,configuration,router and other.
+     * Bootstrap application.
      *
      * @return void
      */
-    public function boot()
+    public function bootstrap()
     {
         if (!$this->booted) {
 
@@ -179,13 +142,11 @@ abstract class AppKernel extends Terminal
             'kernel.storage'    => Storage::class,
             'kernel.routing'    => '\\Routes::getRouter',
             'kernel.debug'      => Debug::enable($this->isDebug()),
+            'kernel.event'      => Event::class,
         ]);
 
         $this->container->set('kernel.container', $this->container);
-        $this->container->set('kernel.dispatch', new Dispatcher($this->container));
         $this->container->set('kernel', $this);
-
-        $this->container->singleton('kernel.dispatch')->dispatch('handle.error');
     }
 
     /**
@@ -195,18 +156,9 @@ abstract class AppKernel extends Terminal
      */
     public function initializeBundles()
     {
-        $config = $this->getContainer()->singleton('kernel.config');
-        $routing = $this->getContainer()->singleton('kernel.routing');
-
-        $this->bundles = $this->registerBundles();
-
         foreach ($this->bundles as $bundle) {
             $bundle->setContainer($this->getContainer());
-            $bundle->registerRouting($routing, $this->getEnvironment());
-            $bundle->registerConfiguration($config, $this->getEnvironment());
         }
-
-        unset($config, $routing);
     }
 
     /**
@@ -218,17 +170,7 @@ abstract class AppKernel extends Terminal
     {
         $config = $this->container->singleton('kernel.config');
 
-        $config->setVariable([
-            'root.path' => $this->getRootPath(),
-            'env'       => $this->getEnvironment(),
-            'debug'     => $this->isDebug(),
-            'version'   => AppKernel::VERSION,
-        ]);
-
-        $this->registerConfigurationVariable($config);
-
         if ($this->isDebug()) {
-            $this->registerConfiguration($config);
             $debug = $this->getContainer()->singleton('kernel.debug');
             $debug->addConfig($debug->getBar(), $config);
             unset($debug);
@@ -247,21 +189,10 @@ abstract class AppKernel extends Terminal
     public function initializeRouting()
     {
         if ($this->isDebug()) {
-            return $this->container->singleton('kernel.dispatch')->dispatch('handle.annotation.route');
+            $this->container->singleton('kernel.event');
+        } else {
+            include $this->getRootPath() . '/routes.cache';
         }
-        include $this->getRootPath() . '/routes.cache';
-    }
-
-    /**
-     * @return \FastD\Http\Request
-     */
-    public function createHttpRequestClient()
-    {
-        $request = Request::createRequestHandle();
-
-        $this->container->set('kernel.request', $request);
-
-        return $request;
     }
 
     /**
@@ -269,9 +200,17 @@ abstract class AppKernel extends Terminal
      */
     public function createHttpRequestHandler()
     {
-        $client = $this->createHttpRequestClient();
+        $client = Request::createRequestHandle();
 
-        return $this->container->singleton('kernel.dispatch')->dispatch('handle.http', [$client]);
+        $this->container->set('kernel.request', $client);
+
+        $event = $this->container->singleton('kernel.event');
+
+        $event->on('handle.http', function (Request $request) {
+            $request->getPathInfo();
+        });
+
+        return $event->trigger('handle.http', [$client]);
     }
 
     /**
@@ -281,10 +220,25 @@ abstract class AppKernel extends Terminal
      */
     public function getRootPath()
     {
-        if (null === $this->rootPath) {
-            $this->rootPath = dirname((new \ReflectionClass($this))->getFileName());
-        }
-
         return $this->rootPath;
+    }
+
+    /**
+     * Run framework into bootstrap file.
+     *
+     * @param $bootstrap
+     * @return mixed
+     */
+    public static function run($bootstrap)
+    {
+        $app = new static($bootstrap);
+
+        $app->bootstrap();
+
+        $response = $app->createHttpRequestHandler();
+
+        $response->send();
+
+        $app->shutdown($app);
     }
 }

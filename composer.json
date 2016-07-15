@@ -19,10 +19,7 @@
     "autoload-dev": {
         "psr-4": {
             "": "app/src/Bundles"
-        },
-        "files": [
-            "app/application.php"
-        ]
+        }
     },
     "require": {
         "php": ">=7.0",
