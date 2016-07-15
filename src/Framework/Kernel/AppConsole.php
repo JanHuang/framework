@@ -24,20 +24,20 @@ use FastD\Console\Console;
 class AppConsole extends Console
 {
     /**
-     * @var AppKernel
+     * @var AppKernelInterface
      */
     protected $application;
 
     /**
      * AppConsole constructor.
      *
-     * @param AppKernel $appKernel
+     * @param AppKernelInterface $appKernel
      */
-    public function __construct(AppKernel $appKernel)
+    public function __construct(AppKernelInterface $appKernel)
     {
         $this->application = $appKernel;
 
-        $this->application->boot();
+        $this->application->bootstrap();
 
         parent::__construct();
 
@@ -45,7 +45,7 @@ class AppConsole extends Console
     }
 
     /**
-     * @return AppKernel
+     * @return AppKernelInterface
      */
     public function getKernel()
     {

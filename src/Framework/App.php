@@ -156,9 +156,7 @@ class App extends Terminal implements AppKernelInterface
      */
     public function initializeBundles()
     {
-        foreach ($this->bundles as $bundle) {
-            $bundle->setContainer($this->getContainer());
-        }
+        
     }
 
     /**
@@ -204,13 +202,7 @@ class App extends Terminal implements AppKernelInterface
 
         $this->container->set('kernel.request', $client);
 
-        $event = $this->container->singleton('kernel.event');
-
-        $event->on('handle.http', function (Request $request) {
-            $request->getPathInfo();
-        });
-
-        return $event->trigger('handle.http', [$client]);
+        return $this->handleHttpRequest($client);
     }
 
     /**
@@ -227,7 +219,7 @@ class App extends Terminal implements AppKernelInterface
      * Run framework into bootstrap file.
      *
      * @param $bootstrap
-     * @return mixed
+     * @return void
      */
     public static function run($bootstrap)
     {

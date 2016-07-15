@@ -37,33 +37,15 @@ if (!defined('FASTD_COMPOSER_INSTALL')) {
 
 include FASTD_COMPOSER_INSTALL;
 
-if (!class_exists('Application')) {
-    foreach ([
-                 __DIR__ . '/application.php',
-                 __DIR__ . '/app/application.php',
-                 __DIR__ . '/../application.php',
-                 __DIR__ . '/../app/application.php',
-                 __DIR__ . '/../../application.php',
-                 __DIR__ . '/../../app/application.php',
-                 __DIR__ . '/../../../application.php',
-                 __DIR__ . '/../../../app/application.php',
-             ] as $value) {
-        if (file_exists($value)) {
-            include $value;
-            break;
-        }
-    }
-}
-
 use FastD\Console\Input\ArgvInput;
 use FastD\Framework\Kernel\AppConsole;
-use FastD\Framework\Kernel\AppKernel;
+use FastD\Framework\App;
 use FastD\Console\Input\InputDefinition;
 
 $argvInput = new ArgvInput(null, new InputDefinition);
 
-$env = $argvInput->hasOption(['env', 'e']) ? $argvInput->getOption(['env', 'e']) : AppKernel::ENV_DEV;
+$env = $argvInput->hasOption(['env', 'e']) ? $argvInput->getOption(['env', 'e']) : 'dev';
 
-$console = new AppConsole(new Application($env));
+$console = new AppConsole(new App(include __DIR__ . '/app/bootstrap.php'));
 
 $console->run($argvInput);
