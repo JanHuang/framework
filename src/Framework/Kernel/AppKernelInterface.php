@@ -26,14 +26,6 @@ use FastD\Framework\Bundle\Bundle;
 interface AppKernelInterface
 {
     /**
-     * Run framework into bootstrap file.
-     *
-     * @param $bootstrap
-     * @return mixed
-     */
-    public static function run($bootstrap);
-
-    /**
      * @return Bundle[]
      */
     public function getBundles();

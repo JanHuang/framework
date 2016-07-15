@@ -14,6 +14,7 @@
 
 namespace FastD\Framework\Tests\Framework;
 
+use FastD\Framework\App;
 use FastD\Framework\Tests\WebTestCase;
 
 /**
@@ -25,12 +26,10 @@ class BootstrapTest extends WebTestCase
 {
     public function testKernel()
     {
-        $app = new \Application('dev');
+        $app = new App([]);
 
-        $app->boot();
+        $app->bootstrap();
 
         $this->assertEquals('dev', $app->getEnvironment());
-
-        
     }
 }

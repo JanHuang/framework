@@ -13,6 +13,7 @@
  */
 
 namespace FastD\Framework\Kernel;
+
 use FastD\Framework\Bundle\Controllers\Controller;
 use FastD\Http\Request;
 
