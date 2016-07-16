@@ -11,10 +11,11 @@
 namespace FastD\Framework\Kernel;
 
 use FastD\Standard\Commands\CommandAware;
+use FastD\Container\ContainerInterface;
 use Symfony\Component\Finder\Finder;
 use FastD\Annotation\Annotation;
 use FastD\Container\Container;
-use FastD\Container\Aware;
+use FastD\Console\Console;
 use FastD\Standard\Bundle;
 use FastD\Storage\Storage;
 use FastD\Routing\Router;
@@ -28,8 +29,6 @@ use Routes;
 
 abstract class AppKernel extends Terminal implements AppKernelInterface
 {
-    use Aware;
-
     /**
      * The FastD application version.
      *
@@ -60,6 +59,11 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
      * @var bool
      */
     protected $booted = false;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * App constructor.
@@ -113,6 +117,25 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
     public function getRootPath()
     {
         return $this->rootPath;
+    }
+
+    /**
+     * @param ContainerInterface $containerInterface
+     * @return $this
+     */
+    public function setContainer(ContainerInterface $containerInterface)
+    {
+        $this->container = $containerInterface;
+
+        return $this;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**
@@ -209,8 +232,7 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
 
         try {
             $service->__initialize();
-        } catch (\Exception $e) {
-        }
+        } catch (\Exception $e) {}
 
         return call_user_func_array([$service, $action], $route->getParameters());
     }
@@ -283,8 +305,11 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
 
     /**
      * Scan commands.
+     *
+     * @param Console $console
+     * @return void
      */
-    public function scanCommands()
+    public function scanCommands(Console $console)
     {
         foreach ($this->getBundles() as $bundle) {
             $dir = $bundle->getRootPath() . '/Commands';
@@ -295,6 +320,9 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
             foreach ($finder->in($dir)->name('*Command.php')->files() as $file) {
                 $class = $bundle->getNamespace() . '\\Commands\\' . pathinfo($file, PATHINFO_FILENAME);
                 $command = new $class();
+                if ($command instanceof CommandAware) {
+                    $console->addCommand($command);
+                }
             }
         }
     }
