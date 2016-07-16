@@ -199,7 +199,7 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
     public function initializeRouting()
     {
         $this->container->singleton('kernel.event');
-
+        
         if ($this->isDebug()) {
             $this->scanRoutes();
         } else {
