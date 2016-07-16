@@ -147,13 +147,7 @@ class AppKernel extends Terminal implements AppKernelInterface
     {
         $config = $this->container->singleton('kernel.config');
 
-        if ($this->isDebug()) {
-            $debug = $this->getContainer()->singleton('kernel.debug');
-            $debug->addConfig($debug->getBar(), $config);
-            unset($debug);
-        } else {
-            $config->load($this->getRootPath() . '/config.cache');
-        }
+        $config->load($this->getRootPath() . '/config.cache');
     }
 
     /**
