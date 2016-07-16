@@ -13,7 +13,18 @@
 
 namespace FastD\Framework;
 
+use FastD\Framework\Bundle\Commands\AssetInstallCommand;
+use FastD\Standard\Commands\BundleGeneratorCommand;
+use FastD\Standard\Commands\ConfigCacheCommand;
+use FastD\Standard\Commands\FdbDataSetCommand;
+use FastD\Standard\Commands\RouteCacheCommand;
+use FastD\Standard\Commands\FdbReflexCommand;
+use FastD\Standard\Commands\FdbSchemaCommand;
+use FastD\Standard\Commands\RouteDumpCommand;
+use FastD\Standard\Commands\SwooleCommand;
+use FastD\Standard\Commands\ProdCommand;
 use FastD\Framework\Kernel\AppKernel;
+use FastD\Console\Command\Command;
 
 /**
  * Class AppKernel
@@ -39,5 +50,24 @@ class App extends AppKernel
         $response->send();
 
         $app->shutdown($app);
+    }
+
+    /**
+     * @return Command[]
+     */
+    public function getDefaultCommands()
+    {
+        return [
+            new AssetInstallCommand(),
+            new RouteCacheCommand(),
+            new RouteDumpCommand(),
+            new FdbReflexCommand(),
+            new FdbDataSetCommand(),
+            new FdbSchemaCommand(),
+            new BundleGeneratorCommand(),
+            new SwooleCommand(),
+            new ConfigCacheCommand(),
+            new ProdCommand(),
+        ];
     }
 }

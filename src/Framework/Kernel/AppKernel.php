@@ -22,7 +22,7 @@ use FastD\Database\Fdb;
 use FastD\Http\Request;
 use FastD\Debug\Debug;
 
-class AppKernel extends Terminal implements AppKernelInterface
+abstract class AppKernel extends Terminal implements AppKernelInterface
 {
     use Aware;
 

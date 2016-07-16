@@ -15,6 +15,7 @@
 namespace FastD\Framework\Kernel;
 
 use FastD\Config\Config;
+use FastD\Console\Command\Command;
 use FastD\Container\Container;
 use FastD\Framework\Bundle\Bundle;
 
@@ -41,4 +42,9 @@ interface AppKernelInterface
      * @return void
      */
     public function bootstrap();
+
+    /**
+     * @return Command[]
+     */
+    public function getDefaultCommands();
 }
