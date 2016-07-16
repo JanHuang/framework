@@ -10,17 +10,21 @@
 
 namespace FastD\Framework\Kernel;
 
-use FastD\Event\Event;
-use FastD\Framework\Bundle\Bundle;
+use FastD\Standard\Commands\CommandAware;
+use Symfony\Component\Finder\Finder;
+use FastD\Annotation\Annotation;
 use FastD\Container\Container;
 use FastD\Container\Aware;
+use FastD\Standard\Bundle;
 use FastD\Storage\Storage;
 use FastD\Routing\Router;
 use FastD\Http\Response;
 use FastD\Config\Config;
 use FastD\Database\Fdb;
 use FastD\Http\Request;
+use FastD\Event\Event;
 use FastD\Debug\Debug;
+use Routes;
 
 abstract class AppKernel extends Terminal implements AppKernelInterface
 {
@@ -68,7 +72,7 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
 
         $this->environment = $bootstrap['env'] ?? 'dev';
 
-        $this->debug = in_array((string) $this->environment, ['dev', 'test']) ? true : false;
+        $this->debug = in_array((string)$this->environment, ['dev', 'test']) ? true : false;
 
         $this->bundles = $bootstrap['bundles'] ?? [];
     }
@@ -102,6 +106,16 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
     }
 
     /**
+     * Get application work space directory.
+     *
+     * @return string
+     */
+    public function getRootPath()
+    {
+        return $this->rootPath;
+    }
+
+    /**
      * Bootstrap application.
      *
      * @return void
@@ -129,7 +143,7 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
             'kernel.database'   => Fdb::class,
             'kernel.config'     => Config::class,
             'kernel.storage'    => Storage::class,
-            'kernel.routing'    => '\\Routes::getRouter',
+            'kernel.routing'    => Routes::getRouter(),
             'kernel.debug'      => Debug::enable($this->isDebug()),
             'kernel.event'      => Event::class,
         ]);
@@ -147,7 +161,9 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
     {
         $config = $this->container->singleton('kernel.config');
 
-        $config->load($this->getRootPath() . '/config.cache');
+        if (!$this->isDebug()) {
+            $config->load($this->getRootPath() . '/config.cache');
+        }
     }
 
     /**
@@ -159,32 +175,127 @@ abstract class AppKernel extends Terminal implements AppKernelInterface
      */
     public function initializeRouting()
     {
+        $this->container->singleton('kernel.event');
+
         if ($this->isDebug()) {
-            $this->container->singleton('kernel.event');
+            $this->scanRoutes();
         } else {
             include $this->getRootPath() . '/routes.cache';
         }
     }
 
     /**
+     * Handle request.
+     *
      * @return Response
      */
     public function createHttpRequestHandler()
     {
-        $client = Request::createRequestHandle();
+        $request = Request::createRequestHandle();
 
-        $this->container->set('kernel.request', $client);
+        $this->container->set('kernel.request', $request);
 
-        return $this->handleHttpRequest($client);
+        $route = $this->getContainer()->singleton('kernel.routing')->match($request->getMethod(), $request->getPathInfo());
+
+        $callback = $route->getCallback();
+
+        list($controller, $action) = explode('@', $callback);
+
+        $service = $this->getContainer()->set('request.callback', $controller)->get('request.callback');
+
+        if (method_exists($service->singleton(), 'setContainer')) {
+            $service->singleton()->setContainer($this->getContainer());
+        }
+
+        try {
+            $service->__initialize();
+        } catch (\Exception $e) {
+        }
+
+        return call_user_func_array([$service, $action], $route->getParameters());
     }
 
     /**
-     * Get application work space directory.
+     * Scan all controller routes.
      *
-     * @return string
+     * @return void
      */
-    public function getRootPath()
+    public function scanRoutes()
     {
-        return $this->rootPath;
+        $routes = [];
+
+        $scan = function (Bundle $bundle) {
+            $path = $bundle->getRootPath() . '/Controllers';
+            if (!is_dir($path)) {
+                return [];
+            }
+
+            $baseNamespace = $bundle->getNamespace() . '\\Controllers\\';
+            $finder = new Finder();
+            $files = $finder->name('*.php')->in($path)->files();
+
+            $routes = [];
+            foreach ($files as $file) {
+                $className = $baseNamespace . pathinfo($file->getFileName(), PATHINFO_FILENAME);
+                if (!class_exists($className)) {
+                    continue;
+                }
+
+                $annotation = new Annotation($className, 'Action');
+                foreach ($annotation as $annotator) {
+                    if (null === ($route = $annotator->getParameter('Route'))) {
+                        continue;
+                    }
+                    if (!isset($route['name'])) {
+                        $route['name'] = $route[0];
+                    }
+                    $parameters = [
+                        $route['name'],
+                        str_replace('//', '/', $route[0]),
+                        $annotator->getClassName() . '@' . $annotator->getName(),
+                        isset($route['defaults']) ? $route['defaults'] : [],
+                        isset($route['requirements']) ? $route['requirements'] : [],
+                    ];
+                    $method = null === $annotator->getParameter('Method') ? 'any' : strtolower($annotator->getParameter('Method')[0]);
+                    $routes[$bundle->getName()][] = [
+                        'method' => $method,
+                        'parameters' => $parameters
+                    ];
+                    unset($route, $method, $parameters, $parent);
+                }
+                unset($annotation);
+            }
+            return $routes;
+        };
+
+        foreach ($this->getBundles() as $bundle) {
+            $routes = array_merge($routes, $scan($bundle));
+        }
+
+        foreach ($routes as $prefix => $collection) {
+            foreach ($collection as $route) {
+                call_user_func_array("\\Routes::{$route['method']}", $route['parameters']);
+            }
+        }
+
+        unset($routes, $scan);
+    }
+
+    /**
+     * Scan commands.
+     */
+    public function scanCommands()
+    {
+        foreach ($this->getBundles() as $bundle) {
+            $dir = $bundle->getRootPath() . '/Commands';
+            if (!is_dir($dir)) {
+                continue;
+            }
+            $finder = new Finder();
+            foreach ($finder->in($dir)->name('*Command.php')->files() as $file) {
+                $class = $bundle->getNamespace() . '\\Commands\\' . pathinfo($file, PATHINFO_FILENAME);
+                $command = new $class();
+            }
+        }
     }
 }

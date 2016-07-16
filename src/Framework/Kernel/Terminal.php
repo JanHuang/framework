@@ -24,34 +24,6 @@ use FastD\Http\Request;
  */
 abstract class Terminal implements TerminalInterface, AppKernelInterface
 {
-    /**
-     * @param Request $request
-     * @return mixed
-     * @throws \Exception
-     */
-    public function handleHttpRequest(Request $request)
-    {
-        $route = $this->getContainer()->singleton('kernel.routing')->match($request->getMethod(), $request->getPathInfo());
-
-        $callback = $route->getCallback();
-
-        list($controller, $action) = explode('@', $callback);
-
-        $controller = str_replace(':', '\\', $controller);
-
-        $service = $this->getContainer()->set('request_callback', $controller)->get('request_callback');
-
-        if (method_exists($service->singleton(), 'setContainer')) {
-            $service->singleton()->setContainer($this->getContainer());
-        }
-        
-        try {
-            $service->__initialize();
-        } catch (\Exception $e) {}
-
-        return call_user_func_array([$service, $action], $route->getParameters());
-    }
-
     public function handleError()
     {
 
