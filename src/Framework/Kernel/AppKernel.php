@@ -184,6 +184,7 @@ abstract class AppKernel extends Terminal
         $this->container->set('kernel.container', $this->container);
         $this->container->set('kernel.dispatch', new Dispatcher($this->container));
         $this->container->set('kernel', $this);
+        $this->registerService($this->container);
 
         $this->container->singleton('kernel.dispatch')->dispatch('handle.error');
     }
