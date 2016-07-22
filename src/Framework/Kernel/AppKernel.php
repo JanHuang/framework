@@ -287,4 +287,10 @@ abstract class AppKernel extends Terminal
 
         return $this->rootPath;
     }
+
+
+    /**
+     * @param Container $container
+     */
+    abstract public function registerService(Container $container);
 }
