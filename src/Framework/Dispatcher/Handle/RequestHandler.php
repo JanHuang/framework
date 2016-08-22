@@ -16,6 +16,7 @@ namespace FastD\Framework\Dispatcher\Handle;
 
 use FastD\Framework\Bundle\Controllers\ControllerInterface;
 use FastD\Framework\Dispatcher\Dispatch;
+use FastD\Http\Response;
 use FastD\Routing\Route;
 
 /**
@@ -55,7 +56,10 @@ class RequestHandler extends Dispatch
             $service->singleton()->setContainer($this->container);
         }
         try {
-            $service->__initialize();
+            $response = $service->__initialize();
+            if ($response instanceof Response) {
+                return $response;
+            }
         } catch (\Exception $e) {}
 
         return call_user_func_array([$service, $action], $route->getParameters());
