@@ -44,8 +44,6 @@ class Controller implements ControllerInterface
      */
     protected $session_storage = [];
 
-    public function __initialize(){}
-
     /**
      * @param $connection
      * @return SessionRedis
