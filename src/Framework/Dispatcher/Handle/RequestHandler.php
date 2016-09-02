@@ -52,9 +52,11 @@ class RequestHandler extends Dispatch
         $this->getContainer()->singleton('kernel')->setActiveBundle($bundle); unset($bundle);
 
         $service = $this->container->set('request_callback', $controller)->get('request_callback');
-        if ($service->singleton() instanceof ControllerInterface) {
-            $service->singleton()->setContainer($this->container);
+        if (($instance = $service->singleton()) instanceof ControllerInterface) {
+            $instance->setContainer($this->container);
+            $instance->currentAction = $action;
         }
+
         try {
             $response = $service->__initialize();
             if ($response instanceof Response) {
@@ -62,7 +64,14 @@ class RequestHandler extends Dispatch
             }
         } catch (\Exception $e) {}
 
-        return call_user_func_array([$service, $action], $route->getParameters());
+        $response = call_user_func_array([$service, $action], $route->getParameters());
+        $instance->statusCode = $response->getStatusCode() === 200 ? 1 : 0;
+        if (1 !== $instance->statusCode) {
+            $instance->code = $response->getStatusCode();
+            $instance->msg = $response->getContent();
+        }
+        unset($instance);
+        return $response;
     }
 
     /**

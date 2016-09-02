@@ -35,6 +35,17 @@ class Controller implements ControllerInterface
     const SERVER_VERSION = AppKernel::VERSION;
 
     /**
+     * @var string
+     */
+    public $currentAction;
+
+    public $statusCode;
+
+    public $msg;
+
+    public $code;
+
+    /**
      * @var Session
      */
     protected $session;
