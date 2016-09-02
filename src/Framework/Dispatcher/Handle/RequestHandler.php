@@ -62,16 +62,18 @@ class RequestHandler extends Dispatch
             if ($response instanceof Response) {
                 return $response;
             }
-        } catch (\Exception $e) {}
+            $response = call_user_func_array([$service, $action], $route->getParameters());
+            $instance->statusCode = $response->getStatusCode() === 200 ? 1 : 0;
+            if (1 !== $instance->statusCode) {
+                $instance->code = $response->getStatusCode();
+                $instance->msg = $response->getContent();
+            }
 
-        $response = call_user_func_array([$service, $action], $route->getParameters());
-        $instance->statusCode = $response->getStatusCode() === 200 ? 1 : 0;
-        if (1 !== $instance->statusCode) {
-            $instance->code = $response->getStatusCode();
-            $instance->msg = $response->getContent();
+            unset($instance);
+            return $response;
+        } catch (\Exception $e) {
+            return new Response('server interval error.', 500);
         }
-        unset($instance);
-        return $response;
     }
 
     /**
