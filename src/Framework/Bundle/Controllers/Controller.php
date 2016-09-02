@@ -39,10 +39,19 @@ class Controller implements ControllerInterface
      */
     public $currentAction;
 
+    /**
+     * @var int
+     */
     public $statusCode;
 
+    /**
+     * @var string
+     */
     public $msg;
 
+    /**
+     * @var int
+     */
     public $code;
 
     /**
