@@ -72,6 +72,9 @@ class RequestHandler extends Dispatch
             unset($instance);
             return $response;
         } catch (\Exception $e) {
+            if ($this->getContainer()->get('kernel')->isDebug()) {
+                throw $e;
+            }
             return new Response('server interval error.', 500);
         }
     }
