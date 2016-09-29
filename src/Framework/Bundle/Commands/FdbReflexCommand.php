@@ -15,6 +15,7 @@
 namespace FastD\Framework\Bundle\Commands;
 
 use FastD\Console\Input\Input;
+use FastD\Console\Input\InputOption;
 use FastD\Console\Output\Output;
 use FastD\Database\Schema\SchemaParser;
 use FastD\Database\Schema\Structure\Rename;
@@ -44,6 +45,7 @@ class FdbReflexCommand extends CommandAware
         $this
             ->setArgument('connection')
             ->setOption('bundle')
+            ->setOption('only')
         ;
     }
 
@@ -63,7 +65,7 @@ class FdbReflexCommand extends CommandAware
 
         $driver = $this->getDriver($connection);
 
-        $parser = new SchemaParser($driver);
+        $parser = new SchemaParser($driver, true);
 
         if (null !== $bundle) {
             $bundle = $this->getContainer()->singleton('kernel')->getBundle($bundle);
