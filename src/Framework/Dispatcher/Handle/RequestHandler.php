@@ -14,6 +14,7 @@
 
 namespace FastD\Framework\Dispatcher\Handle;
 
+use FastD\Debug\Exceptions\HttpException;
 use FastD\Framework\Bundle\Controllers\ControllerInterface;
 use FastD\Framework\Dispatcher\Dispatch;
 use FastD\Http\Response;
@@ -73,11 +74,18 @@ class RequestHandler extends Dispatch
 
             unset($instance);
             return $response;
+        } catch (HttpException $e) {
+            $response = $e->getContent();
+            if ($response instanceof Response) {
+                return $response;
+            }
+            return new Response($e->getContent(), $e->getStatusCode(), $e->getHeaders());
         } catch (\Exception $e) {
             if ($this->getContainer()->get('kernel')->isDebug()) {
-                throw $e;
+                return new Response($e->getMessage(), Response::HTTP_SERVICE_UNAVAILABLE);
             }
-            return new Response('server interval error.', 500);
+
+            return new Response('server interval error.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
